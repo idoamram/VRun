@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/VRun.iml" filepath="$PROJECT_DIR$/VRun.iml" />
+      <module fileurl="file://$PROJECT_DIR$/VRunBackend/VRunBackend.iml" filepath="$PROJECT_DIR$/VRunBackend/VRunBackend.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
