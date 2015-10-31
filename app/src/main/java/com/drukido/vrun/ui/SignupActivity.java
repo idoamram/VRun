@@ -1,9 +1,10 @@
-package com.drukido.vrun;
+package com.drukido.vrun.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import com.drukido.vrun.R;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
