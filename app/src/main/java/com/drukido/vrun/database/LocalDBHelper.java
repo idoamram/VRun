@@ -23,7 +23,7 @@ public class LocalDBHelper extends SQLiteOpenHelper {
             Log.i(DATABASE_NAME, "database created");
         }
         catch (SQLException e){
-            Log.e(DATABASE_NAME, e.getMessage());
+            Log.e(DATABASE_NAME, "database creation error" + e.getMessage());
         }
     }
 

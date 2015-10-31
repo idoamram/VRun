@@ -10,6 +10,7 @@ import com.drukido.vrun.database.annotations.EntityArraySetter;
 import com.drukido.vrun.database.annotations.EntitySetter;
 import com.drukido.vrun.database.annotations.ForeignKeyEntity;
 import com.drukido.vrun.database.annotations.ForeignKeyEntityArray;
+import com.drukido.vrun.database.annotations.PrimaryKeySetter;
 import com.drukido.vrun.database.annotations.TableName;
 import com.drukido.vrun.database.annotations.TrackColumn;
 import com.drukido.vrun.database.annotations.TrackColumnSetter;
@@ -57,6 +58,7 @@ public class Run extends DBObject{
 
     /*************************************************************************/
     /** Setters **/
+    @PrimaryKeySetter
     @ColumnSetter(columnName = DBConstants.COL_ID, type = TYPE_LONG)
     public void setId(long id) {
         this.id = id;

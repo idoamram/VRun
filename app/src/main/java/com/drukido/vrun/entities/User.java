@@ -10,6 +10,7 @@ import com.drukido.vrun.database.annotations.ColumnSetter;
 import com.drukido.vrun.database.annotations.EntityArraySetter;
 import com.drukido.vrun.database.annotations.ForeignKeyEntityArray;
 import com.drukido.vrun.database.annotations.PrimaryKey;
+import com.drukido.vrun.database.annotations.PrimaryKeySetter;
 import com.drukido.vrun.database.annotations.TableName;
 
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class User extends DBObject{
 
     /*************************************************************************/
     /** Setters **/
+    @PrimaryKeySetter
     @ColumnSetter(columnName = DBConstants.COL_ID, type = TYPE_LONG)
     public void setId(long id) {
         this.id = id;

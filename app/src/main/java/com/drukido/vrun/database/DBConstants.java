@@ -9,23 +9,23 @@ public class DBConstants {
     public static final String T_RUN  = "run";
 
     /** Columns **/
-    public static final String COL_ID = "id";
-    public static final String COL_USER_NAME = "userName";
-    public static final String COL_PASSWORD = "password";
-    public static final String COL_EMAIL = "email";
-    public static final String COL_PHONE_NUMBER = "phoneNumber";
-    public static final String COL_FIRST_NAME = "firstName";
-    public static final String COL_LAST_NAME = "lastName";
-    public static final String COL_JOIN_TIME = "join_time";
-    public static final String COL_RUNS = "runs";
-    public static final String COL_TIME = "time";
-    public static final String COL_DISTANCE = "distance";
-    public static final String COL_DURATION = "duration";
-    public static final String COL_ATTENDING = "attending";
-    public static final String COL_NOT_ATTENDING = "notAttending";
-    public static final String COL_TRACK = "track";
-    public static final String COL_RUN_CREATOR = "run_creator";
-    public static final String COL_TRACK_CREATOR = "track_creator";
+    public static final String COL_ID               = "id";
+    public static final String COL_USER_NAME        = "userName";
+    public static final String COL_PASSWORD         = "password";
+    public static final String COL_EMAIL            = "email";
+    public static final String COL_PHONE_NUMBER     = "phoneNumber";
+    public static final String COL_FIRST_NAME       = "firstName";
+    public static final String COL_LAST_NAME        = "lastName";
+    public static final String COL_JOIN_TIME        = "join_time";
+    public static final String COL_RUNS             = "runs";
+    public static final String COL_TIME             = "time";
+    public static final String COL_DISTANCE         = "distance";
+    public static final String COL_DURATION         = "duration";
+    public static final String COL_ATTENDING        = "attending";
+    public static final String COL_NOT_ATTENDING    = "notAttending";
+    public static final String COL_TRACK            = "track";
+    public static final String COL_RUN_CREATOR      = "run_creator";
+    public static final String COL_TRACK_CREATOR    = "track_creator";
 
     /** Create table commands **/
     public static final String CREATE_T_USER = "CREATE TABLE " + T_USER + " (" +
