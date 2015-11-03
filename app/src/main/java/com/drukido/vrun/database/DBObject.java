@@ -17,8 +17,13 @@ import com.drukido.vrun.database.annotations.ForeignKeyEntityArray;
 import com.drukido.vrun.database.annotations.PrimaryKey;
 import com.drukido.vrun.database.annotations.PrimaryKeySetter;
 import com.drukido.vrun.database.annotations.TableName;
+import com.drukido.vrun.database.annotations.TrackColumn;
+import com.drukido.vrun.database.annotations.TrackColumnSetter;
 import com.drukido.vrun.database.interfaces.BackgroundTaskCallBack;
+import com.drukido.vrun.utils.Duration;
 import com.drukido.vrun.utils.Validator;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -37,8 +42,14 @@ public abstract class DBObject {
     public static final String TYPE_STRING = "string";
     public static final String TYPE_BOOLEAN = "boolean";
     public static final String TYPE_DATE = "date";
+    public static final String TYPE_DURATION = "calendar";
     public static final String DATE_FORMAT = "dd-MM-yyyy HH:mm";
+
     private static final String SUCCESS_FLAG = "Done";
+    private static final String LONGITUDE_LATITUDE_DIVIDER = ":";
+    private static final String LOCATION_SPLITTER = ",";
+    private static final int LATITUDE_INDEX = 0;
+    private static final int LONGITUDE_INDEX = 1;
 
     private static SQLiteDatabase database;
     private LocalDBHelper dbHelper;
@@ -100,6 +111,9 @@ public abstract class DBObject {
                 else if (annotation instanceof ForeignKeyEntityArray) {
                     allColumnsList.add(((ForeignKeyEntityArray) annotation).fkColumnName());
                 }
+                else if (annotation instanceof TrackColumn) {
+                    allColumnsList.add(((TrackColumn) annotation).columnName());
+                }
             }
         }
     }
@@ -111,7 +125,8 @@ public abstract class DBObject {
             }
             else if (method.isAnnotationPresent(ColumnSetter.class) ||
                     method.isAnnotationPresent(EntitySetter.class) ||
-                    method.isAnnotationPresent(EntityArraySetter.class)) {
+                    method.isAnnotationPresent(EntityArraySetter.class) ||
+                    method.isAnnotationPresent(TrackColumnSetter.class)) {
                 allSetters.add(method);
             }
         }
@@ -171,6 +186,9 @@ public abstract class DBObject {
                     else if (value instanceof Date) {
                         values.put(column.name(),(dateToString((Date)value)));
                     }
+                    else if (value instanceof Duration) {
+                        values.put(column.name(),(value.toString()));
+                    }
                 }
                 catch (Exception e){
                     throw e;
@@ -225,6 +243,30 @@ public abstract class DBObject {
                 catch (Exception e) {
                     throw e;
                 }
+            } else if (field.isAnnotationPresent(TrackColumn.class)) {
+                TrackColumn trackColumn = field.getAnnotation(TrackColumn.class);
+                try {
+                    field.setAccessible(true);
+                    ArrayList<LatLng> locations = (ArrayList<LatLng>) field.get(this);
+
+                    if (locations != null) {
+                        String fkValue = "";
+
+                        for(LatLng currLocation:locations) {
+                            String currLocationString =
+                                    currLocation.latitude + LONGITUDE_LATITUDE_DIVIDER + currLocation.longitude;
+
+                            if (!fkValue.equals("")) {
+                                fkValue = fkValue + LOCATION_SPLITTER + currLocationString;
+                            } else fkValue = currLocationString;
+                        }
+
+                        values.put(trackColumn.columnName(),fkValue);
+                    }
+                }
+                catch (Exception e) {
+                    throw e;
+                }
             }
         }
 
@@ -240,6 +282,12 @@ public abstract class DBObject {
             } else if (setter.isAnnotationPresent(EntitySetter.class)) {
                 EntitySetter entitySetter = setter.getAnnotation(EntitySetter.class);
                 currSetterColumnName = entitySetter.fkColumnName();
+            } else if (setter.isAnnotationPresent(EntityArraySetter.class)) {
+                EntityArraySetter entityArraySetter = setter.getAnnotation(EntityArraySetter.class);
+                currSetterColumnName = entityArraySetter.fkColumnName();
+            } else if (setter.isAnnotationPresent(TrackColumnSetter.class)) {
+                TrackColumnSetter trackColumnSetter = setter.getAnnotation(TrackColumnSetter.class);
+                currSetterColumnName = trackColumnSetter.columnName();
             }
 
             if (columnName.equals(currSetterColumnName)) {
@@ -297,13 +345,16 @@ public abstract class DBObject {
                                             stringToDate(cursor.
                                                     getString(cursor.getColumnIndex(column))));
 
+                                } else if (columnSetter.type().equals(TYPE_DURATION)) {
+                                    setter.invoke(this,
+                                            Duration.fromString(cursor.
+                                            getString(cursor.getColumnIndex(column))));
                                 }
                             } catch (Exception e) {
                                 throw e;
                             }
                         }
-                    }
-                    if (setter.isAnnotationPresent(EntitySetter.class)) {
+                    } else if (setter.isAnnotationPresent(EntitySetter.class)) {
                         EntitySetter entitySetter = setter.getAnnotation(EntitySetter.class);
                         if (column.equals(entitySetter.fkColumnName())) {
                             try {
@@ -324,8 +375,7 @@ public abstract class DBObject {
                                 throw e;
                             }
                         }
-                    }
-                    if (setter.isAnnotationPresent(EntityArraySetter.class)) {
+                    } else if (setter.isAnnotationPresent(EntityArraySetter.class)) {
                         EntityArraySetter entityArraySetter =
                                 setter.getAnnotation(EntityArraySetter.class);
                         if (column.equals(entityArraySetter.fkColumnName())) {
@@ -360,6 +410,40 @@ public abstract class DBObject {
                                     setter.invoke(this, objectArray);
                                 }
 
+                            } catch (Exception e) {
+                                throw e;
+                            }
+                        }
+                    } else if (setter.isAnnotationPresent(TrackColumnSetter.class)) {
+                        TrackColumnSetter trackColumnSetter =
+                                setter.getAnnotation(TrackColumnSetter.class);
+                        if (column.equals(trackColumnSetter.columnName())) {
+                            try {
+                                String locationsStringArray =
+                                        cursor.getString(cursor.
+                                                getColumnIndex(DBConstants.COL_TRACK));
+
+                                if (locationsStringArray != null) {
+                                    String[] locations = locationsStringArray
+                                            .split(LOCATION_SPLITTER);
+                                    ArrayList<LatLng> latLngArrayList = new ArrayList<>();
+
+                                    for (String currLocationString:locations) {
+                                        String[] locationArgs = currLocationString
+                                                .split(LONGITUDE_LATITUDE_DIVIDER);
+
+                                        double latitude =
+                                                Double.valueOf(locationArgs[LATITUDE_INDEX]);
+                                        double longitude =
+                                                Double.valueOf(locationArgs[LONGITUDE_INDEX]);
+
+                                        latLngArrayList
+                                                .add(new LatLng(latitude, longitude));
+                                    }
+                                    
+                                    setter.setAccessible(true);
+                                    setter.invoke(latLngArrayList);
+                                }
                             } catch (Exception e) {
                                 throw e;
                             }

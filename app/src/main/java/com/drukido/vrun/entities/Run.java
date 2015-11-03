@@ -14,8 +14,10 @@ import com.drukido.vrun.database.annotations.PrimaryKeySetter;
 import com.drukido.vrun.database.annotations.TableName;
 import com.drukido.vrun.database.annotations.TrackColumn;
 import com.drukido.vrun.database.annotations.TrackColumnSetter;
+import com.drukido.vrun.utils.Duration;
 import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 @TableName(name = DBConstants.T_RUN)
@@ -38,7 +40,7 @@ public class Run extends DBObject{
     private long distance;
 
     @Column(name = DBConstants.COL_DURATION)
-    private long durationInSeconds;
+    private Duration duration;
 
     @ForeignKeyEntityArray(fkColumnName = DBConstants.COL_ATTENDING, entityClass = User.class)
     private ArrayList<User> attending;
@@ -74,9 +76,9 @@ public class Run extends DBObject{
         this.distance = distance;
     }
 
-    @ColumnSetter(columnName = DBConstants.COL_DURATION, type = TYPE_LONG)
-    public void setDurationInSeconds(long durationInSeconds) {
-        this.durationInSeconds = durationInSeconds;
+    @ColumnSetter(columnName = DBConstants.COL_DURATION, type = TYPE_DURATION)
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 
     @EntityArraySetter(fkColumnName = DBConstants.COL_ATTENDING, entityClass = User.class)
@@ -123,8 +125,8 @@ public class Run extends DBObject{
     }
 
     @ColumnGetter(columnName = DBConstants.COL_DURATION)
-    public long getDurationInSeconds() {
-        return durationInSeconds;
+    public Duration getDuration() {
+        return duration;
     }
 
     @ColumnGetter(columnName = DBConstants.COL_ATTENDING)

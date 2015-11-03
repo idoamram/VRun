@@ -5,6 +5,7 @@ package com.drukido.vrun.database;
  */
 public class DBConstants {
     /** Tables **/
+    public static final String T_GROUP = "group";
     public static final String T_USER = "user";
     public static final String T_RUN  = "run";
 
@@ -26,6 +27,10 @@ public class DBConstants {
     public static final String COL_TRACK            = "track";
     public static final String COL_RUN_CREATOR      = "run_creator";
     public static final String COL_TRACK_CREATOR    = "track_creator";
+    public static final String COL_TARGET_DURATION  = "target_duration";
+    public static final String COL_TARGET_DISTANCE  = "target_distance";
+    public static final String COL_TARGET_TIME      = "target_time";
+    public static final String COL_FOUNDER          = "founder";
 
     /** Create table commands **/
     public static final String CREATE_T_USER = "CREATE TABLE " + T_USER + " (" +
