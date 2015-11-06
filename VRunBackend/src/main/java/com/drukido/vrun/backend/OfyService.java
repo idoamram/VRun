@@ -1,5 +1,6 @@
 package com.drukido.vrun.backend;
 
+import com.drukido.vrun.backend.entities.RegistrationRecord;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;

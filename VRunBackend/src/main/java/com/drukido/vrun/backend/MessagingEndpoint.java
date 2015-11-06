@@ -6,6 +6,7 @@
 
 package com.drukido.vrun.backend;
 
+import com.drukido.vrun.backend.entities.RegistrationRecord;
 import com.google.android.gcm.server.Constants;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;

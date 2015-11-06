@@ -1,4 +1,4 @@
-package com.drukido.vrun.backend;
+package com.drukido.vrun.backend.entities;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
