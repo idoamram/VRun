@@ -33,6 +33,9 @@ public class Run extends DBObject{
     @Column(name = DBConstants.COL_ID)
     private long id;
 
+    @Column(name = DBConstants.COL_CLOUD_ID)
+    private long cloudId;
+
     @Column(name = DBConstants.COL_TIME)
     private Date time;
 
@@ -64,6 +67,11 @@ public class Run extends DBObject{
     @ColumnSetter(columnName = DBConstants.COL_ID, type = TYPE_LONG)
     public void setId(long id) {
         this.id = id;
+    }
+
+    @ColumnSetter(columnName = DBConstants.COL_CLOUD_ID, type = TYPE_LONG)
+    public void setCloudId(long cloudId) {
+        this.cloudId = cloudId;
     }
 
     @ColumnSetter(columnName = DBConstants.COL_TIME, type = TYPE_DATE)
@@ -112,6 +120,11 @@ public class Run extends DBObject{
     @ColumnGetter(columnName = DBConstants.COL_ID)
     public long getId() {
         return id;
+    }
+
+    @ColumnGetter(columnName = DBConstants.COL_CLOUD_ID)
+    public long getCloudId() {
+        return cloudId;
     }
 
     @ColumnGetter(columnName = DBConstants.COL_TIME)

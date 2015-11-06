@@ -440,7 +440,7 @@ public abstract class DBObject {
                                         latLngArrayList
                                                 .add(new LatLng(latitude, longitude));
                                     }
-                                    
+
                                     setter.setAccessible(true);
                                     setter.invoke(latLngArrayList);
                                 }

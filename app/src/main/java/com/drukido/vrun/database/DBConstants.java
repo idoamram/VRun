@@ -31,10 +31,12 @@ public class DBConstants {
     public static final String COL_TARGET_DISTANCE  = "target_distance";
     public static final String COL_TARGET_TIME      = "target_time";
     public static final String COL_FOUNDER          = "founder";
+    public static final String COL_CLOUD_ID = "cloud_id";
 
     /** Create table commands **/
     public static final String CREATE_T_USER = "CREATE TABLE " + T_USER + " (" +
             COL_ID              + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COL_CLOUD_ID        + " TEXT UNIQUE, " +
             COL_USER_NAME       + " TEXT UNIQUE, " +
             COL_PASSWORD        + " TEXT, " +
             COL_EMAIL           + " TEXT UNIQUE, " +
@@ -46,6 +48,7 @@ public class DBConstants {
 
     public static final String CREATE_T_RUN = "CREATE TABLE " + T_RUN + " (" +
             COL_ID              + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COL_CLOUD_ID        + " TEXT UNIQUE, " +
             COL_TIME            + " TEXT, " +
             COL_DISTANCE        + " INTEGER, " +
             COL_DURATION        + " INTEGER, " +
