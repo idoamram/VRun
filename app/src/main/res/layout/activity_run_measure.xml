@@ -17,6 +17,7 @@
             android:id="@+id/runMeasure_etxt_Duration"
             android:textSize="40sp"
             android:layout_width="match_parent"
+            android:hint="hh:mm:ss"
             android:layout_height="100dp"
             android:layout_weight="1"/>
         <EditText
@@ -24,6 +25,8 @@
             android:textSize="40sp"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:hint="KM"
+            android:gravity="center"
             android:layout_weight="1"/>
     </LinearLayout>
 
