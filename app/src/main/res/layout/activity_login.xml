@@ -23,7 +23,7 @@
         android:password="true"/>
 
     <Button
-        android:id="@+id/btnSubmit"
+        android:id="@+id/login_btnSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -8,54 +10,85 @@
     tools:context="com.drukido.vrun.SignupActivity"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/txtUsername"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Username"
-        android:layout_marginTop="10dp"/>
+        android:orientation="vertical"
+        android:id="@+id/signup_mainLayout">
 
-    <EditText
-        android:id="@+id/txtFirstname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="First name"
-        android:layout_marginTop="10dp"/>
+        <EditText
+            android:id="@+id/signup_txtUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="User name"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:text="idoamram" />
 
-    <EditText
-        android:id="@+id/txtLastname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Last name"
-        android:layout_marginTop="10dp"/>
+        <EditText
+            android:id="@+id/signup_txtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:layout_marginTop="10dp"
+            android:inputType="textEmailAddress"
+            android:text="ido.movieditor@gmail.com" />
 
-    <EditText
-        android:id="@+id/txtPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:layout_marginTop="10dp"
-        android:password="true"/>
+        <EditText
+            android:id="@+id/signup_txtFirstname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First name"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:text="Ido" />
 
-    <EditText
-        android:id="@+id/txtPhoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Phone number"
-        android:layout_marginTop="10dp"/>
+        <EditText
+            android:id="@+id/signup_txtLastname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last name"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:text="Amram" />
 
-    <EditText
-        android:id="@+id/txtEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:layout_marginTop="10dp"/>
+        <EditText
+            android:id="@+id/signup_txtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:layout_marginTop="10dp"
+            android:password="true"
+            android:inputType="textPassword"
+            android:text="Success1" />
 
-    <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Sign up"
-        android:layout_marginTop="10dp"/>
-</LinearLayout>
+        <EditText
+            android:id="@+id/signup_txtPasswordRepeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password repeat"
+            android:layout_marginTop="10dp"
+            android:password="true"
+            android:inputType="textPassword"
+            android:text="Success1" />
+
+        <EditText
+            android:id="@+id/signup_txtPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone number"
+            android:layout_marginTop="10dp"
+            android:inputType="phone"
+            android:text="0544677945" />
+
+        <Button
+            android:id="@+id/signup_btnSignup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Sign up"
+            android:layout_marginTop="10dp"/>
+
+    </LinearLayout>
+
+</ScrollView>
