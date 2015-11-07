@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                                         SharedPreferences.Editor prefsEditor = prefs.edit();
                                         prefsEditor.putBoolean(Constants.PREF_IS_USER_LOGGED_IN,
                                                 true);
-                                        prefsEditor.commit();
+                                        prefsEditor.apply();
 
                                         startActivity(new Intent(LoginActivity.this,
                                                 MainActivity.class));
