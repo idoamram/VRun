@@ -1,5 +1,7 @@
 package com.drukido.vrun.ui;
 
+import android.content.SharedPreferences;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,8 +20,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
+import com.parse.LogOutCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,12 +44,14 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private CoordinatorLayout mCoordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainActivity_coordinateLayout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -85,6 +94,28 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_logout) {
+            final ParseUser user = ParseUser.getCurrentUser();
+            ParseUser.logOutInBackground(new LogOutCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Toast.makeText(MainActivity.this,
+                                "Bye Bye " + user.getString("firstName") + " " +
+                                        user.getString("lastName") + "!", Toast.LENGTH_LONG).show();
+                        SharedPreferences prefs =
+                                getSharedPreferences(Constants.VRUN_PREFS_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor prefsEditor = prefs.edit();
+                        prefsEditor.putBoolean(Constants.PREF_IS_USER_LOGGED_IN, false);
+                        prefsEditor.commit();
+
+                        MainActivity.this.finish();
+                    } else {
+                        Snackbar.make(mCoordinatorLayout, "Sorry, something went wrong...",
+                                Snackbar.LENGTH_LONG);
+                    }
+                }
+            });
         }
 
         return super.onOptionsItemSelected(item);

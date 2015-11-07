@@ -22,8 +22,7 @@
             android:layout_height="wrap_content"
             android:hint="User name"
             android:layout_marginTop="10dp"
-            android:inputType="text"
-            android:text="idoamram" />
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/signup_txtEmail"
@@ -31,8 +30,7 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:layout_marginTop="10dp"
-            android:inputType="textEmailAddress"
-            android:text="ido.movieditor@gmail.com" />
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/signup_txtFirstname"
@@ -40,8 +38,7 @@
             android:layout_height="wrap_content"
             android:hint="First name"
             android:layout_marginTop="10dp"
-            android:inputType="text"
-            android:text="Ido" />
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/signup_txtLastname"
@@ -49,8 +46,7 @@
             android:layout_height="wrap_content"
             android:hint="Last name"
             android:layout_marginTop="10dp"
-            android:inputType="text"
-            android:text="Amram" />
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/signup_txtPassword"
@@ -59,8 +55,7 @@
             android:hint="Password"
             android:layout_marginTop="10dp"
             android:password="true"
-            android:inputType="textPassword"
-            android:text="Success1" />
+            android:inputType="textPassword" />
 
         <EditText
             android:id="@+id/signup_txtPasswordRepeat"
@@ -69,8 +64,7 @@
             android:hint="Password repeat"
             android:layout_marginTop="10dp"
             android:password="true"
-            android:inputType="textPassword"
-            android:text="Success1" />
+            android:inputType="textPassword" />
 
         <EditText
             android:id="@+id/signup_txtPhoneNumber"
@@ -78,8 +72,7 @@
             android:layout_height="wrap_content"
             android:hint="Phone number"
             android:layout_marginTop="10dp"
-            android:inputType="phone"
-            android:text="0544677945" />
+            android:inputType="phone" />
 
         <Button
             android:id="@+id/signup_btnSignup"

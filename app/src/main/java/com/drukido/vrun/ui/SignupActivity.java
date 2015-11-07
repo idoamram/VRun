@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -17,9 +17,6 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 public class SignUpActivity extends AppCompatActivity {
-
-    private static final String VRUN_GROUP_OBJECT_ID = "hM5byuhi4e";
-    private static final String EMPTY_STRING = "";
 
     EditText _etxtUserName;
     EditText _etxtFirstName;
@@ -59,7 +56,7 @@ public class SignUpActivity extends AppCompatActivity {
                     newUser.put("lastName", _etxtLastName.getText().toString());
                     newUser.put("phoneNumber", _etxtPhoneNumber.getText().toString());
                     newUser.put("group",
-                            ParseObject.createWithoutData("Group",VRUN_GROUP_OBJECT_ID));
+                            ParseObject.createWithoutData("Group", Constants.VRUN_GROUP_OBJECT_ID));
 
                     newUser.signUpInBackground(new SignUpCallback() {
                         @Override
@@ -82,29 +79,29 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean validateFields() {
-        if(_etxtUserName.getText().toString().equals(EMPTY_STRING)) {
+        if(_etxtUserName.getText().toString().equals(Constants.EMPTY_STRING)) {
             Snackbar.make(_mainLayout, "Please type a User name", Snackbar.LENGTH_LONG).show();
             return false;
-        } else if (_etxtFirstName.getText().toString().equals(EMPTY_STRING)) {
+        } else if (_etxtFirstName.getText().toString().equals(Constants.EMPTY_STRING)) {
             Snackbar.make(_mainLayout, "Please type your Fist name", Snackbar.LENGTH_LONG).show();
             return false;
-        } else if (_etxtLastName.getText().toString().equals(EMPTY_STRING)) {
+        } else if (_etxtLastName.getText().toString().equals(Constants.EMPTY_STRING)) {
             Snackbar.make(_mainLayout, "Please type your Last name", Snackbar.LENGTH_LONG).show();
             return false;
-        } else if (_etxtEmail.getText().toString().equals(EMPTY_STRING)) {
+        } else if (_etxtEmail.getText().toString().equals(Constants.EMPTY_STRING)) {
             Snackbar.make(_mainLayout, "Please type your Email", Snackbar.LENGTH_LONG).show();
             return false;
-        } else if (_etxtPassword.getText().toString().equals(EMPTY_STRING)) {
+        } else if (_etxtPassword.getText().toString().equals(Constants.EMPTY_STRING)) {
             Snackbar.make(_mainLayout, "Please type a password", Snackbar.LENGTH_LONG).show();
             return false;
-        } else if (_etxtPasswordRepeat.getText().toString().equals(EMPTY_STRING)) {
+        } else if (_etxtPasswordRepeat.getText().toString().equals(Constants.EMPTY_STRING)) {
             Snackbar.make(_mainLayout, "Please repeat your password", Snackbar.LENGTH_LONG).show();
             return false;
         } else if (!(_etxtPassword.getText().toString()
                 .equals(_etxtPasswordRepeat.getText().toString()))) {
             Snackbar.make(_mainLayout, "Please type match passwords", Snackbar.LENGTH_LONG).show();
             return false;
-        } else if (_etxtPhoneNumber.getText().toString().equals(EMPTY_STRING)) {
+        } else if (_etxtPhoneNumber.getText().toString().equals(Constants.EMPTY_STRING)) {
             Snackbar.make(_mainLayout, "Please type a Phone number", Snackbar.LENGTH_LONG).show();
             return false;
         } else {
