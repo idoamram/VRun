@@ -34,11 +34,11 @@ public class Duration {
 
     @Override
     public String toString() {
-        return hours + "," + minutes + "," + seconds;
+        return hours + ":" + minutes + ":" + seconds;
     }
 
     public static Duration fromString(String durationString) {
-        String args[] = durationString.split(",");
+        String args[] = durationString.split(":");
 
         Duration duration = new Duration();
         duration.setHours(Long.valueOf(args[0]));
