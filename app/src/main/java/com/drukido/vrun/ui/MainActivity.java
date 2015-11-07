@@ -1,5 +1,6 @@
 package com.drukido.vrun.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -74,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Intent i = new Intent(MainActivity.this, RunMeasureActivity.class);
+        i.putExtra(Constants.EXTRA_RUN_ID, "QkTYcSTFi9");
+        startActivity(i);
     }
 
 

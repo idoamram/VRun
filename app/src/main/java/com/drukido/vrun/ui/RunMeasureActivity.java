@@ -78,7 +78,7 @@ public class RunMeasureActivity extends AppCompatActivity {
             Run run = ParseObject.createWithoutData(Run.class, mRunId);
             run.setCreator(ParseUser.getCurrentUser());
             run.setDistance(Long.parseLong(distance.getText().toString()));
-            run.setDuration(distance.getText().toString());
+            run.setDuration(duration.getText().toString());
 
             run.saveInBackground(new SaveCallback() {
                 @Override
@@ -87,6 +87,7 @@ public class RunMeasureActivity extends AppCompatActivity {
                         Toast.makeText(RunMeasureActivity.this, "Couldn't complete the run.", Toast.LENGTH_LONG);
                     }
                     else {
+                        Toast.makeText(RunMeasureActivity.this, "Run Completed.", Toast.LENGTH_LONG);
                         RunMeasureActivity.this.finish();
                     }
                 }
