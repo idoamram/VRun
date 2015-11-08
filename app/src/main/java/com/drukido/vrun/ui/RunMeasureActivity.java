@@ -59,7 +59,7 @@ public class RunMeasureActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute, int seconds) {
                 // TODO Auto-generated method stub
-                v.setText("Time" + String.format("%02d", hourOfDay) +
+                v.setText(String.format("%02d", hourOfDay) +
                         ":" + String.format("%02d", minute) +
                         ":" + String.format("%02d", seconds));
             }
