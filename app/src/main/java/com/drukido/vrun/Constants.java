@@ -9,4 +9,5 @@ public class Constants {
     public static final String VRUN_GROUP_OBJECT_ID = "hM5byuhi4e";
     public static final String EMPTY_STRING = "";
     public static final String EXTRA_RUN_ID = "run_id";
+    public static final String DATE_HELPER_FORMAT = "dd-MM-yyyy HH:mm";
 }

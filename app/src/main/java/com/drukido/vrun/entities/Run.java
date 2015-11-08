@@ -5,6 +5,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @ParseClassName("Run")
 public class Run extends ParseObject {
@@ -16,6 +17,7 @@ public class Run extends ParseObject {
     public static final String KEY_ATTENDING = "attending";
     public static final String KEY_RUN_CREATOR = "runCreator";
     public static final String KEY_GROUP = "group";
+    public static final String KEY_RUN_TIME = "runTime";
 
     public Run() {
     }
@@ -77,5 +79,13 @@ public class Run extends ParseObject {
 
     public void setGroup(Group group) {
         this.put(KEY_GROUP, group);
+    }
+
+    public Date getRunTime() {
+        return getDate(KEY_RUN_TIME);
+    }
+
+    public void setRunTime(Date runTime) {
+        this.put(KEY_RUN_TIME, runTime);
     }
 }

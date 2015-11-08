@@ -13,10 +13,21 @@ public class Group extends ParseObject {
     public static final String KEY_TARGET_DATE = "target_date";
     public static final String KEY_TARGET_DURATION = "target_duration";
     public static final String KEY_TARGET_DISTANCE = "target_distance";
+    public static final String KEY_BEST_RUN = "bestRun";
     public static final String KEY_NAME = "name";
 
     public Group() {
     }
+
+    public Run getBestRun() {
+        return (Run) getParseObject(KEY_BEST_RUN);
+    }
+
+    public void setBestRun(Run bestRun) {
+        this.put(KEY_BEST_RUN, bestRun);
+    }
+
+    Run bestRun;
 
     public ParseUser getFounder() {
         return getParseUser(KEY_FOUNDER);

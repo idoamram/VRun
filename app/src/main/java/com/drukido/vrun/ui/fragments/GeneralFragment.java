@@ -1,14 +1,29 @@
 package com.drukido.vrun.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
+import com.drukido.vrun.entities.Run;
+import com.drukido.vrun.utils.RunsRecyclerAdapter;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.List;
 
 public class GeneralFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -21,6 +36,12 @@ public class GeneralFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private List<Run> mRunsList;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLinearLayoutManager;
+    private RunsRecyclerAdapter mRunsRecyclerAdapter;
+    private Context mContext;
 
     /**
      * Use this factory method to create a new instance of
@@ -58,8 +79,60 @@ public class GeneralFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_general, container, false);
-
+        mContext = getActivity();
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.general_recyclerView);
+        getRunsList();
         return rootView;
+    }
+
+    private void getRunsList() {
+        ParseQuery<Run> query = ParseQuery.getQuery(Run.class);
+        query.whereEqualTo("group", Constants.VRUN_GROUP_OBJECT_ID);
+        query.findInBackground(new FindCallback<Run>() {
+            public void done(List<Run> runsListResult, ParseException e) {
+                if (e == null) {
+                    Log.d("score", "Retrieved " + runsListResult.size() + " runs");
+                    if (runsListResult.size() > 0) {
+                        mRunsList = runsListResult;
+                        fetchRunsDetails();
+                    }
+                } else {
+                    Log.d("run", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void fetchRunsDetails() {
+        new AsyncTask<Void,Void,Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                for (Run currRun:mRunsList) {
+                    try {
+                        currRun.getCreator().fetch();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean isSucceeded) {
+                super.onPostExecute(isSucceeded);
+                if (isSucceeded) {
+                    initializeRecycler();
+                }
+            }
+        }.execute();
+    }
+
+    private void initializeRecycler() {
+        mLinearLayoutManager = new LinearLayoutManager(mContext);
+        mRunsRecyclerAdapter = new RunsRecyclerAdapter(mRunsList, mContext);
+        mRecyclerView.setAdapter(mRunsRecyclerAdapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

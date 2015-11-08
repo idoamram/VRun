@@ -54,6 +54,8 @@ public class SignUpActivity extends AppCompatActivity {
                     newUser.setPassword(_etxtPassword.getText().toString());
                     newUser.put("firstName", _etxtFirstName.getText().toString());
                     newUser.put("lastName", _etxtLastName.getText().toString());
+                    newUser.put("name", _etxtFirstName.getText().toString() + " " +
+                    _etxtLastName.getText().toString());
                     newUser.put("phoneNumber", _etxtPhoneNumber.getText().toString());
                     newUser.put("group",
                             ParseObject.createWithoutData("Group", Constants.VRUN_GROUP_OBJECT_ID));
