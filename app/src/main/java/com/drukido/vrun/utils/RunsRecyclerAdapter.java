@@ -10,11 +10,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Run;
-
-import org.w3c.dom.Text;
-
+import com.rey.material.widget.Button;
 import java.util.List;
 
 public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapter.RunVH> {
@@ -31,7 +30,7 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
     @Override
     public RunVH onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.runs_list_item, parent, false);
+                .inflate(R.layout.runs_list_item_swipe, parent, false);
         RunVH viewHolder = new RunVH(view);
         return viewHolder;
     }
@@ -53,6 +52,56 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
             @Override
             public void onClick(View view) {
                 Toast.makeText(mContext, "Attending dialog", Toast.LENGTH_LONG).show();
+            }
+        });
+        //set show mode.
+        holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
+        //add drag edge.(If the BottomView has 'layout_gravity' attribute, this line is unnecessary)
+        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left,
+                holder.swipeLayout.findViewById(R.id.run_list_item_bottom_wrapper));
+        holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+            @Override
+            public void onClose(SwipeLayout layout) {
+                //when the SurfaceView totally cover the BottomView.
+            }
+
+            @Override
+            public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+                //you are swiping.
+            }
+
+            @Override
+            public void onStartOpen(SwipeLayout layout) {
+
+            }
+
+            @Override
+            public void onOpen(SwipeLayout layout) {
+                // When the BottomView totally show.
+                layout.findViewById(R.id.run_list_item_btnAttending)
+                        .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(mContext, "Attending", Toast.LENGTH_LONG).show();
+                    }
+                });
+                layout.findViewById(R.id.run_list_item_btnNotAttending)
+                        .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(mContext, "Not attending", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onStartClose(SwipeLayout layout) {
+
+            }
+
+            @Override
+            public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+                //when user's hand released.
             }
         });
     }
@@ -83,6 +132,7 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
         TextView txtvDuration;
         TextView txtvDistance;
         TextView txtvUserName;
+        SwipeLayout swipeLayout;
 
         public RunVH(View itemView) {
             super(itemView);
@@ -93,6 +143,7 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
             txtvDuration = (TextView)itemView.findViewById(R.id.run_list_item_txtvDuration);
             txtvDistance = (TextView)itemView.findViewById(R.id.run_list_item_txtvDistance);
             txtvUserName = (TextView)itemView.findViewById(R.id.run_list_item_txtvUserName);
+            swipeLayout = (SwipeLayout)itemView.findViewById(R.id.run_list_item_swipeLayout);
             itemView.setOnClickListener(this);
         }
 

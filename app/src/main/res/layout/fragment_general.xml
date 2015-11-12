@@ -1,11 +1,47 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.drukido.vrun.ui.fragments.GeneralFragment">
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.drukido.vrun.ui.fragments.GeneralFragment"
+    android:orientation="vertical">
+
+    <RelativeLayout android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="30dp"
+        android:layout_weight="1"
+        android:background="#303F9F" >
+
+        <com.github.lzyzsd.circleprogress.DonutProgress
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/general_donutProgress"
+            custom:donut_progress="40"
+            custom:donut_finished_color="#FF9800"
+            custom:donut_unfinished_color="#3F51B5"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:hint="@string/group_name"
+            android:id="@+id/textView"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/general_donutProgress"
+            android:layout_marginEnd="10dp"/>
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:id="@+id/general_recyclerView" />
-</RelativeLayout>
+        android:layout_height="0dp"
+        android:id="@+id/general_recyclerView"
+        android:layout_weight="1.5"/>
+
+</LinearLayout>

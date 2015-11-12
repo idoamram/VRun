@@ -1,11 +1,14 @@
 package com.drukido.vrun.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -25,11 +28,13 @@ import android.widget.Toast;
 
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
+import com.drukido.vrun.ui.fragments.GeneralFragment;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements GeneralFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -80,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -125,6 +129,58 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure ?");
+        builder.setCancelable(true);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // if this button is clicked, close
+                // current activity
+                final ParseUser user = ParseUser.getCurrentUser();
+                ParseUser.logOutInBackground(new LogOutCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Toast.makeText(MainActivity.this,
+                                    "Bye Bye " + user.getString("firstName") + " " +
+                                            user.getString("lastName") + "!", Toast.LENGTH_LONG).show();
+                            SharedPreferences prefs =
+                                    getSharedPreferences(Constants.VRUN_PREFS_NAME, MODE_PRIVATE);
+                            SharedPreferences.Editor prefsEditor = prefs.edit();
+                            prefsEditor.putBoolean(Constants.PREF_IS_USER_LOGGED_IN, false);
+                            prefsEditor.commit();
+
+                            MainActivity.this.finish();
+                        } else {
+                            Snackbar.make(mCoordinatorLayout, "Sorry, something went wrong...",
+                                    Snackbar.LENGTH_LONG);
+                        }
+                    }
+                });
+            }
+        })
+                .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = builder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -140,6 +196,10 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+            switch (position) {
+                case 0:
+                    return new GeneralFragment();
+            }
             return PlaceholderFragment.newInstance(position + 1);
         }
 
@@ -153,11 +213,11 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "General";
                 case 1:
-                    return "SECTION 2";
+                    return "Me";
                 case 2:
-                    return "SECTION 3";
+                    return "Run";
             }
             return null;
         }

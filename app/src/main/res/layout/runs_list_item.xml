@@ -3,8 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="5dp"
-    android:id="@+id/run_list_item_mainLayout">
-
+    android:layout_margin="5dp"
+    android:id="@+id/run_list_item_mainLayout"
+    android:background="@drawable/run_item_border">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +16,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:hint="Run's date"
             android:id="@+id/run_list_item_txtvDate"
@@ -27,9 +28,10 @@
             android:layout_height="match_parent"
             android:scaleType="centerInside"
             android:layout_weight="1"
-            android:src="@drawable/android_group"
-            android:background="@android:color/transparent"
-            android:id="@+id/run_list_item_imgBtnAttendings" />
+            android:src="@android:drawable/ic_menu_info_details"
+            android:background="@drawable/run_item_border"
+            android:id="@+id/run_list_item_imgBtnAttendings"
+            android:layout_marginEnd="5dp"/>
 
         <ImageButton
             android:layout_width="0dp"
@@ -37,7 +39,7 @@
             android:scaleType="centerInside"
             android:layout_weight="1"
             android:src="@android:drawable/checkbox_on_background"
-            android:background="@android:color/transparent"
+            android:background="@drawable/run_item_border"
             android:id="@+id/run_list_item_imgBtnSetStatus" />
     </LinearLayout>
 
@@ -71,7 +73,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@android:drawable/ic_menu_recent_history" />
+            android:src="@android:drawable/presence_away" />
 
         <TextView
             android:layout_width="0dp"

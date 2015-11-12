@@ -2,10 +2,12 @@ package com.drukido.vrun.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,13 +18,19 @@ import android.widget.LinearLayout;
 
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
+import com.drukido.vrun.entities.Group;
 import com.drukido.vrun.entities.Run;
 import com.drukido.vrun.utils.RunsRecyclerAdapter;
+import com.github.lzyzsd.circleprogress.ArcProgress;
+import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
+import java.util.Date;
 import java.util.List;
 
 public class GeneralFragment extends Fragment {
@@ -42,6 +50,7 @@ public class GeneralFragment extends Fragment {
     private LinearLayoutManager mLinearLayoutManager;
     private RunsRecyclerAdapter mRunsRecyclerAdapter;
     private Context mContext;
+    private DonutProgress mDonutProgress;
 
     /**
      * Use this factory method to create a new instance of
@@ -81,13 +90,38 @@ public class GeneralFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_general, container, false);
         mContext = getActivity();
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.general_recyclerView);
+        mDonutProgress = (DonutProgress) rootView.findViewById(R.id.general_donutProgress);
+        initializeArcProgress();
         getRunsList();
         return rootView;
     }
 
+    private void initializeArcProgress() {
+        ParseUser user = ParseUser.getCurrentUser();
+        Group userGroup = (Group) user.getParseObject("group");
+        userGroup.fetchInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    long targetDistance = ((Group)object).getTargetDistance();
+                    long bestDistance = ((Group)object).getBestDistance();
+                    double progress = (bestDistance % targetDistance) / 100;
+                    if (progress > 100) {
+                        progress = 100;
+                    }
+
+                    mDonutProgress.setProgress((int) progress);
+                    mDonutProgress.setTextColor(Color.WHITE);
+                }
+            }
+        });
+    }
+
     private void getRunsList() {
         ParseQuery<Run> query = ParseQuery.getQuery(Run.class);
-        query.whereEqualTo("group", Constants.VRUN_GROUP_OBJECT_ID);
+//        query.whereEqualTo(Run.KEY_GROUP,
+//                ParseObject.createWithoutData("Run",Constants.VRUN_GROUP_OBJECT_ID));
+//        query.whereLessThanOrEqualTo(Run.KEY_RUN_TIME, new Date());
         query.findInBackground(new FindCallback<Run>() {
             public void done(List<Run> runsListResult, ParseException e) {
                 if (e == null) {
@@ -131,6 +165,8 @@ public class GeneralFragment extends Fragment {
 
     private void initializeRecycler() {
         mLinearLayoutManager = new LinearLayoutManager(mContext);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRunsRecyclerAdapter = new RunsRecyclerAdapter(mRunsList, mContext);
         mRecyclerView.setAdapter(mRunsRecyclerAdapter);
     }
