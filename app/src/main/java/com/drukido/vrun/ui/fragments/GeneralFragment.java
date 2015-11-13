@@ -20,6 +20,7 @@ import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Group;
 import com.drukido.vrun.entities.Run;
+import com.drukido.vrun.utils.DividerItemDecoration;
 import com.drukido.vrun.utils.RunsRecyclerAdapter;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.github.lzyzsd.circleprogress.DonutProgress;
@@ -169,6 +170,9 @@ public class GeneralFragment extends Fragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRunsRecyclerAdapter = new RunsRecyclerAdapter(mRunsList, mContext);
         mRecyclerView.setAdapter(mRunsRecyclerAdapter);
+        RecyclerView.ItemDecoration itemDecoration =
+                new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL);
+        mRecyclerView.addItemDecoration(itemDecoration);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

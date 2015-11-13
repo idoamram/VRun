@@ -2,9 +2,6 @@
 <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:layout_margin="5dp"
-    android:background="@drawable/run_item_border"
     android:id="@+id/run_list_item_swipeLayout">
 
     <!-- Bottom View Start-->
@@ -13,7 +10,6 @@
         android:id="@+id/run_list_item_bottom_wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="2"
         android:orientation="horizontal">
         <!--What you want to show-->
         <com.rey.material.widget.Button
@@ -39,7 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/run_list_item_mainLayout"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
