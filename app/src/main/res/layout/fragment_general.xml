@@ -9,9 +9,22 @@
 
     <RelativeLayout android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="30dp"
+        android:padding="20dp"
         android:layout_weight="1"
         android:background="#303F9F" >
+
+        <com.rey.material.widget.ProgressView
+            android:id="@+id/general_groupDetails_progressView"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:pv_autostart="true"
+            app:pv_circular="true"
+            app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
+            app:pv_progressMode="indeterminate"
+            android:visibility="gone"
+            android:layout_above="@+id/general_txtvBestRun"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"/>
 
         <com.github.lzyzsd.circleprogress.DonutProgress
             android:layout_width="wrap_content"
@@ -20,28 +33,86 @@
             custom:donut_progress="40"
             custom:donut_finished_color="#FF9800"
             custom:donut_unfinished_color="#3F51B5"
+            android:layout_marginEnd="30dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"/>
+            android:layout_alignParentEnd="true" />
 
-        <TextView
+        <com.rey.material.widget.TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:hint="@string/group_name"
-            android:id="@+id/textView"
-            android:gravity="center"
+            android:id="@+id/general_txtvGroupName"
+            android:gravity="start"
             android:textColor="@android:color/white"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/general_txtvGroupProgress"
+            android:layout_toStartOf="@+id/general_donutProgress"
+            android:layout_marginEnd="15dp"/>
+
+        <com.rey.material.widget.TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/general_txtvGroupProgress"
+            android:gravity="start"
+            android:textColor="@android:color/white"
+            android:hint="Group progress"
+            android:layout_above="@+id/general_txtvLastRun"
+            android:layout_alignStart="@+id/general_txtvLastRun"
+            android:layout_toStartOf="@+id/general_donutProgress"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="10dp"/>
+
+        <com.rey.material.widget.TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Last run"
+            android:id="@+id/general_txtvLastRun"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="5dp"
             android:layout_toStartOf="@+id/general_donutProgress"
-            android:layout_marginEnd="10dp"/>
+            android:gravity="start"
+            android:layout_marginEnd="15dp"/>
+
+        <com.rey.material.widget.TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Best run"
+            android:id="@+id/general_txtvBestRun"
+            android:layout_below="@+id/general_txtvLastRun"
+            android:layout_alignParentStart="true"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_toStartOf="@+id/general_donutProgress"
+            android:gravity="start"/>
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
+
+    <RelativeLayout android:layout_weight="1.5"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/general_recyclerView"
-        android:layout_weight="1.5"/>
+        android:layout_height="0dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/general_recyclerView"
+            android:layout_centerInParent="true"/>
+
+        <com.rey.material.widget.ProgressView
+            android:id="@+id/general_list_progressView"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:pv_autostart="true"
+            app:pv_circular="true"
+            app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
+            app:pv_progressMode="indeterminate"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
 
 </LinearLayout>

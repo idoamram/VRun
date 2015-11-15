@@ -23,15 +23,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
+import com.drukido.vrun.entities.Group;
 import com.drukido.vrun.ui.fragments.GeneralFragment;
+import com.parse.GetCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class MainActivity extends AppCompatActivity
         implements GeneralFragment.OnFragmentInteractionListener {
@@ -51,11 +57,16 @@ public class MainActivity extends AppCompatActivity
      */
     private ViewPager mViewPager;
     private CoordinatorLayout mCoordinatorLayout;
+    private Boolean mIsSubscribed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(!mIsSubscribed){
+            subscribeGroupPushes();
+        }
 
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainActivity_coordinateLayout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -71,18 +82,55 @@ public class MainActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+
+        findViewById(R.id.mainActivity_btnNewRun).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(MainActivity.this, NewRunActivity.class);
+                startActivity(i);
             }
         });
 
         Intent i = new Intent(MainActivity.this, RunMeasureActivity.class);
         i.putExtra(Constants.EXTRA_RUN_ID, "QkTYcSTFi9");
         startActivity(i);
+    }
+
+    private void subscribeGroupPushes() {
+        final Group userGroup =
+                (Group) ParseUser.getCurrentUser().getParseObject(Constants.KEY_GROUP);
+        userGroup.fetchInBackground(new GetCallback<Group>() {
+            @Override
+            public void done(final Group group, ParseException e) {
+                if (e == null) {
+                    ParsePush.subscribeInBackground(group.getName(), new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                mIsSubscribed = true;
+                                Toast.makeText(MainActivity.this, "You are now subscribe to " +
+                                        group.getName(), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, "Failed to subscribe..." +
+                                        group.getName(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                } else {
+                    Toast.makeText(MainActivity.this, "Failed to subscribe..." +
+                            group.getName(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
     }
 
     @Override

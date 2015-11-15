@@ -5,6 +5,7 @@ import com.drukido.vrun.Constants;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -13,10 +14,14 @@ import java.util.Locale;
  * Created by Ido on 11/8/2015.
  */
 public class DateHelper {
-    public static Date stringToDate(String string) throws Exception{
+    public static Date stringToDate(String string){
         if (string != null) {
             DateFormat format = new SimpleDateFormat(Constants.DATE_HELPER_FORMAT, Locale.ENGLISH);
-            return format.parse(string);
+            try {
+                return format.parse(string);
+            } catch (ParseException e) {
+                return null;
+            }
         } else {
             return null;
         }

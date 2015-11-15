@@ -20,6 +20,7 @@ import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Group;
 import com.drukido.vrun.entities.Run;
+import com.drukido.vrun.utils.DateHelper;
 import com.drukido.vrun.utils.DividerItemDecoration;
 import com.drukido.vrun.utils.RunsRecyclerAdapter;
 import com.github.lzyzsd.circleprogress.ArcProgress;
@@ -30,6 +31,8 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.rey.material.widget.ProgressView;
+import com.rey.material.widget.TextView;
 
 import java.util.Date;
 import java.util.List;
@@ -39,6 +42,7 @@ public class GeneralFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final long KM_DIVIDER = 1000;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -52,6 +56,12 @@ public class GeneralFragment extends Fragment {
     private RunsRecyclerAdapter mRunsRecyclerAdapter;
     private Context mContext;
     private DonutProgress mDonutProgress;
+    private TextView mTxtvGroupProgress;
+    private TextView mTxtvGroupName;
+    private TextView mTxtvLastRun;
+    private TextView mTxtvBestRun;
+    private ProgressView mProgressViewGroupDetails;
+    private ProgressView mProgressViewList;
 
     /**
      * Use this factory method to create a new instance of
@@ -90,22 +100,60 @@ public class GeneralFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_general, container, false);
         mContext = getActivity();
+        mProgressViewList = (ProgressView) rootView.findViewById(R.id.general_list_progressView);
+        mProgressViewGroupDetails =
+                (ProgressView) rootView.findViewById(R.id.general_groupDetails_progressView);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.general_recyclerView);
         mDonutProgress = (DonutProgress) rootView.findViewById(R.id.general_donutProgress);
-        initializeArcProgress();
+        mTxtvGroupName = (TextView) rootView.findViewById(R.id.general_txtvGroupName);
+        mTxtvGroupProgress = (TextView) rootView.findViewById(R.id.general_txtvGroupProgress);
+        mTxtvLastRun = (TextView) rootView.findViewById(R.id.general_txtvLastRun);
+        mTxtvBestRun = (TextView) rootView.findViewById(R.id.general_txtvBestRun);
+
+        showGroupDetailsProgressView();
+        showListProgressView();
+
+        initializeGroupDetails();
         getRunsList();
         return rootView;
     }
 
-    private void initializeArcProgress() {
+    private void showGroupDetailsProgressView() {
+        mTxtvGroupName.setVisibility(View.INVISIBLE);
+        mTxtvGroupProgress.setVisibility(View.INVISIBLE);
+        mTxtvLastRun.setVisibility(View.INVISIBLE);
+        mTxtvBestRun.setVisibility(View.INVISIBLE);
+        mProgressViewGroupDetails.setVisibility(View.VISIBLE);
+    }
+
+    private void hideGroupDetailsProgressView() {
+        mTxtvGroupName.setVisibility(View.VISIBLE);
+        mTxtvGroupProgress.setVisibility(View.VISIBLE);
+        mTxtvLastRun.setVisibility(View.VISIBLE);
+        mTxtvBestRun.setVisibility(View.VISIBLE);
+        mProgressViewGroupDetails.setVisibility(View.INVISIBLE);
+    }
+
+    private void showListProgressView() {
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mProgressViewList.setVisibility(View.VISIBLE);
+    }
+
+    private void hideListProgressView() {
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mProgressViewList.setVisibility(View.GONE);
+    }
+
+    private void initializeGroupDetails() {
         ParseUser user = ParseUser.getCurrentUser();
         Group userGroup = (Group) user.getParseObject("group");
-        userGroup.fetchInBackground(new GetCallback<ParseObject>() {
+        userGroup.fetchInBackground(new GetCallback<Group>() {
             @Override
-            public void done(ParseObject object, ParseException e) {
+            public void done(Group group, ParseException e) {
                 if (e == null) {
-                    long targetDistance = ((Group)object).getTargetDistance();
-                    long bestDistance = ((Group)object).getBestDistance();
+                    // Initialize Donut progress bar
+                    long targetDistance = group.getTargetDistance();
+                    long bestDistance = group.getBestDistance();
                     double progress = (bestDistance % targetDistance) / 100;
                     if (progress > 100) {
                         progress = 100;
@@ -113,20 +161,74 @@ public class GeneralFragment extends Fragment {
 
                     mDonutProgress.setProgress((int) progress);
                     mDonutProgress.setTextColor(Color.WHITE);
+
+                    // Initialize group name
+                    mTxtvGroupName.setText(group.getName());
+                    mTxtvGroupName.setVisibility(View.VISIBLE);
+
+                    // Initialize group progress
+                    mTxtvGroupProgress.setText(String.valueOf("Progress: " +
+                            (bestDistance / KM_DIVIDER) + " / " +
+                            (targetDistance / KM_DIVIDER) + " KM"));
+                    mTxtvGroupProgress.setVisibility(View.VISIBLE);
+                    checkIfAllTextFilled();
+                }
+            }
+        });
+
+        // Get last run
+        Run.getLastRunInBackground(Constants.VRUN_GROUP_OBJECT_ID, new FindCallback<Run>() {
+            @Override
+            public void done(List<Run> runs, ParseException e) {
+                if (e == null) {
+                    if (runs.size() > 0) {
+                        String strDistance =
+                                String.valueOf(((double) (runs.get(0).getDistance() / KM_DIVIDER)) +
+                                        " KM");
+                        String strTime = DateHelper.dateToString(runs.get(0).getRunTime());
+                        String lastRun = "Last run: " + strDistance + "\n" + "at " + strTime;
+                        mTxtvLastRun.setText(lastRun);
+                        mTxtvLastRun.setVisibility(View.VISIBLE);
+                        checkIfAllTextFilled();
+                    }
+                }
+            }
+        });
+
+        // Get best run
+        Run.getBestRunInBackground(Constants.VRUN_GROUP_OBJECT_ID, new FindCallback<Run>() {
+            @Override
+            public void done(List<Run> runs, ParseException e) {
+                if (e == null) {
+                    if (runs.size() > 0) {
+                        String strDistance =
+                                String.valueOf(((double) (runs.get(0).getDistance() / KM_DIVIDER)) +
+                                        " KM");
+                        String strTime = DateHelper.dateToString(runs.get(0).getRunTime());
+                        String bestRun = "Best run: " + strDistance + "\n" + "at " + strTime;
+                        mTxtvBestRun.setText(bestRun);
+                        mTxtvBestRun.setVisibility(View.VISIBLE);
+                        checkIfAllTextFilled();
+                    }
                 }
             }
         });
     }
 
+    private void checkIfAllTextFilled() {
+        if(mTxtvGroupName.getVisibility() == View.VISIBLE &&
+                mTxtvGroupProgress.getVisibility() == View.VISIBLE &&
+                mTxtvBestRun.getVisibility() == View.VISIBLE &&
+                mTxtvLastRun.getVisibility() == View.VISIBLE) {
+            mProgressViewGroupDetails.setVisibility(View.GONE);
+        }
+    }
+
     private void getRunsList() {
-        ParseQuery<Run> query = ParseQuery.getQuery(Run.class);
-//        query.whereEqualTo(Run.KEY_GROUP,
-//                ParseObject.createWithoutData("Run",Constants.VRUN_GROUP_OBJECT_ID));
-//        query.whereLessThanOrEqualTo(Run.KEY_RUN_TIME, new Date());
-        query.findInBackground(new FindCallback<Run>() {
+        Run.getAllComingRuns(Constants.VRUN_GROUP_OBJECT_ID, new FindCallback<Run>() {
             public void done(List<Run> runsListResult, ParseException e) {
                 if (e == null) {
-                    Log.d("score", "Retrieved " + runsListResult.size() + " runs");
+                    Log.d("run", "Retrieved " + runsListResult.size() + " runs");
                     if (runsListResult.size() > 0) {
                         mRunsList = runsListResult;
                         fetchRunsDetails();
@@ -173,6 +275,7 @@ public class GeneralFragment extends Fragment {
         RecyclerView.ItemDecoration itemDecoration =
                 new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL);
         mRecyclerView.addItemDecoration(itemDecoration);
+        hideListProgressView();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

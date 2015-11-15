@@ -1,5 +1,6 @@
 package com.drukido.vrun.ui;
 
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText _etxtPassword;
     EditText _etxtPasswordRepeat;
     EditText _etxtPhoneNumber;
+    Button btnSignUp;
 
     LinearLayout _mainLayout;
 
@@ -42,7 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
         _etxtPasswordRepeat = (EditText) findViewById(R.id.signup_txtPasswordRepeat);
         _etxtPhoneNumber = (EditText) findViewById(R.id.signup_txtPhoneNumber);
 
-        Button btnSignUp = (Button) findViewById(R.id.signup_btnSignup);
+        btnSignUp = (Button) findViewById(R.id.signup_btnSignup);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,9 +69,13 @@ public class SignUpActivity extends AppCompatActivity {
                                 Toast.makeText(SignUpActivity.this, "Welcome " +
                                 newUser.get("firstName") + " " + newUser.get("lastName") + "!",
                                         Toast.LENGTH_LONG).show();
+                                btnSignUp.setText(getString(R.string.welcome));
+                                btnSignUp.setBackgroundColor(Color.parseColor("#8BC34A"));
                             } else {
                                 Snackbar.make(_mainLayout, "Sorry, something went wrong...",
                                         Snackbar.LENGTH_LONG).show();
+                                btnSignUp.setText(getString(R.string.failed));
+                                btnSignUp.setBackgroundColor(Color.parseColor("#F44336"));
                             }
                         }
                     });
