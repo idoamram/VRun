@@ -99,9 +99,9 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        Intent i = new Intent(MainActivity.this, RunMeasureActivity.class);
-        i.putExtra(Constants.EXTRA_RUN_ID, "QkTYcSTFi9");
-        startActivity(i);
+//        Intent i = new Intent(MainActivity.this, RunMeasureActivity.class);
+//        i.putExtra(Constants.EXTRA_RUN_ID, "QkTYcSTFi9");
+//        startActivity(i);
     }
 
     private void subscribeGroupPushes() {

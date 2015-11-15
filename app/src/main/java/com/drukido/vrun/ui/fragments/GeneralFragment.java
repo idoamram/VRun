@@ -164,15 +164,17 @@ public class GeneralFragment extends Fragment {
 
                     // Initialize group name
                     mTxtvGroupName.setText(group.getName());
-                    mTxtvGroupName.setVisibility(View.VISIBLE);
 
                     // Initialize group progress
                     mTxtvGroupProgress.setText(String.valueOf("Progress: " +
                             (bestDistance / KM_DIVIDER) + " / " +
                             (targetDistance / KM_DIVIDER) + " KM"));
-                    mTxtvGroupProgress.setVisibility(View.VISIBLE);
-                    checkIfAllTextFilled();
+                } else {
+                    mTxtvGroupProgress.setText("");
                 }
+                mTxtvGroupName.setVisibility(View.VISIBLE);
+                mTxtvGroupProgress.setVisibility(View.VISIBLE);
+                checkIfAllTextFilled();
             }
         });
 
@@ -183,15 +185,19 @@ public class GeneralFragment extends Fragment {
                 if (e == null) {
                     if (runs.size() > 0) {
                         String strDistance =
-                                String.valueOf(((double) (runs.get(0).getDistance() / KM_DIVIDER)) +
+                                String.valueOf((((double)(runs.get(0).getDistance())) / KM_DIVIDER) +
                                         " KM");
                         String strTime = DateHelper.dateToString(runs.get(0).getRunTime());
                         String lastRun = "Last run: " + strDistance + "\n" + "at " + strTime;
                         mTxtvLastRun.setText(lastRun);
-                        mTxtvLastRun.setVisibility(View.VISIBLE);
-                        checkIfAllTextFilled();
+                    } else {
+                        mTxtvLastRun.setText("");
                     }
+                } else {
+                    mTxtvLastRun.setText("");
                 }
+                mTxtvLastRun.setVisibility(View.VISIBLE);
+                checkIfAllTextFilled();
             }
         });
 
@@ -202,15 +208,19 @@ public class GeneralFragment extends Fragment {
                 if (e == null) {
                     if (runs.size() > 0) {
                         String strDistance =
-                                String.valueOf(((double) (runs.get(0).getDistance() / KM_DIVIDER)) +
+                                String.valueOf((((double)(runs.get(0).getDistance())) / KM_DIVIDER) +
                                         " KM");
                         String strTime = DateHelper.dateToString(runs.get(0).getRunTime());
                         String bestRun = "Best run: " + strDistance + "\n" + "at " + strTime;
                         mTxtvBestRun.setText(bestRun);
-                        mTxtvBestRun.setVisibility(View.VISIBLE);
-                        checkIfAllTextFilled();
+                    } else {
+                        mTxtvBestRun.setText("");
                     }
+                } else {
+                    mTxtvBestRun.setText("");
                 }
+                mTxtvBestRun.setVisibility(View.VISIBLE);
+                checkIfAllTextFilled();
             }
         });
     }
@@ -232,9 +242,12 @@ public class GeneralFragment extends Fragment {
                     if (runsListResult.size() > 0) {
                         mRunsList = runsListResult;
                         fetchRunsDetails();
+                    } else {
+                        hideListProgressView();
                     }
                 } else {
                     Log.d("run", "Error: " + e.getMessage());
+                    hideListProgressView();
                 }
             }
         });
@@ -261,6 +274,8 @@ public class GeneralFragment extends Fragment {
                 super.onPostExecute(isSucceeded);
                 if (isSucceeded) {
                     initializeRecycler();
+                } else {
+                    hideListProgressView();
                 }
             }
         }.execute();

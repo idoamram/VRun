@@ -39,8 +39,8 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
     public void onBindViewHolder(RunVH holder, int position) {
         Run currRun = mItemsList.get(position);
         holder.txtvDate.setText(DateHelper.dateToString(currRun.getRunTime()));
-        holder.txtvDistance.setText(String
-                .valueOf((((double) currRun.getTargetDistance()) / 1000) + " KM"));
+        String distance = String.valueOf((((double) currRun.getTargetDistance()) / 1000)) + " KM";
+        holder.txtvDistance.setText(distance);
         Duration duration = Duration.fromString(currRun.getTargetDuration());
         holder.txtvDuration.setText(duration.toPresentableString());
         holder.txtvUserName.setText(currRun.getCreator().getString("name"));
