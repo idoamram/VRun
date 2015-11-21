@@ -135,6 +135,7 @@ public class NewRunActivity extends AppCompatActivity
                     newRun.setCreator(currUser);
                     newRun.setGroup((Group) currUser.getParseObject(Constants.KEY_GROUP));
                     newRun.setAttending(attendingUsers);
+                    newRun.setIsMeasured(false);
                     saveNewRun(newRun, currUser);
                 }
             }

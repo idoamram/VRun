@@ -260,6 +260,7 @@ public class GeneralFragment extends Fragment {
             protected Boolean doInBackground(Void... voids) {
                 for (Run currRun:mRunsList) {
                     try {
+                        currRun.fetch();
                         currRun.getCreator().fetch();
                     } catch (ParseException e) {
                         e.printStackTrace();

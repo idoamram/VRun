@@ -58,11 +58,11 @@ public class Run extends ParseObject {
         this.put(KEY_TARGET_DISTANCE, targetDistance);
     }
 
-    public String getTitle() {
+    public String getRunTitle() {
         return getString(KEY_TITLE);
     }
 
-    public void setTitle(String title) {
+    public void setRunTitle(String title) {
         this.put(KEY_TITLE, title);
     }
 
@@ -175,4 +175,5 @@ public class Run extends ParseObject {
         query.whereLessThanOrEqualTo(Run.KEY_RUN_TIME, new Date());
         query.findInBackground(findCallback);
     }
+
 }

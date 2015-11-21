@@ -1,6 +1,7 @@
 package com.drukido.vrun.ui;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -103,6 +104,7 @@ public class RunMeasureActivity extends AppCompatActivity
                     Run currRun = ParseObject.createWithoutData(Run.class, mRunId);
                     currRun.setDistance(mDistance);
                     currRun.setDuration(mDuration);
+                    currRun.setIsMeasured(true);
                     saveRun(currRun);
                 }
             }
@@ -118,7 +120,7 @@ public class RunMeasureActivity extends AppCompatActivity
                     Toast.makeText(RunMeasureActivity.this,
                             getString(R.string.run_saved_successfully),
                             Toast.LENGTH_LONG).show();
-                    finish();
+                    checkIfBestRun();
                 } else {
                     hideProgressBar();
                     btnFinish.setBackgroundColor(getResources().
@@ -127,6 +129,41 @@ public class RunMeasureActivity extends AppCompatActivity
                 }
             }
         });
+    }
+
+    private void checkIfBestRun() {
+        new AsyncTask<Void,Void,Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                try {
+                    Run currRun = Run.createWithoutData(Run.class, mRunId);
+                    currRun.fetch();
+                    Group group = currRun.getGroup();
+                    group.fetch();
+                    if(currRun.getDistance() > group.getBestDistance()) {
+                        group.setBestDistance(currRun.getDistance());
+                        group.save();
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean isSucceeded) {
+                super.onPostExecute(isSucceeded);
+                if (isSucceeded) {
+                    finish();
+                } else {
+                    Toast.makeText(RunMeasureActivity.this,
+                            "Failed to check if it was the best run", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        }.execute();
     }
 
     private void showProgressBar() {

@@ -33,4 +33,20 @@ public class DateHelper {
             return dateFormat.format(date);
         } else return "";
     }
+
+    public static String getTimeStringFromDate(Date date){
+        if (date != null) {
+            DateFormat dateFormat = new SimpleDateFormat(Constants.DATE_HELPER_FORMAT);
+            String fullDateTime[] = dateFormat.format(date).split(" ");
+            return fullDateTime[1];
+        } else return "";
+    }
+
+    public static String getDateStringFromDate(Date date){
+        if (date != null) {
+            DateFormat dateFormat = new SimpleDateFormat(Constants.DATE_HELPER_FORMAT);
+            String fullDateTime[] = dateFormat.format(date).split(" ");
+            return fullDateTime[0];
+        } else return "";
+    }
 }

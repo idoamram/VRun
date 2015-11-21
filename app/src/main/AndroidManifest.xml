@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.drukido.vrun" >
+    package="com.drukido.vrun">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -21,8 +21,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".ui.LoginActivity"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".ui.LoginActivity"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -31,18 +32,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.SignUpActivity" >
-        </activity>
+        <activity android:name=".ui.SignUpActivity"></activity>
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <service android:name="com.parse.PushService" />
 
         <receiver
             android:name="com.parse.ParsePushBroadcastReceiver"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
@@ -51,7 +50,7 @@
         </receiver>
         <receiver
             android:name="com.parse.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -61,12 +60,14 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.RunMeasureActivity"
-            android:theme="@style/NoTitleDialog">
-        </activity>
-        <activity android:name=".ui.NewRunActivity"
-            android:theme="@style/NoTitleDialog">
-        </activity>
+        <activity
+            android:name=".ui.RunMeasureActivity"
+            android:theme="@style/NoTitleDialog"/>
+        <activity
+            android:name=".ui.NewRunActivity"
+            android:theme="@style/NoTitleDialog"/>
+        <activity android:name=".ui.WatchAttendingActivity"
+            android:theme="@style/NoTitleDialog"/>
     </application>
 
 </manifest>

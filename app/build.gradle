@@ -44,4 +44,5 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.code-troopers.betterpickers:library:2.2.1'
     compile 'joda-time:joda-time:2.8.2'
+    compile 'de.hdodenhof:circleimageview:2.0.0'
 }
