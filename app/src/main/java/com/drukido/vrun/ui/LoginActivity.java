@@ -6,29 +6,31 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.rey.material.widget.Button;
 
 public class LoginActivity extends AppCompatActivity {
 
     EditText _etxtUserName;
     EditText _etxtPassword;
 
-    LinearLayout _mainLayout;
+    RelativeLayout _mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
-        _mainLayout = (LinearLayout) findViewById(R.id.login_mainLayout);
+        _mainLayout = (RelativeLayout) findViewById(R.id.login_relativeLayout_mainLayout);
         _etxtUserName = (EditText) findViewById(R.id.login_etxtUserName);
         _etxtPassword = (EditText) findViewById(R.id.login_etxtPassword);
 

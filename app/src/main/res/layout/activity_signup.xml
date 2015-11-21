@@ -24,7 +24,7 @@
         <com.github.florent37.materialtextfield.MaterialTextField
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/ic_menu_myplaces"
+            app:mtf_image="@android:drawable/ic_menu_view"
             android:id="@+id/signup_txtUsernameContainer"
             android:layout_marginTop="@dimen/signup_fields_margin_top">
 
@@ -88,7 +88,7 @@
         <com.github.florent37.materialtextfield.MaterialTextField
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/ic_menu_view"
+            app:mtf_image="@android:drawable/ic_lock_idle_lock"
             android:id="@+id/signup_txtPasswordContainer"
             android:layout_marginTop="@dimen/signup_fields_margin_top">
 
@@ -104,7 +104,7 @@
         <com.github.florent37.materialtextfield.MaterialTextField
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/ic_menu_view"
+            app:mtf_image="@android:drawable/ic_lock_idle_lock"
             android:id="@+id/signup_txtPasswordRepeatContainer"
             android:layout_marginTop="@dimen/signup_fields_margin_top">
 

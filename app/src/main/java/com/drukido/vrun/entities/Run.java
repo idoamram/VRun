@@ -28,8 +28,18 @@ public class Run extends ParseObject {
     public static final String KEY_RUN_TIME = "runTime";
     public static final String KEY_TARGET_DISTANCE = "targetDistance";
     public static final String KEY_TARGET_DURATION = "targetDuration";
+    public static final String KEY_IS_MEASURED = "isMeasured";
+    public static final String KEY_TITLE = "title";
 
     public Run() {
+    }
+
+    public Boolean getIsMeasured() {
+        return getBoolean(KEY_IS_MEASURED);
+    }
+
+    public void setIsMeasured(Boolean isMeasured) {
+        this.put(KEY_IS_MEASURED, isMeasured);
     }
 
     public long getDistance() {
@@ -46,6 +56,14 @@ public class Run extends ParseObject {
 
     public void setTargetDistance(long targetDistance) {
         this.put(KEY_TARGET_DISTANCE, targetDistance);
+    }
+
+    public String getTitle() {
+        return getString(KEY_TITLE);
+    }
+
+    public void setTitle(String title) {
+        this.put(KEY_TITLE, title);
     }
 
     public String getDuration() {
@@ -126,6 +144,7 @@ public class Run extends ParseObject {
         query.whereEqualTo(Run.KEY_GROUP,
                 Group.createWithoutData(Group.class, groupId));
         query.whereLessThan(Run.KEY_RUN_TIME, new Date());
+        query.whereGreaterThan(Run.KEY_DISTANCE, 0);
         query.orderByDescending(Run.KEY_RUN_TIME);
         query.setLimit(1);
         query.findInBackground(findCallback);
@@ -135,6 +154,7 @@ public class Run extends ParseObject {
         ParseQuery<Run> query = getQuery();
         query.whereEqualTo(Run.KEY_GROUP,
                 Group.createWithoutData(Group.class, groupId));
+        query.whereGreaterThan(Run.KEY_DISTANCE, 0);
         query.orderByDescending(Run.KEY_DISTANCE);
         query.setLimit(1);
         query.findInBackground(findCallback);
@@ -145,6 +165,14 @@ public class Run extends ParseObject {
         query.whereEqualTo(Run.KEY_GROUP,
                 Group.createWithoutData(Group.class, groupId));
         query.whereGreaterThanOrEqualTo(Run.KEY_RUN_TIME, new Date());
+        query.findInBackground(findCallback);
+    }
+
+    public static void getAllPastRuns(String groupId, FindCallback<Run> findCallback) {
+        ParseQuery<Run> query = getQuery();
+        query.whereEqualTo(Run.KEY_GROUP,
+                Group.createWithoutData(Group.class, groupId));
+        query.whereLessThanOrEqualTo(Run.KEY_RUN_TIME, new Date());
         query.findInBackground(findCallback);
     }
 }

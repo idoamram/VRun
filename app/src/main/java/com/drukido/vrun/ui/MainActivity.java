@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,16 +29,17 @@ import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Group;
 import com.drukido.vrun.ui.fragments.GeneralFragment;
+import com.drukido.vrun.ui.fragments.RunFragment;
 import com.parse.GetCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 public class MainActivity extends AppCompatActivity
-        implements GeneralFragment.OnFragmentInteractionListener {
+        implements RunFragment.OnFragmentInteractionListener,
+        GeneralFragment.OnFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -163,7 +162,7 @@ public class MainActivity extends AppCompatActivity
                                 getSharedPreferences(Constants.VRUN_PREFS_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor prefsEditor = prefs.edit();
                         prefsEditor.putBoolean(Constants.PREF_IS_USER_LOGGED_IN, false);
-                        prefsEditor.commit();
+                        prefsEditor.apply();
 
                         MainActivity.this.finish();
                     } else {
@@ -247,6 +246,8 @@ public class MainActivity extends AppCompatActivity
             switch (position) {
                 case 0:
                     return new GeneralFragment();
+                case 2:
+                    return new RunFragment();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

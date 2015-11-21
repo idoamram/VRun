@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:padding="20dp"
         android:layout_weight="1"
-        android:background="#303F9F" >
+        android:background="@drawable/group_details_background">
 
         <com.rey.material.widget.ProgressView
             android:id="@+id/general_groupDetails_progressView"
@@ -30,9 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/general_donutProgress"
-            custom:donut_progress="40"
-            custom:donut_finished_color="#FF9800"
-            custom:donut_unfinished_color="#3F51B5"
+            custom:donut_finished_color="@color/colorGreenSuccess"
+            custom:donut_unfinished_color="@color/colorPrimary"
             android:layout_marginEnd="30dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true" />

@@ -9,24 +9,39 @@
         android:background="#FF9800"
         android:id="@+id/run_list_item_bottom_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
         <!--What you want to show-->
-        <com.rey.material.widget.Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/attending"
+        <com.rey.material.widget.ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="10dp"
-            android:id="@+id/run_list_item_btnAttending"/>
+            android:layout_gravity="center"
+            android:id="@+id/run_list_item_btnAttending"
+            android:src="@mipmap/ic_thumb_up_white"
+            android:background="@android:color/transparent"/>
 
-        <com.rey.material.widget.Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/not_attending"
+        <com.rey.material.widget.ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="10dp"
-            android:id="@+id/run_list_item_btnNotAttending"/>
+            android:layout_gravity="center"
+            android:id="@+id/run_list_item_btnWatchAttending"
+            android:src="@mipmap/ic_supervisor_account_white"
+            android:background="@android:color/transparent"/>
+
+        <com.rey.material.widget.ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:id="@+id/run_list_item_btnNotAttending"
+            android:src="@mipmap/ic_thumb_down_white"
+            android:background="@android:color/transparent"/>
+
     </LinearLayout>
     <!-- Bottom View End-->
 
@@ -54,24 +69,6 @@
                 android:gravity="center"
                 android:layout_gravity="center_horizontal" />
 
-            <ImageButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:scaleType="centerInside"
-                android:layout_weight="1"
-                android:src="@android:drawable/ic_menu_info_details"
-                android:background="@drawable/run_item_border"
-                android:id="@+id/run_list_item_imgBtnAttendings"
-                android:layout_marginEnd="5dp"/>
-
-            <ImageButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:scaleType="centerInside"
-                android:layout_weight="1"
-                android:src="@android:drawable/checkbox_on_background"
-                android:background="@drawable/run_item_border"
-                android:id="@+id/run_list_item_imgBtnSetStatus" />
         </LinearLayout>
 
         <LinearLayout

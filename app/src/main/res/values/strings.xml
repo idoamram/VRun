@@ -32,4 +32,7 @@
     <string name="run_saved_successfully">Run saved successfully</string>
     <string name="error_click_to_retry">Error. Click to retry</string>
     <string name="new_run">New run</string>
+    <string name="tap_a_run">Tap on a run</string>
+    <string name="login">Login</string>
+    <string name="vrun">© VRun</string>
 </resources>

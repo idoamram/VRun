@@ -4,8 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.drukido.vrun.ui.NewRunActivity"
-    android:background="@color/colorPrimaryDark">
+    tools:context="com.drukido.vrun.ui.NewRunActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/group_details_background"
+        android:scaleType="centerCrop"/>
 
     <com.rey.material.widget.ProgressView
         android:id="@+id/newRun_progressView"

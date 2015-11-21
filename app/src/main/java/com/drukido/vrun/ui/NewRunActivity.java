@@ -268,8 +268,8 @@ public class NewRunActivity extends AppCompatActivity
             mDistance = number;
             btnDistance.setText(distance);
             btnDistance.setBackgroundColor(getResources().getColor(R.color.colorGreenSuccess));
+            mIsDistanceValid = true;
         }
-        mIsDistanceValid = true;
     }
 
     @Override

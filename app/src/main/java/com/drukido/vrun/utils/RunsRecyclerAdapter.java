@@ -21,10 +21,12 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
     List<Run> mItemsList;
     OnItemClickListener mItemClickListener;
     Context mContext;
+    Boolean isSwipable;
 
-    public RunsRecyclerAdapter (List<Run> runsList, Context context) {
+    public RunsRecyclerAdapter (List<Run> runsList, Context context, Boolean isSwipable) {
         this.mItemsList = runsList;
         this.mContext = context;
+        this.isSwipable = isSwipable;
     }
 
     @Override
@@ -56,56 +58,58 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                 Toast.makeText(mContext, "Attending dialog", Toast.LENGTH_LONG).show();
             }
         });
-        //set show mode.
-        holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
-        //add drag edge.(If the BottomView has 'layout_gravity' attribute, this line is unnecessary)
-        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left,
-                holder.swipeLayout.findViewById(R.id.run_list_item_bottom_wrapper));
-        holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
-            @Override
-            public void onClose(SwipeLayout layout) {
-                //when the SurfaceView totally cover the BottomView.
-            }
+        if (isSwipable) {
+            //set show mode.
+            holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
+            //add drag edge.(If the BottomView has 'layout_gravity' attribute, this line is unnecessary)
+            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left,
+                    holder.swipeLayout.findViewById(R.id.run_list_item_bottom_wrapper));
+            holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+                @Override
+                public void onClose(SwipeLayout layout) {
+                    //when the SurfaceView totally cover the BottomView.
+                }
 
-            @Override
-            public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
-                //you are swiping.
-            }
+                @Override
+                public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+                    //you are swiping.
+                }
 
-            @Override
-            public void onStartOpen(SwipeLayout layout) {
+                @Override
+                public void onStartOpen(SwipeLayout layout) {
 
-            }
+                }
 
-            @Override
-            public void onOpen(SwipeLayout layout) {
-                // When the BottomView totally show.
-                layout.findViewById(R.id.run_list_item_btnAttending)
-                        .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(mContext, "Attending", Toast.LENGTH_LONG).show();
-                    }
-                });
-                layout.findViewById(R.id.run_list_item_btnNotAttending)
-                        .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(mContext, "Not attending", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+                @Override
+                public void onOpen(SwipeLayout layout) {
+                    // When the BottomView totally show.
+                    layout.findViewById(R.id.run_list_item_btnAttending)
+                            .setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Toast.makeText(mContext, "Attending", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                    layout.findViewById(R.id.run_list_item_btnNotAttending)
+                            .setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Toast.makeText(mContext, "Not attending", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
 
-            @Override
-            public void onStartClose(SwipeLayout layout) {
+                @Override
+                public void onStartClose(SwipeLayout layout) {
 
-            }
+                }
 
-            @Override
-            public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
-                //when user's hand released.
-            }
-        });
+                @Override
+                public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+                    //when user's hand released.
+                }
+            });
+        }
     }
 
     @Override
@@ -124,6 +128,10 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
 
     public void setOnItemClickListener(final OnItemClickListener itemClickListener) {
         this.mItemClickListener = itemClickListener;
+    }
+
+    public String getRunObjectId(int position){
+        return mItemsList.get(position).getObjectId();
     }
 
     public class RunVH extends RecyclerView.ViewHolder implements View.OnClickListener{
