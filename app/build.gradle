@@ -29,7 +29,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(path: ':VRunBackend', configuration: 'android-endpoints')
     compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.google.android.gms:play-services:8.1.0'
+    compile 'com.google.android.gms:play-services-location:8.1.0'
     compile 'com.android.support:design:23.1.0'
     compile 'org.jetbrains:annotations:13.0'
     compile 'com.parse.bolts:bolts-android:1.+'

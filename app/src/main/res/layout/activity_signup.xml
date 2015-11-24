@@ -21,117 +21,54 @@
         android:orientation="vertical"
         android:id="@+id/signup_mainLayout">
 
-        <com.github.florent37.materialtextfield.MaterialTextField
+        <EditText
+            android:id="@+id/signup_txtUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/ic_menu_view"
-            android:id="@+id/signup_txtUsernameContainer"
-            android:layout_marginTop="@dimen/signup_fields_margin_top">
+            android:hint="@string/user_name"
+            android:inputType="textEmailAddress"/>
 
-            <EditText
-                android:id="@+id/signup_txtUsername"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/user_name"
-                android:inputType="text" />
-
-        </com.github.florent37.materialtextfield.MaterialTextField>
-
-        <com.github.florent37.materialtextfield.MaterialTextField
+        <EditText
+            android:id="@+id/signup_txtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/sym_action_email"
-            android:id="@+id/signup_txtEmailContainer"
-            android:layout_marginTop="@dimen/signup_fields_margin_top">
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"/>
 
-            <EditText
-                android:id="@+id/signup_txtEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/email"
-                android:inputType="textEmailAddress"/>
-
-        </com.github.florent37.materialtextfield.MaterialTextField>
-
-        <com.github.florent37.materialtextfield.MaterialTextField
+        <EditText
+            android:id="@+id/signup_txtFirstname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/ic_menu_info_details"
-            android:id="@+id/signup_txtFirstnameContainer"
-            android:layout_marginTop="@dimen/signup_fields_margin_top">
+            android:hint="@string/first_name"
+            android:inputType="text" />
 
-            <EditText
-                android:id="@+id/signup_txtFirstname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/first_name"
-                android:inputType="text" />
-
-        </com.github.florent37.materialtextfield.MaterialTextField>
-
-        <com.github.florent37.materialtextfield.MaterialTextField
+        <EditText
+            android:id="@+id/signup_txtLastname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/ic_menu_info_details"
-            android:id="@+id/signup_txtLastnameContainer"
-            android:layout_marginTop="@dimen/signup_fields_margin_top">
+            android:hint="@string/last_name"
+            android:inputType="text" />
 
-            <EditText
-                android:id="@+id/signup_txtLastname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/last_name"
-                android:inputType="text" />
-
-        </com.github.florent37.materialtextfield.MaterialTextField>
-
-        <com.github.florent37.materialtextfield.MaterialTextField
+        <EditText
+            android:id="@+id/signup_txtPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/ic_lock_idle_lock"
-            android:id="@+id/signup_txtPasswordContainer"
-            android:layout_marginTop="@dimen/signup_fields_margin_top">
+            android:hint="@string/password"
+            android:inputType="textPassword" />
 
-            <EditText
-                android:id="@+id/signup_txtPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/password"
-                android:inputType="textPassword" />
-
-        </com.github.florent37.materialtextfield.MaterialTextField>
-
-        <com.github.florent37.materialtextfield.MaterialTextField
+        <EditText
+            android:id="@+id/signup_txtPasswordRepeat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/ic_lock_idle_lock"
-            android:id="@+id/signup_txtPasswordRepeatContainer"
-            android:layout_marginTop="@dimen/signup_fields_margin_top">
+            android:hint="@string/password_repeat"
+            android:inputType="textPassword" />
 
-            <EditText
-                android:id="@+id/signup_txtPasswordRepeat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/password_repeat"
-                android:inputType="textPassword" />
-
-        </com.github.florent37.materialtextfield.MaterialTextField>
-
-        <com.github.florent37.materialtextfield.MaterialTextField
+        <EditText
+            android:id="@+id/signup_txtPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/ic_menu_call"
-            android:id="@+id/signup_txtPhoneNumberContainer"
-            android:layout_marginTop="@dimen/signup_fields_margin_top">
-
-            <EditText
-                android:id="@+id/signup_txtPhoneNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/phone_number"
-                android:inputType="phone" />
-
-        </com.github.florent37.materialtextfield.MaterialTextField>
+            android:hint="@string/phone_number"
+            android:inputType="phone" />
 
         <Button
             android:id="@+id/signup_btnSignup"

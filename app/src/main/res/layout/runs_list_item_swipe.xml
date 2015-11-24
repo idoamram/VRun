@@ -62,49 +62,90 @@
             android:gravity="center"
             android:visibility="gone"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/run_list_item_txtvTitle"
-            android:src="@mipmap/ic_date_range_black"
-            android:id="@+id/run_list_item_icon_runDate"
-            android:layout_marginTop="@dimen/runs_list_item_fields_margin"/>
+            android:id="@+id/run_list_item_layout_time"
+            android:layout_below="@+id/run_list_item_txtvTitle">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/run_list_item_icon_runDate"
-            android:layout_alignBottom="@+id/run_list_item_icon_runDate"
-            android:layout_below="@+id/run_list_item_txtvTitle"
-            android:id="@+id/run_list_item_txtvDate"
-            android:layout_toEndOf="@+id/run_list_item_icon_runDate"
-            android:layout_toStartOf="@+id/run_list_item_icon_runTime"
-            android:layout_marginStart="@dimen/runs_list_item_fields_margin"
-            android:textStyle="bold"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_date_range_black"
+                android:id="@+id/run_list_item_icon_runDate"
+                android:layout_weight="1"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_schedule_black"
-            android:id="@+id/run_list_item_icon_runTime"
-            android:layout_alignTop="@+id/run_list_item_txtvDate"
-            android:layout_centerHorizontal="true"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/run_list_item_txtvDate"
+                android:textStyle="bold"
+                android:layout_weight="3"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/run_list_item_icon_runTime"
-            android:layout_alignBottom="@+id/run_list_item_icon_runTime"
-            android:id="@+id/run_list_item_txtvTime"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/run_list_item_icon_runTime"
-            android:layout_marginStart="@dimen/runs_list_item_fields_margin"
-            android:textStyle="bold"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_schedule_black"
+                android:id="@+id/run_list_item_icon_runTime"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/run_list_item_txtvTime"
+                android:textStyle="bold"
+                android:layout_weight="3"/>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:id="@+id/run_list_item_imgv_isAttendingIcon"
+                android:src="@mipmap/dont_know"/>
+        </LinearLayout>
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/run_list_item_txtvTitle"-->
+            <!--android:src="@mipmap/ic_date_range_black"-->
+            <!--android:id="@+id/run_list_item_icon_runDate"-->
+            <!--android:layout_marginTop="@dimen/runs_list_item_fields_margin"/>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignTop="@+id/run_list_item_icon_runDate"-->
+            <!--android:layout_alignBottom="@+id/run_list_item_icon_runDate"-->
+            <!--android:layout_below="@+id/run_list_item_txtvTitle"-->
+            <!--android:id="@+id/run_list_item_txtvDate"-->
+            <!--android:layout_toEndOf="@+id/run_list_item_icon_runDate"-->
+            <!--android:layout_toLeftOf="@+id/run_list_item_icon_runTime"-->
+            <!--android:layout_marginLeft="@dimen/runs_list_item_fields_margin"-->
+            <!--android:textStyle="bold"/>-->
+
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@mipmap/ic_schedule_black"-->
+            <!--android:id="@+id/run_list_item_icon_runTime"-->
+            <!--android:layout_alignTop="@+id/run_list_item_txtvDate"-->
+            <!--android:layout_centerHorizontal="true"/>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignTop="@+id/run_list_item_icon_runTime"-->
+            <!--android:layout_alignBottom="@+id/run_list_item_icon_runTime"-->
+            <!--android:id="@+id/run_list_item_txtvTime"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_toEndOf="@+id/run_list_item_icon_runTime"-->
+            <!--android:layout_marginLeft="@dimen/runs_list_item_fields_margin"-->
+            <!--android:textStyle="bold"/>-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/run_list_item_icon_runDate"
+            android:layout_below="@+id/run_list_item_layout_time"
             android:layout_marginTop="5dp">
 
             <ImageView
@@ -117,7 +158,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:layout_marginStart="@dimen/runs_list_item_fields_margin"
+                android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
                 android:id="@+id/run_list_item_txtvDuration"/>
 
             <ImageView
@@ -130,7 +171,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:layout_marginStart="@dimen/runs_list_item_fields_margin"
+                android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
                 android:id="@+id/run_list_item_txtvDistance"/>
 
             <ImageView
@@ -143,7 +184,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
-                android:layout_marginStart="@dimen/runs_list_item_fields_margin"
+                android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
                 android:id="@+id/run_list_item_txtvUserName"/>
         </LinearLayout>
 

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,18 +61,10 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                 holder.isStatusWasFetched = true;
                 switch ((int)result) {
                     case IsUserRegisterToRun.RESULT_ATTENDING:
-                        holder.isUserAttending = true;
-
-                        holder.mainRelativeLayout
-                                .setBackgroundResource(R.drawable.run_item_border_attending);
-                        holder.btnAttending.setImageResource(R.mipmap.ic_thumb_up_black);
+                            holder.showAsAttending();
                         break;
                     case IsUserRegisterToRun.RESULT_NOT_ATTENDING:
-                        holder.isUserNotAttending = true;
-
-                        holder.mainRelativeLayout
-                                .setBackgroundResource(R.drawable.run_item_border_not_attending);
-                        holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_black);
+                            holder.showAsNotAttending();
                         break;
                     default:
                         break;
@@ -143,13 +136,14 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
-                                holder.isUserAttending = true;
-                                holder.isUserNotAttending = false;
-
-                                holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_white);
-                                holder.mainRelativeLayout
-                                        .setBackgroundResource(R.drawable.run_item_border_attending);
-                                holder.btnAttending.setImageResource(R.mipmap.ic_thumb_up_black);
+//                                holder.isUserAttending = true;
+//                                holder.isUserNotAttending = false;
+//
+//                                holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_white);
+//                                holder.mainRelativeLayout
+//                                        .setBackgroundResource(R.drawable.run_item_border_attending);
+//                                holder.btnAttending.setImageResource(R.mipmap.ic_thumb_up_black);
+                                holder.showAsAttending();
                                 Toast.makeText(mContext, "You are attending!",
                                         Toast.LENGTH_LONG).show();
                             }
@@ -202,13 +196,14 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                     holder.currRun.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            holder.isUserNotAttending = true;
-                            holder.isUserAttending = false;
-
-                            holder.btnAttending.setImageResource(R.mipmap.ic_thumb_up_white);
-                            holder.mainRelativeLayout
-                                    .setBackgroundResource(R.drawable.run_item_border_not_attending);
-                            holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_black);
+//                            holder.isUserNotAttending = true;
+//                            holder.isUserAttending = false;
+//
+//                            holder.btnAttending.setImageResource(R.mipmap.ic_thumb_up_white);
+//                            holder.mainRelativeLayout
+//                                    .setBackgroundResource(R.drawable.run_item_border_not_attending);
+//                            holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_black);
+                            holder.showAsNotAttending();
                             Toast.makeText(mContext, "You are not attending...\nthink twice",
                                     Toast.LENGTH_LONG).show();
                         }
@@ -259,6 +254,8 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                     //when user's hand released.
                 }
             });
+        } else {
+            holder.swipeLayout.setSwipeEnabled(false);
         }
     }
 
@@ -294,6 +291,7 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
         ImageButton btnWatchAttending;
         ImageButton btnAttending;
         ImageButton btnNotAttending;
+        ImageView imageViewStatus;
         TextView txtvTitle;
         TextView txtvDate;
         TextView txtvTime;
@@ -311,6 +309,8 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
             btnAttending = (ImageButton)itemView.findViewById(R.id.run_list_item_btnAttending);
             btnNotAttending =
                     (ImageButton)itemView.findViewById(R.id.run_list_item_btnNotAttending);
+            imageViewStatus =
+                    (ImageView) itemView.findViewById(R.id.run_list_item_imgv_isAttendingIcon);
             txtvTitle = (TextView)itemView.findViewById(R.id.run_list_item_txtvTitle);
             txtvDate = (TextView)itemView.findViewById(R.id.run_list_item_txtvDate);
             txtvTime = (TextView)itemView.findViewById(R.id.run_list_item_txtvTime);
@@ -323,6 +323,27 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
             itemView.setOnClickListener(this);
         }
 
+        public void showAsAttending() {
+            isUserAttending = true;
+            isUserNotAttending = false;
+
+//            mainRelativeLayout
+//                    .setBackgroundResource(R.drawable.run_item_border_attending);
+            imageViewStatus.setImageResource(R.mipmap.run_green);
+            btnAttending.setImageResource(R.mipmap.ic_thumb_up_black);
+            btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_white);
+        }
+
+        public void showAsNotAttending() {
+            isUserNotAttending = true;
+            isUserAttending = false;
+
+//            mainRelativeLayout
+//                    .setBackgroundResource(R.drawable.run_item_border_not_attending);
+            imageViewStatus.setImageResource(R.mipmap.watch_tv_red);
+            btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_black);
+            btnAttending.setImageResource(R.mipmap.ic_thumb_up_white);
+        }
         @Override
         public void onClick(View view) {
             if (mItemClickListener != null) {

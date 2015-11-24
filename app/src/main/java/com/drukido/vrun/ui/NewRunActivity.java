@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -56,6 +57,7 @@ public class NewRunActivity extends AppCompatActivity
     Button btnFinish;
     ProgressView mProgressView;
     LinearLayout mMainLayout;
+    EditText mEditTextTitle;
 
     String mStrDate = "";
     String mStrTime = "";
@@ -80,6 +82,7 @@ public class NewRunActivity extends AppCompatActivity
         btnDistance = (Button) findViewById(R.id.newRun_btnDistance);
         btnDuration = (Button) findViewById(R.id.newRun_btnDuration);
         btnFinish = (Button) findViewById(R.id.newRun_btnFinish);
+        mEditTextTitle = (EditText) findViewById(R.id.newRun_etxtRunTitle);
 
         btnWhen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +139,11 @@ public class NewRunActivity extends AppCompatActivity
                     newRun.setGroup((Group) currUser.getParseObject(Constants.KEY_GROUP));
                     newRun.setAttending(attendingUsers);
                     newRun.setIsMeasured(false);
+
+                    if (!mEditTextTitle.getText().toString().equals("")) {
+                        newRun.setRunTitle(mEditTextTitle.getText().toString());
+                    }
+
                     saveNewRun(newRun, currUser);
                 }
             }

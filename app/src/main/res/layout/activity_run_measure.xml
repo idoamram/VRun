@@ -4,13 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.drukido.vrun.ui.RunMeasureActivity">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:src="@drawable/group_details_background"
-        android:scaleType="centerCrop"/>
+    tools:context="com.drukido.vrun.ui.RunMeasureActivity"
+    android:background="@color/colorPrimaryDark">
 
     <com.rey.material.widget.ProgressView
         android:id="@+id/runMeasure_progressView"

@@ -70,11 +70,13 @@ public class WatchAttendingActivity extends AppCompatActivity {
                     if (run.getAttending() != null) {
                         mAttendingList = run.getAttending();
                         fetchAttendingUsers();
-                    } else mAttendingRecyclerView.setVisibility(View.GONE);
+                    }
+//                    else mAttendingRecyclerView.setVisibility(View.GONE);
                     if (run.getNotAttending() != null) {
                         mNotAttendingList = run.getNotAttending();
                         fetchNotAttendingUsers();
-                    } else mNotAttendingRecyclerView.setVisibility(View.GONE);
+                    }
+//                    else mNotAttendingRecyclerView.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(WatchAttendingActivity.this, "There was an error",
                             Toast.LENGTH_LONG).show();
@@ -148,7 +150,7 @@ public class WatchAttendingActivity extends AppCompatActivity {
             mAttendingAdapter = new AttendingsRecyclerAdapter(mAttendingList, mContext);
             mAttendingRecyclerView.setAdapter(mAttendingAdapter);
         } else {
-            mAttendingRecyclerView.setVisibility(View.GONE);
+//            mAttendingRecyclerView.setVisibility(View.INVISIBLE);
         }
         hideAttedingProgressView();
     }
@@ -161,7 +163,7 @@ public class WatchAttendingActivity extends AppCompatActivity {
             mNotAttendingAdapter = new AttendingsRecyclerAdapter(mNotAttendingList, mContext);
             mNotAttendingRecyclerView.setAdapter(mNotAttendingAdapter);
         } else {
-            mNotAttendingRecyclerView.setVisibility(View.GONE);
+//            mNotAttendingRecyclerView.setVisibility(View.INVISIBLE);
         }
         hideNotAttedingProgressView();
     }

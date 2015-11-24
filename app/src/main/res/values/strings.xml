@@ -35,4 +35,5 @@
     <string name="tap_a_run">Tap on a run</string>
     <string name="login">Login</string>
     <string name="vrun">© VRun</string>
+    <string name="run_title">Run title</string>
 </resources>

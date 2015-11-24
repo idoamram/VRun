@@ -23,8 +23,8 @@
             app:pv_progressMode="indeterminate"
             android:visibility="gone"
             android:layout_above="@+id/general_txtvBestRun"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="20dp"/>
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"/>
 
         <com.github.lzyzsd.circleprogress.DonutProgress
             android:layout_width="wrap_content"
@@ -45,8 +45,8 @@
             android:gravity="start"
             android:textColor="@android:color/white"
             android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/general_txtvGroupProgress"
-            android:layout_toStartOf="@+id/general_donutProgress"
+            android:layout_alignLeft="@+id/general_txtvGroupProgress"
+            android:layout_toLeftOf="@+id/general_donutProgress"
             android:layout_marginEnd="15dp"/>
 
         <com.rey.material.widget.TextView
@@ -57,8 +57,8 @@
             android:textColor="@android:color/white"
             android:hint="Group progress"
             android:layout_above="@+id/general_txtvLastRun"
-            android:layout_alignStart="@+id/general_txtvLastRun"
-            android:layout_toStartOf="@+id/general_donutProgress"
+            android:layout_alignLeft="@+id/general_txtvLastRun"
+            android:layout_toLeftOf="@+id/general_donutProgress"
             android:layout_marginEnd="15dp"
             android:layout_marginTop="10dp"/>
 
@@ -68,10 +68,10 @@
             android:hint="Last run"
             android:id="@+id/general_txtvLastRun"
             android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:textColor="@android:color/white"
             android:layout_marginTop="5dp"
-            android:layout_toStartOf="@+id/general_donutProgress"
+            android:layout_toLeftOf="@+id/general_donutProgress"
             android:gravity="start"
             android:layout_marginEnd="15dp"/>
 
@@ -81,11 +81,11 @@
             android:hint="Best run"
             android:id="@+id/general_txtvBestRun"
             android:layout_below="@+id/general_txtvLastRun"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:textColor="@android:color/white"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="15dp"
-            android:layout_toStartOf="@+id/general_donutProgress"
+            android:layout_toLeftOf="@+id/general_donutProgress"
             android:gravity="start"/>
     </RelativeLayout>
 

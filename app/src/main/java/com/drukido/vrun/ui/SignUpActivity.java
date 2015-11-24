@@ -71,6 +71,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         Toast.LENGTH_LONG).show();
                                 btnSignUp.setText(getString(R.string.welcome));
                                 btnSignUp.setBackgroundColor(Color.parseColor("#8BC34A"));
+                                finish();
                             } else {
                                 Snackbar.make(_mainLayout, "Sorry, something went wrong...",
                                         Snackbar.LENGTH_LONG).show();

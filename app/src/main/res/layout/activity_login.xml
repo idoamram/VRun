@@ -21,41 +21,24 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
         android:layout_alignParentTop="true"
         android:id="@+id/login_linearLayout_txtFields">
 
-        <com.github.florent37.materialtextfield.MaterialTextField
+        <EditText
+            android:id="@+id/login_etxtUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/ic_menu_view"
-            android:id="@+id/login_etxtUserNameContainer"
-            android:layout_marginTop="@dimen/signup_fields_margin_top">
+            android:hint="@string/user_name"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="20dp"/>
 
-            <EditText
-                android:id="@+id/login_etxtUserName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/user_name"
-                android:inputType="textEmailAddress" />
-
-        </com.github.florent37.materialtextfield.MaterialTextField>
-
-        <com.github.florent37.materialtextfield.MaterialTextField
+        <EditText
+            android:id="@+id/login_etxtPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@android:drawable/ic_lock_idle_lock"
-            android:id="@+id/login_etxtPasswordContainer"
-            android:layout_marginTop="@dimen/signup_fields_margin_top">
-
-            <EditText
-                android:id="@+id/login_etxtPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/password"
-                android:inputType="textPassword" />
-
-        </com.github.florent37.materialtextfield.MaterialTextField>
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:layout_marginTop="5dp"/>
 
     </LinearLayout>
 
@@ -63,12 +46,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@+id/login_linearLayout_txtFields"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
-        android:layout_marginTop="100dp">
+        android:layout_alignParentBottom="true">
 
         <com.rey.material.widget.Button
             android:layout_width="match_parent"

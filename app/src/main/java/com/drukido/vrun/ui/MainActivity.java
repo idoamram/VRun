@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity
         implements RunFragment.OnFragmentInteractionListener,
         GeneralFragment.OnFragmentInteractionListener{
 
+    private final int FRAGMENTS_COUNT = 3;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setOffscreenPageLimit(FRAGMENTS_COUNT);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -255,7 +258,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return FRAGMENTS_COUNT;
         }
 
         @Override
