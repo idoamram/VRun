@@ -94,120 +94,176 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                 @Override
                 public void onClick(View view) {
 
-                    ArrayList<ParseUser> notAttendingUsers = holder.currRun.getNotAttending();
-                    ArrayList<ParseUser> attendingUsers = holder.currRun.getAttending();
+                    if (!holder.isUserAttending) {
+                        ArrayList<ParseUser> notAttendingUsers = holder.currRun.getNotAttending();
+                        ArrayList<ParseUser> attendingUsers = holder.currRun.getAttending();
 
-                    if(attendingUsers != null){
-                        boolean isUserAttending = false;
+                        if(attendingUsers != null){
+                            boolean isUserAttending = false;
 
-                        for(ParseUser currUser:attendingUsers) {
-                            if(currUser.getObjectId()
-                                    .equals(ParseUser.getCurrentUser().getObjectId())) {
-                                isUserAttending = true;
-                                break;
+                            for(ParseUser currUser:attendingUsers) {
+                                if(currUser.getObjectId()
+                                        .equals(ParseUser.getCurrentUser().getObjectId())) {
+                                    isUserAttending = true;
+                                    break;
+                                }
                             }
-                        }
 
-                        if (!isUserAttending) {
+                            if (!isUserAttending) {
+                                attendingUsers.add(ParseUser.getCurrentUser());
+                            }
+                        } else {
+                            attendingUsers = new ArrayList<>();
                             attendingUsers.add(ParseUser.getCurrentUser());
                         }
-                    } else {
-                        attendingUsers = new ArrayList<>();
-                        attendingUsers.add(ParseUser.getCurrentUser());
-                    }
 
-                    if(notAttendingUsers == null){
-                        notAttendingUsers = new ArrayList<>();
-                    }
-
-                    try {
-                        for(ParseUser currUser:notAttendingUsers) {
-                            if(currUser.getObjectId()
-                                    .equals(ParseUser.getCurrentUser().getObjectId())) {
-                                notAttendingUsers.remove(notAttendingUsers.indexOf(currUser));
-                                break;
-                            }
+                        if(notAttendingUsers == null){
+                            notAttendingUsers = new ArrayList<>();
                         }
-                    } catch (Exception e){}
 
-                    holder.currRun.setAttending(attendingUsers);
-                    holder.currRun.setNotAttending(notAttendingUsers);
-                    holder.currRun.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-//                                holder.isUserAttending = true;
-//                                holder.isUserNotAttending = false;
-//
-//                                holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_white);
-//                                holder.mainRelativeLayout
-//                                        .setBackgroundResource(R.drawable.run_item_border_attending);
-//                                holder.btnAttending.setImageResource(R.mipmap.ic_thumb_up_black);
-                                holder.showAsAttending();
-                                Toast.makeText(mContext, "You are attending!",
-                                        Toast.LENGTH_LONG).show();
+                        try {
+                            for(ParseUser currUser:notAttendingUsers) {
+                                if(currUser.getObjectId()
+                                        .equals(ParseUser.getCurrentUser().getObjectId())) {
+                                    notAttendingUsers.remove(notAttendingUsers.indexOf(currUser));
+                                    break;
+                                }
                             }
-                        }
-                    });
+                        } catch (Exception e){}
+
+                        holder.currRun.setAttending(attendingUsers);
+                        holder.currRun.setNotAttending(notAttendingUsers);
+                        holder.currRun.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+    //                                holder.isUserAttending = true;
+    //                                holder.isUserNotAttending = false;
+    //
+    //                                holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_white);
+    //                                holder.mainRelativeLayout
+    //                                        .setBackgroundResource(R.drawable.run_item_border_attending);
+    //                                holder.btnAttending.setImageResource(R.mipmap.ic_thumb_up_black);
+                                    holder.showAsAttending();
+                                    Toast.makeText(mContext, "You are attending!",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
+                    // Already attending
+                    else {
+                        ArrayList<ParseUser> attendingUsers = holder.currRun.getAttending();
+
+                        try {
+                            for(ParseUser currUser:attendingUsers) {
+                                if(currUser.getObjectId()
+                                        .equals(ParseUser.getCurrentUser().getObjectId())) {
+                                    attendingUsers.remove(attendingUsers.indexOf(currUser));
+                                    break;
+                                }
+                            }
+                        } catch (Exception e){}
+
+                        holder.currRun.setAttending(attendingUsers);
+                        holder.currRun.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    holder.imageViewStatus.setImageResource(R.mipmap.dont_know);
+                                    holder.btnAttending.setImageResource(R.mipmap.ic_thumb_up_white);
+                                    Toast.makeText(mContext, "You've cancel your attending",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
                 }
             });
             holder.btnNotAttending.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    ArrayList<ParseUser> notAttendingUsers = holder.currRun.getNotAttending();
-                    ArrayList<ParseUser> attendingUsers = holder.currRun.getAttending();
+                    if (!holder.isUserNotAttending) {
+                        ArrayList<ParseUser> notAttendingUsers = holder.currRun.getNotAttending();
+                        ArrayList<ParseUser> attendingUsers = holder.currRun.getAttending();
 
-                    if(notAttendingUsers != null){
-                        boolean isUserNotAttending = false;
+                        if(notAttendingUsers != null){
+                            boolean isUserNotAttending = false;
 
-                        for(ParseUser currUser:notAttendingUsers) {
-                            if(currUser.getObjectId()
-                                    .equals(ParseUser.getCurrentUser().getObjectId())) {
-                                isUserNotAttending = true;
-                                break;
+                            for(ParseUser currUser:notAttendingUsers) {
+                                if(currUser.getObjectId()
+                                        .equals(ParseUser.getCurrentUser().getObjectId())) {
+                                    isUserNotAttending = true;
+                                    break;
+                                }
                             }
-                        }
 
-                        if (!isUserNotAttending) {
+                            if (!isUserNotAttending) {
+                                notAttendingUsers.add(ParseUser.getCurrentUser());
+                            }
+                        } else {
+                            notAttendingUsers = new ArrayList<>();
                             notAttendingUsers.add(ParseUser.getCurrentUser());
                         }
-                    } else {
-                        notAttendingUsers = new ArrayList<>();
-                        notAttendingUsers.add(ParseUser.getCurrentUser());
-                    }
 
-                    if(attendingUsers == null){
-                        attendingUsers = new ArrayList<>();
-                    }
+                        if(attendingUsers == null){
+                            attendingUsers = new ArrayList<>();
+                        }
 
-                    try {
-                        for(ParseUser currUser:attendingUsers) {
-                            if(currUser.getObjectId()
-                                    .equals(ParseUser.getCurrentUser().getObjectId())) {
-                                attendingUsers.remove(attendingUsers.indexOf(currUser));
-                                break;
+                        try {
+                            for(ParseUser currUser:attendingUsers) {
+                                if(currUser.getObjectId()
+                                        .equals(ParseUser.getCurrentUser().getObjectId())) {
+                                    attendingUsers.remove(attendingUsers.indexOf(currUser));
+                                    break;
+                                }
                             }
-                        }
-                    } catch (Exception e){}
+                        } catch (Exception e){}
 
-                    holder.currRun.setAttending(attendingUsers);
-                    holder.currRun.setNotAttending(notAttendingUsers);
-                    holder.currRun.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-//                            holder.isUserNotAttending = true;
-//                            holder.isUserAttending = false;
-//
-//                            holder.btnAttending.setImageResource(R.mipmap.ic_thumb_up_white);
-//                            holder.mainRelativeLayout
-//                                    .setBackgroundResource(R.drawable.run_item_border_not_attending);
-//                            holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_black);
-                            holder.showAsNotAttending();
-                            Toast.makeText(mContext, "You are not attending...\nthink twice",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
+                        holder.currRun.setAttending(attendingUsers);
+                        holder.currRun.setNotAttending(notAttendingUsers);
+                        holder.currRun.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+    //                            holder.isUserNotAttending = true;
+    //                            holder.isUserAttending = false;
+    //
+    //                            holder.btnAttending.setImageResource(R.mipmap.ic_thumb_up_white);
+    //                            holder.mainRelativeLayout
+    //                                    .setBackgroundResource(R.drawable.run_item_border_not_attending);
+    //                            holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_black);
+                                holder.showAsNotAttending();
+                                Toast.makeText(mContext, "You are not attending...\nthink twice",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                    // User already not attending
+                    else {
+                        ArrayList<ParseUser> notAttendingUsers = holder.currRun.getNotAttending();
+
+                        try {
+                            for(ParseUser currUser:notAttendingUsers) {
+                                if(currUser.getObjectId()
+                                        .equals(ParseUser.getCurrentUser().getObjectId())) {
+                                    notAttendingUsers.remove(notAttendingUsers.indexOf(currUser));
+                                    break;
+                                }
+                            }
+                        } catch (Exception e){}
+
+                        holder.currRun.setNotAttending(notAttendingUsers);
+                        holder.currRun.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                holder.imageViewStatus.setImageResource(R.mipmap.dont_know);
+                                holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_white);
+                                Toast.makeText(mContext, "You've cancel your not attending respond",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
                 }
             });
             holder.btnWatchAttending.setOnClickListener(new View.OnClickListener() {
