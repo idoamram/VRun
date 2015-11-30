@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    tools:context="com.drukido.vrun.ui.fragments.GroupFragment">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/group_swipeLayout">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:background="@drawable/run_item_border"
+                    android:id="@+id/group_photoLayout"
+                    android:layout_marginBottom="5dp"
+                    android:paddingBottom="2dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/group_gray"
+                        android:scaleType="centerInside"
+                        android:id="@+id/group_imgvGroupPhoto"/>
+
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/camera"
+                        android:background="#66212121"
+                        android:scaleType="centerInside"
+                        android:padding="12dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"/>
+
+                </RelativeLayout>
+
+                <include layout="@layout/card_group_progress"/>
+
+                <include layout="@layout/card_group_coming_event"/>
+
+                <include layout="@layout/card_group_best_run"/>
+
+                <include layout="@layout/card_group_last_run"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Group members"
+                    android:background="@color/colorAccent"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@android:color/white"/>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

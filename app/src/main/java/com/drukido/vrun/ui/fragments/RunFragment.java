@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,12 +16,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Run;
 import com.drukido.vrun.ui.MainActivity;
+import com.drukido.vrun.ui.NewRunActivity;
 import com.drukido.vrun.ui.RunMeasureActivity;
 import com.drukido.vrun.utils.DividerItemDecoration;
 import com.drukido.vrun.utils.RunsRecyclerAdapter;
@@ -28,6 +33,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.rey.material.widget.ProgressView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,12 +46,19 @@ import java.util.List;
  */
 public class RunFragment extends Fragment {
 
-    private List<Run> mRunsList;
+    private static final String COMING_RUNS = "Coming";
+    private static final String PAST_RUNS = "Past";
+
+    private List<Run> mComingRunsList;
+    private List<Run> mPastRunsList;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
-    private RunsRecyclerAdapter mRunsRecyclerAdapter;
+    private RunsRecyclerAdapter mPastRunsRecyclerAdapter;
+    private RunsRecyclerAdapter mComingRunsRecyclerAdapter;
     private Context mContext;
     private ProgressView mProgressView;
+    private Spinner mSpinner;
+    private SwipeRefreshLayout mSwipeLayout;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -98,45 +111,150 @@ public class RunFragment extends Fragment {
         mContext = getActivity();
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.run_fragment_recyclerView);
         mProgressView = (ProgressView) rootView.findViewById(R.id.run_fragment_progressView);
+        mSpinner = (Spinner) rootView.findViewById(R.id.run_fragment_spinnerRunType);
+        mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.run_fragment_swipeLayout);
 
+        rootView.findViewById(R.id.run_fragment_fltBtnNewRun).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), NewRunActivity.class);
+                startActivity(i);
+            }
+        });
+
+        initializeSpinner();
+        initializeSwipeRefreshLayout();
         showListProgressView();
-        getRunsList();
+        getRunsList(COMING_RUNS);
 
         return rootView;
     }
 
-    private void getRunsList() {
-        Run.getAllPastRuns(Constants.VRUN_GROUP_OBJECT_ID, new FindCallback<Run>() {
-            public void done(List<Run> runsListResult, ParseException e) {
-                if (e == null) {
-                    Log.d("run", "Retrieved " + runsListResult.size() + " runs");
-                    if (runsListResult.size() > 0) {
-                        mRunsList = runsListResult;
-                        fetchRunsDetails();
-                    } else {
-                        hideListProgressView();
-                    }
-                } else {
-                    Log.d("run", "Error: " + e.getMessage());
-                    hideListProgressView();
-                }
+    private void initializeSwipeRefreshLayout() {
+        mSwipeLayout.setColorSchemeColors(getResources().getColor(R.color.colorGreenSuccess),
+                getResources().getColor(R.color.colorPrimary),
+                getResources().getColor(R.color.colorRedFailed));
+        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeLayout.setRefreshing(true);
+                getRunsList((String) mSpinner.getSelectedItem());
             }
         });
     }
 
-    private void fetchRunsDetails() {
+    private void initializeSpinner() {
+        List<String> list = new ArrayList<>();
+        list.add(COMING_RUNS);
+        list.add(PAST_RUNS);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(mContext,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(dataAdapter);
+        mSpinner.setSelection(0);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch ((String) mSpinner.getSelectedItem()) {
+                    case COMING_RUNS:
+                        mSwipeLayout.setRefreshing(true);
+                        if (mComingRunsList == null) {
+                            getRunsList(COMING_RUNS);
+                        }
+                        else {
+                            mSwipeLayout.setRefreshing(true);
+                            initializeRecycler(COMING_RUNS);
+                        }
+                        break;
+                    case PAST_RUNS:
+                        mSwipeLayout.setRefreshing(true);
+                        if (mPastRunsList == null) {
+                            getRunsList(PAST_RUNS);
+                        }
+                        else {
+                            mSwipeLayout.setRefreshing(true);
+                            initializeRecycler(PAST_RUNS);
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void getRunsList(String runType) {
+        switch (runType) {
+            case COMING_RUNS:
+                Run.getAllComingRuns(Constants.VRUN_GROUP_OBJECT_ID, new FindCallback<Run>() {
+                    public void done(List<Run> runsListResult, ParseException e) {
+                        if (e == null) {
+                            Log.d("run", "Retrieved " + runsListResult.size() + " runs");
+                            if (runsListResult.size() > 0) {
+                                mComingRunsList = runsListResult;
+                                fetchRunsDetails(COMING_RUNS);
+                            } else {
+                                hideListProgressView();
+                            }
+                        } else {
+                            Log.d("run", "Error: " + e.getMessage());
+                            hideListProgressView();
+                        }
+                    }
+                });
+                break;
+            case PAST_RUNS:
+                Run.getAllPastRuns(Constants.VRUN_GROUP_OBJECT_ID, new FindCallback<Run>() {
+                    public void done(List<Run> runsListResult, ParseException e) {
+                        if (e == null) {
+                            Log.d("run", "Retrieved " + runsListResult.size() + " runs");
+                            if (runsListResult.size() > 0) {
+                                mPastRunsList = runsListResult;
+                                fetchRunsDetails(PAST_RUNS);
+                            } else {
+                                hideListProgressView();
+                            }
+                        } else {
+                            Log.d("run", "Error: " + e.getMessage());
+                            hideListProgressView();
+                        }
+                    }
+                });
+                break;
+        }
+    }
+
+    private void fetchRunsDetails(final String runType) {
         new AsyncTask<Void,Void,Boolean>() {
 
             @Override
             protected Boolean doInBackground(Void... voids) {
-                for (Run currRun:mRunsList) {
-                    try {
-                        currRun.fetchIfNeeded();
-                        currRun.getCreator().fetchIfNeeded();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
+                switch (runType) {
+                    case COMING_RUNS:
+                        for (Run currRun:mComingRunsList) {
+                            try {
+                                currRun.fetchIfNeeded();
+                                currRun.getCreator().fetchIfNeeded();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                return false;
+                            }
+                        }
+                        break;
+                    case PAST_RUNS:
+                        for (Run currRun:mPastRunsList) {
+                            try {
+                                currRun.fetchIfNeeded();
+                                currRun.getCreator().fetchIfNeeded();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                return false;
+                            }
+                        }
+                        break;
                 }
                 return true;
             }
@@ -145,7 +263,7 @@ public class RunFragment extends Fragment {
             protected void onPostExecute(Boolean isSucceeded) {
                 super.onPostExecute(isSucceeded);
                 if (isSucceeded) {
-                    initializeRecycler();
+                    initializeRecycler(runType);
                 } else {
                     hideListProgressView();
                 }
@@ -153,20 +271,41 @@ public class RunFragment extends Fragment {
         }.execute();
     }
 
-    private void initializeRecycler() {
+    private void initializeRecycler(String runType) {
         mLinearLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRunsRecyclerAdapter = new RunsRecyclerAdapter(mRunsList, mContext, false);
-        mRunsRecyclerAdapter.setOnItemClickListener(new RunsRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent i = new Intent(getActivity(), RunMeasureActivity.class);
-                i.putExtra(Constants.EXTRA_RUN_ID, mRunsRecyclerAdapter.getRunObjectId(position));
-                startActivity(i);
-            }
-        });
-        mRecyclerView.setAdapter(mRunsRecyclerAdapter);
+
+        switch (runType) {
+            case COMING_RUNS:
+                mComingRunsRecyclerAdapter = new RunsRecyclerAdapter(mComingRunsList, mContext, true);
+                mRecyclerView.setAdapter(mComingRunsRecyclerAdapter);
+                break;
+            case PAST_RUNS:
+                mPastRunsRecyclerAdapter = new RunsRecyclerAdapter(mPastRunsList, mContext, false);
+                mPastRunsRecyclerAdapter.setOnItemClickListener(new RunsRecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent i = new Intent(getActivity(), RunMeasureActivity.class);
+                        i.putExtra(Constants.EXTRA_RUN_ID,
+                                mPastRunsRecyclerAdapter.getRunObjectId(position));
+                        startActivity(i);
+                    }
+                });
+                mRecyclerView.setAdapter(mPastRunsRecyclerAdapter);
+                break;
+        }
+
+//        mRunsRecyclerAdapter = new RunsRecyclerAdapter(mRunsList, mContext, false);
+//        mRunsRecyclerAdapter.setOnItemClickListener(new RunsRecyclerAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                Intent i = new Intent(getActivity(), RunMeasureActivity.class);
+//                i.putExtra(Constants.EXTRA_RUN_ID, mRunsRecyclerAdapter.getRunObjectId(position));
+//                startActivity(i);
+//            }
+//        });
+//        mRecyclerView.setAdapter(mRunsRecyclerAdapter);
         RecyclerView.ItemDecoration itemDecoration =
                 new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL);
         mRecyclerView.addItemDecoration(itemDecoration);
@@ -176,11 +315,13 @@ public class RunFragment extends Fragment {
     private void showListProgressView() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mProgressView.setVisibility(View.VISIBLE);
+        mSwipeLayout.setRefreshing(true);
     }
 
     private void hideListProgressView() {
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressView.setVisibility(View.GONE);
+        mSwipeLayout.setRefreshing(false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

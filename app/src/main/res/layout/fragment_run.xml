@@ -5,20 +5,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.drukido.vrun.ui.fragments.RunFragment">
 
-    <TextView
+    <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/tap_a_run"
-        android:id="@+id/run_fragment_txtv_title"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:padding="5dp"
-        android:gravity="center"/>
+        android:id="@+id/run_fragment_spinnerRunType"
+        android:padding="15dp"/>
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/run_fragment_txtv_title"
-        android:id="@+id/run_fragment_recyclerView"/>
+        android:layout_below="@+id/run_fragment_spinnerRunType"
+        android:id="@+id/run_fragment_swipeLayout">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/run_fragment_recyclerView" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <com.rey.material.widget.ProgressView
         android:layout_width="48dp"
@@ -29,5 +34,15 @@
         app:pv_progressMode="indeterminate"
         android:id="@+id/run_fragment_progressView"
         android:layout_centerInParent="true"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/new_run_icon"
+        android:id="@+id/run_fragment_fltBtnNewRun" />
 
 </RelativeLayout>

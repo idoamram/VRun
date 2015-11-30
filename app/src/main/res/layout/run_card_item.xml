@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/run_card_item_mainLayout">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/runs_list_item_fields_margin"
+        android:id="@+id/run_card_item_txtvTitle"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/run_card_item_layout_time"
+        android:layout_below="@+id/run_card_item_txtvTitle">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:src="@drawable/calendar"
+            android:id="@+id/run_card_item_iconRunDate"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/run_card_item_txtvDate"
+            android:textStyle="bold"
+            android:layout_weight="3"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:src="@drawable/clock"
+            android:id="@+id/run_card_item_iconRunTime"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/run_card_item_txtvTime"
+            android:textStyle="bold"
+            android:layout_weight="3"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/run_card_item_layout_time">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:src="@drawable/stopwatch_orange"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
+            android:id="@+id/run_card_item_txtvDuration"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:src="@drawable/ployline_orange"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
+            android:id="@+id/run_card_item_txtvDistance"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

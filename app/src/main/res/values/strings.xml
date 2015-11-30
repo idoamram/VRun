@@ -36,4 +36,7 @@
     <string name="login">Login</string>
     <string name="vrun">© VRun</string>
     <string name="run_title">Run title</string>
+    <string name="best_run">Best run :</string>
+    <string name="last_run">Last run :</string>
+    <string name="coming_event">Coming event :</string>
 </resources>

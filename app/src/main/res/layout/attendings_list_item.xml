@@ -5,10 +5,10 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@mipmap/ic_face_black"
+        android:id="@+id/attendings_list_item_imgvProfilePhoto"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/android"
         app:civ_border_width="1dp"
         app:civ_border_color="@android:color/transparent"
         android:layout_gravity="center"

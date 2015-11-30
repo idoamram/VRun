@@ -29,6 +29,7 @@ import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Group;
 import com.drukido.vrun.ui.fragments.GeneralFragment;
+import com.drukido.vrun.ui.fragments.GroupFragment;
 import com.drukido.vrun.ui.fragments.RunFragment;
 import com.parse.GetCallback;
 import com.parse.LogOutCallback;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity
         implements RunFragment.OnFragmentInteractionListener,
         GeneralFragment.OnFragmentInteractionListener{
 
-    private final int FRAGMENTS_COUNT = 3;
+    private final int FRAGMENTS_COUNT = 4;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -127,8 +128,8 @@ public class MainActivity extends AppCompatActivity
                         }
                     });
                 } else {
-                    Toast.makeText(MainActivity.this, "Failed to subscribe..." +
-                            group.getName(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Failed to subscribe..."
+                            , Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -249,6 +250,8 @@ public class MainActivity extends AppCompatActivity
             switch (position) {
                 case 0:
                     return new GeneralFragment();
+                case 1:
+                    return new GroupFragment();
                 case 2:
                     return new RunFragment();
             }
@@ -267,9 +270,11 @@ public class MainActivity extends AppCompatActivity
                 case 0:
                     return "General";
                 case 1:
-                    return "Me";
+                    return "Group";
                 case 2:
-                    return "Run";
+                    return "Runs";
+                case 3:
+                    return "Me";
             }
             return null;
         }

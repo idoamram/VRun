@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,8 +47,7 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
     public RunVH onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.runs_list_item_swipe, parent, false);
-        RunVH viewHolder = new RunVH(view);
-        return viewHolder;
+        return new RunVH(view);
     }
 
     @Override
@@ -89,6 +89,15 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
         Duration duration = Duration.fromString(holder.currRun.getTargetDuration());
         holder.txtvDuration.setText(duration.toPresentableString());
         holder.txtvUserName.setText(holder.currRun.getCreator().getString("name"));
+
+//        if(holder.currRun.getIsMeasured()){
+//            String measuredDistance = String.valueOf((((double) holder.currRun.getDistance()) / 1000)) + " KM";
+//            holder.txtvMeasuredDistance.setText(measuredDistance);
+//            Duration measuredDuration = Duration.fromString(holder.currRun.getDuration());
+//            holder.txtvMeasuredDuration.setText(measuredDuration.toPresentableString());
+//            holder.lnrLayoutMesuredDetails.setVisibility(View.VISIBLE);
+//        }
+
         if (isSwipable) {
             holder.btnAttending.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -137,8 +146,8 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                             @Override
                             public void done(ParseException e) {
                                 if (e == null) {
-    //                                holder.isUserAttending = true;
-    //                                holder.isUserNotAttending = false;
+//                                    holder.isUserAttending = true;
+//                                    holder.isUserNotAttending = false;
     //
     //                                holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_white);
     //                                holder.mainRelativeLayout
@@ -170,8 +179,11 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                             @Override
                             public void done(ParseException e) {
                                 if (e == null) {
-                                    holder.imageViewStatus.setImageResource(R.mipmap.dont_know);
-                                    holder.btnAttending.setImageResource(R.mipmap.ic_thumb_up_white);
+                                    holder.isUserAttending = false;
+                                    holder.imageViewStatus
+                                            .setImageResource(R.drawable.head_dont_know);
+                                    holder.btnAttending
+                                            .setImageResource(R.drawable.head_attenting_gray);
                                     Toast.makeText(mContext, "You've cancel your attending",
                                             Toast.LENGTH_LONG).show();
                                 }
@@ -257,8 +269,10 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                         holder.currRun.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                holder.imageViewStatus.setImageResource(R.mipmap.dont_know);
-                                holder.btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_white);
+                                holder.isUserNotAttending = false;
+                                holder.imageViewStatus.setImageResource(R.drawable.head_dont_know);
+                                holder.btnNotAttending.
+                                        setImageResource(R.drawable.head_not_attenting_gray);
                                 Toast.makeText(mContext, "You've cancel your not attending respond",
                                         Toast.LENGTH_LONG).show();
                             }
@@ -356,6 +370,9 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
         TextView txtvUserName;
         SwipeLayout swipeLayout;
         RelativeLayout mainRelativeLayout;
+        LinearLayout lnrLayoutMesuredDetails;
+        TextView txtvMeasuredDuration;
+        TextView txtvMeasuredDistance;
 
         public RunVH(View itemView) {
             super(itemView);
@@ -377,6 +394,12 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
             mainRelativeLayout = (RelativeLayout)
                     itemView.findViewById(R.id.run_list_item_relativeLayout_mainLayout);
             itemView.setOnClickListener(this);
+//            lnrLayoutMesuredDetails = (LinearLayout)
+//                    itemView.findViewById(R.id.run_list_item_layout_measured_details);
+//            txtvMeasuredDistance =
+//                    (TextView) itemView.findViewById(R.id.run_list_item_txtvMeasuredDistance);
+//            txtvMeasuredDuration =
+//                    (TextView) itemView.findViewById(R.id.run_list_item_txtvMeasuredDuration);
         }
 
         public void showAsAttending() {
@@ -385,9 +408,9 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
 
 //            mainRelativeLayout
 //                    .setBackgroundResource(R.drawable.run_item_border_attending);
-            imageViewStatus.setImageResource(R.mipmap.run_green);
-            btnAttending.setImageResource(R.mipmap.ic_thumb_up_black);
-            btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_white);
+            imageViewStatus.setImageResource(R.drawable.head_attenting);
+            btnAttending.setImageResource(R.drawable.head_attenting);
+            btnNotAttending.setImageResource(R.drawable.head_not_attenting_gray);
         }
 
         public void showAsNotAttending() {
@@ -396,14 +419,16 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
 
 //            mainRelativeLayout
 //                    .setBackgroundResource(R.drawable.run_item_border_not_attending);
-            imageViewStatus.setImageResource(R.mipmap.watch_tv_red);
-            btnNotAttending.setImageResource(R.mipmap.ic_thumb_down_black);
-            btnAttending.setImageResource(R.mipmap.ic_thumb_up_white);
+            imageViewStatus.setImageResource(R.drawable.head_not_attenting);
+            btnNotAttending.setImageResource(R.drawable.head_not_attenting);
+            btnAttending.setImageResource(R.drawable.head_attenting_gray);
         }
         @Override
         public void onClick(View view) {
             if (mItemClickListener != null) {
                 mItemClickListener.onItemClick(view, getLayoutPosition());
+                Toast.makeText(mContext, String.valueOf(currRun.getIsMeasured()),
+                        Toast.LENGTH_LONG).show();
             }
         }
     }

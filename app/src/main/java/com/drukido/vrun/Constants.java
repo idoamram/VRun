@@ -12,4 +12,5 @@ public class Constants {
     public static final String KEY_LAST_NAME = "lastName";
     public static final String LOG_TAG = "VRun";
     public static final String KEY_NAME = "name";
+    public static final String KEY_IS_IPHONE_USER = "isIphoneUser";
 }

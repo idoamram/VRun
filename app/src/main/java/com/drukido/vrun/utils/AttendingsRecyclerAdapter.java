@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import com.drukido.vrun.AsyncTasks.IsUserRegisterToRun;
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Run;
+import com.drukido.vrun.entities.User;
 import com.drukido.vrun.interfaces.OnAsyncTaskFinishedListener;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -22,6 +24,8 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Ido on 11/21/2015.
@@ -48,6 +52,13 @@ public class AttendingsRecyclerAdapter extends
 
     @Override
     public void onBindViewHolder(final UserVH holder, int position) {
+
+//        if(mItemsList.get(position).getBoolean(Constants.KEY_IS_IPHONE_USER)) {
+//            holder.imgvProfilePhoto.setImageResource(R.drawable.apple);
+//        }
+        User.setUserProfilePhoto((User)mItemsList.get(position), holder.imgvProfilePhoto);
+        holder.imgvProfilePhoto
+                .setBorderColor(mContext.getResources().getColor(R.color.colorAccent));
         holder.txtvUserName.setText(mItemsList.get(position).getString(Constants.KEY_NAME));
     }
 
@@ -76,11 +87,15 @@ public class AttendingsRecyclerAdapter extends
     public class UserVH extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView txtvUserName;
+        CircleImageView imgvProfilePhoto;
 
         public UserVH(View itemView) {
             super(itemView);
 
-            txtvUserName = (TextView) itemView.findViewById(R.id.attendings_list_item_txtv_userName);
+            txtvUserName =
+                    (TextView) itemView.findViewById(R.id.attendings_list_item_txtv_userName);
+            imgvProfilePhoto =
+                    (CircleImageView) itemView.findViewById(R.id.attendings_list_item_imgvProfilePhoto);
 
             itemView.setOnClickListener(this);
         }

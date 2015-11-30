@@ -6,7 +6,7 @@
 
     <!-- Bottom View Start-->
     <LinearLayout
-        android:background="#FF9800"
+        android:background="@android:color/white"
         android:id="@+id/run_list_item_bottom_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,33 +14,36 @@
         <!--What you want to show-->
         <com.rey.material.widget.ImageButton
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:layout_margin="10dp"
             android:layout_gravity="center"
             android:id="@+id/run_list_item_btnAttending"
-            android:src="@mipmap/ic_thumb_up_white"
-            android:background="@android:color/transparent"/>
+            android:src="@drawable/head_attenting_gray"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
 
         <com.rey.material.widget.ImageButton
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:layout_gravity="center"
-            android:id="@+id/run_list_item_btnWatchAttending"
-            android:src="@mipmap/ic_supervisor_account_white"
-            android:background="@android:color/transparent"/>
-
-        <com.rey.material.widget.ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:layout_margin="10dp"
             android:layout_gravity="center"
             android:id="@+id/run_list_item_btnNotAttending"
-            android:src="@mipmap/ic_thumb_down_white"
-            android:background="@android:color/transparent"/>
+            android:src="@drawable/head_not_attenting_gray"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
+
+        <com.rey.material.widget.ImageButton
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:id="@+id/run_list_item_btnWatchAttending"
+            android:src="@drawable/group"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
 
     </LinearLayout>
     <!-- Bottom View End-->
@@ -101,52 +104,15 @@
                 android:layout_height="25dp"
                 android:layout_weight="1"
                 android:id="@+id/run_list_item_imgv_isAttendingIcon"
-                android:src="@mipmap/dont_know"/>
+                android:src="@drawable/head_dont_know"/>
         </LinearLayout>
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@+id/run_list_item_txtvTitle"-->
-            <!--android:src="@mipmap/ic_date_range_black"-->
-            <!--android:id="@+id/run_list_item_icon_runDate"-->
-            <!--android:layout_marginTop="@dimen/runs_list_item_fields_margin"/>-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignTop="@+id/run_list_item_icon_runDate"-->
-            <!--android:layout_alignBottom="@+id/run_list_item_icon_runDate"-->
-            <!--android:layout_below="@+id/run_list_item_txtvTitle"-->
-            <!--android:id="@+id/run_list_item_txtvDate"-->
-            <!--android:layout_toEndOf="@+id/run_list_item_icon_runDate"-->
-            <!--android:layout_toLeftOf="@+id/run_list_item_icon_runTime"-->
-            <!--android:layout_marginLeft="@dimen/runs_list_item_fields_margin"-->
-            <!--android:textStyle="bold"/>-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@mipmap/ic_schedule_black"-->
-            <!--android:id="@+id/run_list_item_icon_runTime"-->
-            <!--android:layout_alignTop="@+id/run_list_item_txtvDate"-->
-            <!--android:layout_centerHorizontal="true"/>-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignTop="@+id/run_list_item_icon_runTime"-->
-            <!--android:layout_alignBottom="@+id/run_list_item_icon_runTime"-->
-            <!--android:id="@+id/run_list_item_txtvTime"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_toEndOf="@+id/run_list_item_icon_runTime"-->
-            <!--android:layout_marginLeft="@dimen/runs_list_item_fields_margin"-->
-            <!--android:textStyle="bold"/>-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/run_list_item_layout_time"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:id="@+id/run_list_item_layout_targets">
 
             <ImageView
                 android:layout_width="0dp"
@@ -186,6 +152,42 @@
                 android:layout_weight="4"
                 android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
                 android:id="@+id/run_list_item_txtvUserName"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/run_list_item_layout_targets"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            android:id="@+id/run_list_item_layout_measured_details">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:src="@drawable/stopwatch_orange"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
+                android:id="@+id/run_list_item_txtvMeasuredDuration"/>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:src="@drawable/ployline_orange"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
+                android:id="@+id/run_list_item_txtvMeasuredDistance"/>
+
         </LinearLayout>
 
     </RelativeLayout>
