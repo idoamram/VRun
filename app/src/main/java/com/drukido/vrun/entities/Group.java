@@ -1,11 +1,15 @@
 package com.drukido.vrun.entities;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.drukido.vrun.R;
 import com.drukido.vrun.interfaces.OnAsyncTaskFinishedListener;
+import com.drukido.vrun.ui.fragments.GroupFragment;
+import com.drukido.vrun.utils.PhotosManager;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseClassName;
@@ -88,10 +92,10 @@ public class Group extends ParseObject {
 
     /****************** Methods *********************/
 
-    public static void setGroupPhotoToImageView(Group group, final ImageView imageView){
+    public static void setGroupPhotoToImageView(final Context context, Group group, final ImageView imageView){
         group.fetchIfNeededInBackground(new GetCallback<Group>() {
             @Override
-            public void done(Group fetchedGroup, ParseException e) {
+            public void done(final Group fetchedGroup, ParseException e) {
                 if (e == null) {
                     fetchedGroup.getGroupPhoto().getDataInBackground(new GetDataCallback() {
                         @Override
@@ -101,6 +105,24 @@ public class Group extends ParseObject {
                                     imageView.setImageBitmap(BitmapFactory
                                             .decodeByteArray(data, 0, data.length));
                                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                                    // Save photo Locally
+                                    PhotosManager.savePhotoLocallyInBackground(context, data,
+                                            fetchedGroup.getObjectId(),
+                                            PhotosManager.DIR_GROUPS_PHOTOS,
+                                            new OnAsyncTaskFinishedListener() {
+                                                @Override
+                                                public void onSuccess(Object result) {
+
+                                                }
+
+                                                @Override
+                                                public void onError(String errorMessage) {
+                                                    Toast.makeText(context,
+                                                            "Failed to save group photo locally",
+                                                            Toast.LENGTH_LONG).show();
+                                                }
+                                            });
                                 }
                             }
                         }

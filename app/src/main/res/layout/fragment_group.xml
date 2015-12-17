@@ -35,12 +35,12 @@
                         android:id="@+id/group_imgvGroupPhoto"/>
 
                     <ImageButton
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/camera"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/camera_enhance"
                         android:background="#66212121"
                         android:scaleType="centerInside"
-                        android:padding="12dp"
+                        android:padding="5dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"/>
 

@@ -236,8 +236,8 @@ public class RunFragment extends Fragment {
                     case COMING_RUNS:
                         for (Run currRun:mComingRunsList) {
                             try {
-                                currRun.fetchIfNeeded();
-                                currRun.getCreator().fetchIfNeeded();
+                                currRun.fetch();
+                                currRun.setCreator(currRun.getCreator().fetch());
                             } catch (ParseException e) {
                                 e.printStackTrace();
                                 return false;
@@ -247,8 +247,8 @@ public class RunFragment extends Fragment {
                     case PAST_RUNS:
                         for (Run currRun:mPastRunsList) {
                             try {
-                                currRun.fetchIfNeeded();
-                                currRun.getCreator().fetchIfNeeded();
+                                currRun.fetch();
+                                currRun.setCreator(currRun.getCreator().fetch());
                             } catch (ParseException e) {
                                 e.printStackTrace();
                                 return false;

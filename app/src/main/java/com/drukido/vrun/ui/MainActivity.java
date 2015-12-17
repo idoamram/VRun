@@ -25,9 +25,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.drukido.vrun.AsyncTasks.SubscribeGroupPushes;
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Group;
+import com.drukido.vrun.interfaces.OnAsyncTaskFinishedListener;
 import com.drukido.vrun.ui.fragments.GeneralFragment;
 import com.drukido.vrun.ui.fragments.GroupFragment;
 import com.drukido.vrun.ui.fragments.RunFragment;
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity
         implements RunFragment.OnFragmentInteractionListener,
         GeneralFragment.OnFragmentInteractionListener{
 
-    private final int FRAGMENTS_COUNT = 4;
+    private final int FRAGMENTS_COUNT = 3;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -67,7 +69,17 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         if(!mIsSubscribed){
-            subscribeGroupPushes();
+            new SubscribeGroupPushes(this, new OnAsyncTaskFinishedListener() {
+                @Override
+                public void onSuccess(Object result) {
+                    mIsSubscribed = true;
+                }
+
+                @Override
+                public void onError(String errorMessage) {
+                    mIsSubscribed = false;
+                }
+            }).execute();
         }
 
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainActivity_coordinateLayout);
@@ -136,6 +148,30 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void logout(){
+        final ParseUser user = ParseUser.getCurrentUser();
+        ParseUser.logOutInBackground(new LogOutCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(MainActivity.this,
+                            "Bye Bye " + user.getString("firstName") + " " +
+                                    user.getString("lastName") + "!", Toast.LENGTH_LONG).show();
+
+                    SharedPreferences prefs =
+                            getSharedPreferences(Constants.VRUN_PREFS_NAME, MODE_PRIVATE);
+                    SharedPreferences.Editor prefsEditor = prefs.edit();
+                    prefsEditor.putBoolean(Constants.PREF_IS_USER_LOGGED_IN, false);
+                    prefsEditor.apply();
+
+                    MainActivity.this.finish();
+                } else {
+                    Snackbar.make(mCoordinatorLayout, "Sorry, something went wrong...",
+                            Snackbar.LENGTH_LONG);
+                }
+            }
+        });
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -154,27 +190,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_logout) {
-            final ParseUser user = ParseUser.getCurrentUser();
-            ParseUser.logOutInBackground(new LogOutCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        Toast.makeText(MainActivity.this,
-                                "Bye Bye " + user.getString("firstName") + " " +
-                                        user.getString("lastName") + "!", Toast.LENGTH_LONG).show();
-                        SharedPreferences prefs =
-                                getSharedPreferences(Constants.VRUN_PREFS_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor prefsEditor = prefs.edit();
-                        prefsEditor.putBoolean(Constants.PREF_IS_USER_LOGGED_IN, false);
-                        prefsEditor.apply();
-
-                        MainActivity.this.finish();
-                    } else {
-                        Snackbar.make(mCoordinatorLayout, "Sorry, something went wrong...",
-                                Snackbar.LENGTH_LONG);
-                    }
-                }
-            });
+            logout();
         }
 
         return super.onOptionsItemSelected(item);
@@ -190,27 +206,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int id) {
                 // if this button is clicked, close
                 // current activity
-                final ParseUser user = ParseUser.getCurrentUser();
-                ParseUser.logOutInBackground(new LogOutCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            Toast.makeText(MainActivity.this,
-                                    "Bye Bye " + user.getString("firstName") + " " +
-                                            user.getString("lastName") + "!", Toast.LENGTH_LONG).show();
-                            SharedPreferences prefs =
-                                    getSharedPreferences(Constants.VRUN_PREFS_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor prefsEditor = prefs.edit();
-                            prefsEditor.putBoolean(Constants.PREF_IS_USER_LOGGED_IN, false);
-                            prefsEditor.commit();
-
-                            MainActivity.this.finish();
-                        } else {
-                            Snackbar.make(mCoordinatorLayout, "Sorry, something went wrong...",
-                                    Snackbar.LENGTH_LONG);
-                        }
-                    }
-                });
+                logout();
             }
         })
                 .setNegativeButton("No",new DialogInterface.OnClickListener() {
@@ -249,10 +245,8 @@ public class MainActivity extends AppCompatActivity
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return new GeneralFragment();
-                case 1:
                     return new GroupFragment();
-                case 2:
+                case 1:
                     return new RunFragment();
             }
             return PlaceholderFragment.newInstance(position + 1);
@@ -268,12 +262,10 @@ public class MainActivity extends AppCompatActivity
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "General";
-                case 1:
                     return "Group";
-                case 2:
+                case 1:
                     return "Runs";
-                case 3:
+                case 2:
                     return "Me";
             }
             return null;

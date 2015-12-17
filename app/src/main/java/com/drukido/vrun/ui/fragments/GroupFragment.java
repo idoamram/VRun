@@ -1,10 +1,13 @@
 package com.drukido.vrun.ui.fragments;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -38,7 +42,13 @@ import com.drukido.vrun.ui.MainActivity;
 import com.drukido.vrun.ui.PhotoViewerActivity;
 import com.drukido.vrun.utils.DateHelper;
 import com.drukido.vrun.utils.Duration;
+import com.drukido.vrun.utils.PhotosManager;
 import com.github.lzyzsd.circleprogress.DonutProgress;
+import com.kbeanie.imagechooser.api.ChooserType;
+import com.kbeanie.imagechooser.api.ChosenImage;
+import com.kbeanie.imagechooser.api.ImageChooserListener;
+import com.kbeanie.imagechooser.api.ImageChooserManager;
+import com.kbeanie.imagechooser.exceptions.ChooserException;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -57,13 +67,17 @@ import java.util.List;
  * Use the {@link GroupFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GroupFragment extends Fragment {
+public class GroupFragment extends Fragment implements ImageChooserListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int REQUEST_CAMERA = 1;
     private static final int SELECT_FILE = 2;
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static final int REQUEST_CAMERA_WRITE_EXTERNAL_STORAGE = 3;
+    private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -81,6 +95,8 @@ public class GroupFragment extends Fragment {
     boolean isLastRunFetched;
     boolean isBestRunFetched;
     boolean isComingEventFetched;
+
+    ImageChooserManager mImageChooserManager;
 
     public GroupFragment() {
         // Required empty public constructor
@@ -137,57 +153,11 @@ public class GroupFragment extends Fragment {
         mImgvGroupPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectImage();
+                grantDataWriting();
             }
         });
-        Group.setGroupPhotoToImageView(((User) ParseUser.getCurrentUser()).getGroup(), mImgvGroupPhoto);
-    }
-
-    private void selectImage() {
-        final CharSequence[] items = { "View photo", "Take photo", "Choose from library", "Cancel" };
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Group photo");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("View photo")) {
-
-                    try {
-                        Bitmap bmp = ((BitmapDrawable) mImgvGroupPhoto.getDrawable()).getBitmap();
-
-                        //Write file
-                        String filename = "bitmap.png";
-                        FileOutputStream stream = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
-                        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
-                        //Cleanup
-                        stream.close();
-
-                        //Pop intent
-                        Intent startPhotoViewerIntent =
-                                new Intent(getActivity(), PhotoViewerActivity.class);
-                        startPhotoViewerIntent
-                                .putExtra(PhotoViewerActivity.EXTRA_PHOTO_KEY, filename);
-                        startActivity(startPhotoViewerIntent);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
-                    }
-                } else if (items[item].equals("Take photo")) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, REQUEST_CAMERA);
-                } else if (items[item].equals("Choose from library")) {
-                    Intent intent =
-                            new Intent(Intent.ACTION_PICK,
-                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, SELECT_FILE);
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
+        Group.setGroupPhotoToImageView(getActivity(),
+                ((User) ParseUser.getCurrentUser()).getGroup(), mImgvGroupPhoto);
     }
 
     private void initializeSwipeLayout() {
@@ -205,6 +175,8 @@ public class GroupFragment extends Fragment {
     }
 
     private void initializeCards() {
+
+        mSwipeRefreshLayout.setRefreshing(true);
 
         isGroupFetched = false;
         isLastRunFetched = false;
@@ -232,7 +204,7 @@ public class GroupFragment extends Fragment {
                                 .findViewById(R.id.card_group_lastRun_txtvDuration))
                                 .setText(duration.toPresentableString());
 
-                        if (runs.get(0).getRunTitle() != "") {
+                        if (!runs.get(0).getRunTitle().equals("")) {
                             (mCardViewLastRun
                                     .findViewById(R.id.card_group_lastRun_txtvTitle))
                                     .setVisibility(View.VISIBLE);
@@ -274,7 +246,7 @@ public class GroupFragment extends Fragment {
                                 .findViewById(R.id.card_group_bestRun_txtvDuration))
                                 .setText(duration.toPresentableString());
 
-                        if (runs.get(0).getRunTitle() != "") {
+                        if (runs.get(0).getRunTitle() != null) {
                             (mCardViewBestRun
                                     .findViewById(R.id.card_group_bestRun_txtvTitle))
                                     .setVisibility(View.VISIBLE);
@@ -363,9 +335,20 @@ public class GroupFragment extends Fragment {
                                 .findViewById(R.id.card_group_comingEvent_txtvDuration))
                                 .setText(duration.toPresentableString());
 
-                        ((TextView) mCardViewComingEvent
-                                .findViewById(R.id.card_group_comingEvent_txtvLocationTitle))
-                                .setText(events.get(0).getLocationTitle());
+                        if (events.get(0).getEventTitle() != null) {
+                            (mCardViewComingEvent
+                                    .findViewById(R.id.card_group_comingEvent_txtvTitle))
+                                    .setVisibility(View.VISIBLE);
+                            ((TextView) mCardViewComingEvent
+                                    .findViewById(R.id.card_group_comingEvent_txtvTitle))
+                                    .setText(events.get(0).getEventTitle());
+                        }
+
+                        if (events.get(0).getLocationTitle() != null) {
+                            ((TextView) mCardViewComingEvent
+                                    .findViewById(R.id.card_group_comingEvent_txtvLocationTitle))
+                                    .setText(events.get(0).getLocationTitle());
+                        }
                     } else {
                         ((LinearLayout) mCardViewComingEvent.getParent()).setVisibility(View.GONE);
                     }
@@ -385,57 +368,202 @@ public class GroupFragment extends Fragment {
         }
     }
 
+    private void grantDataWriting() {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            //RUNTIME PERMISSION Android M
+            if(PackageManager.PERMISSION_GRANTED ==
+                    ActivityCompat.checkSelfPermission(getActivity(),
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
+                    PackageManager.PERMISSION_GRANTED ==
+                    ActivityCompat.checkSelfPermission(getActivity(),
+                            Manifest.permission.CAMERA)){
+                selectImage();
+            }else{
+                requestPermission(getActivity());
+            }
+
+        }
+    }
+
+    private void requestPermission(final Context context){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.CAMERA)) {
+            // Provide an additional rationale to the user if the permission was not granted
+            // and the user would benefit from additional context for the use of the permission.
+            // For example if the user has previously denied the permission.
+
+            new AlertDialog.Builder(context)
+                    .setMessage("You must grant VRun to writing external data for picking a photo")
+                    .setPositiveButton("Grant", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions((Activity)context,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                            Manifest.permission.CAMERA},
+                                    REQUEST_CAMERA_WRITE_EXTERNAL_STORAGE);
+                        }
+                    }).show();
+
+        } else {
+            // permission has not been granted yet. Request it directly.
+            ActivityCompat.requestPermissions((Activity)context,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA},
+                    REQUEST_CAMERA_WRITE_EXTERNAL_STORAGE);
+        }
+    }
+
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == getActivity().RESULT_OK) {
-            if (requestCode == REQUEST_CAMERA) {
-                final Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-                Group.saveCurrentUserGroupPhoto(byteArray, new OnAsyncTaskFinishedListener() {
-                    @Override
-                    public void onSuccess(Object result) {
-                        mImgvGroupPhoto.setImageBitmap(thumbnail);
-                    }
-
-                    @Override
-                    public void onError(String errorMessage) {
-                        Toast.makeText(getActivity(), "Error while trying upload your photo",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
-
-            } else if (requestCode == SELECT_FILE) {
-                Uri selectedImage = data.getData();
-                String[] filePath = { MediaStore.Images.Media.DATA };
-                Cursor c = getActivity().getContentResolver()
-                        .query(selectedImage, filePath, null, null, null);
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePath[0]);
-                final String picturePath = c.getString(columnIndex);
-                c.close();
-                final Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-                Group.saveCurrentUserGroupPhoto(byteArray, new OnAsyncTaskFinishedListener() {
-                    @Override
-                    public void onSuccess(Object result) {
-                        mImgvGroupPhoto.setImageBitmap(thumbnail);
-                    }
-
-                    @Override
-                    public void onError(String errorMessage) {
-                        Toast.makeText(getActivity(), "Error while trying upload your photo",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
+    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CAMERA_WRITE_EXTERNAL_STORAGE: {
+                if ((grantResults.length == 2 && grantResults[0] ==
+                        PackageManager.PERMISSION_GRANTED) && (grantResults[1] ==
+                        PackageManager.PERMISSION_GRANTED)
+                        ) {
+                    Toast.makeText(getActivity(),
+                            "get permissions success", Toast.LENGTH_SHORT).show();
+                    selectImage();
+                } else {
+                    Toast.makeText(getActivity(),
+                            "get permissions failed", Toast.LENGTH_SHORT).show();
+                    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                }
             }
         }
+    }
+
+    private void selectImage() {
+        final CharSequence[] items = { "View photo", "Take photo", "Choose from library", "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Group photo");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("View photo")) {
+
+                    try {
+                        Bitmap bmp = ((BitmapDrawable) mImgvGroupPhoto.getDrawable()).getBitmap();
+
+                        //Write file
+                        String filename = "bitmap.png";
+                        FileOutputStream stream =
+                                getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
+                        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+                        //Cleanup
+                        stream.close();
+
+                        //Pop intent
+                        Intent startPhotoViewerIntent =
+                                new Intent(getActivity(), PhotoViewerActivity.class);
+                        startPhotoViewerIntent
+                                .putExtra(PhotoViewerActivity.EXTRA_PHOTO_KEY, filename);
+                        startActivity(startPhotoViewerIntent);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
+                    }
+                } else if (items[item].equals("Take photo")) {
+                    mImageChooserManager = new ImageChooserManager(GroupFragment.this,
+                            ChooserType.REQUEST_CAPTURE_PICTURE);
+                    mImageChooserManager.setImageChooserListener(GroupFragment.this);
+                    try {
+                        mImageChooserManager.choose();
+                    } catch (ChooserException e) {
+                        e.printStackTrace();
+                    }
+                } else if (items[item].equals("Choose from library")) {
+                    mImageChooserManager = new ImageChooserManager(GroupFragment.this,
+                            ChooserType.REQUEST_PICK_PICTURE);
+                    mImageChooserManager.setImageChooserListener(GroupFragment.this);
+                    try {
+                        mImageChooserManager.choose();
+                    } catch (ChooserException e) {
+                        e.printStackTrace();
+                    }
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == getActivity().RESULT_OK &&
+                (requestCode == ChooserType.REQUEST_PICK_PICTURE||
+                        requestCode == ChooserType.REQUEST_CAPTURE_PICTURE)) {
+            mImageChooserManager.submit(requestCode, data);
+        }
+    }
+
+    @Override
+    public void onImageChosen(final ChosenImage image) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (image != null) {
+                    // Use the image
+                    // image.getFilePathOriginal();
+                    // image.getFileThumbnail();
+                    // image.getFileThumbnailSmall();
+                    Toast.makeText(getActivity(), image.getFileThumbnail(),
+                            Toast.LENGTH_LONG).show();
+
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    final Bitmap bitmap = BitmapFactory.decodeFile(image.getFilePathOriginal());
+                    PhotosManager.saveCurrUserGroupPhoto(getActivity(),
+                            image.getFilePathOriginal(),
+                            new OnAsyncTaskFinishedListener() {
+                                @Override
+                                public void onSuccess(Object result) {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                    mImgvGroupPhoto.setImageBitmap(bitmap);
+                                }
+
+                                @Override
+                                public void onError(String errorMessage) {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                }
+                            });
+//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//
+//                    //this will convert image to byte[]
+//                    byte[] byteArrayImage = baos.toByteArray();
+//
+//                    mSwipeRefreshLayout.setRefreshing(true);
+//                    Group.saveCurrentUserGroupPhoto(byteArrayImage,
+//                            new OnAsyncTaskFinishedListener() {
+//                        @Override
+//                        public void onSuccess(Object result) {
+//                            mSwipeRefreshLayout.setRefreshing(false);
+//                            mImgvGroupPhoto.setImageBitmap(bitmap);
+//                        }
+//
+//                        @Override
+//                        public void onError(String errorMessage) {
+//                            mSwipeRefreshLayout.setRefreshing(false);
+//                        }
+//                    });
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onError(final String reason) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Show error message
+                Toast.makeText(getActivity(), "Pick image failed.\nonError called", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

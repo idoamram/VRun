@@ -20,9 +20,12 @@ import com.drukido.vrun.AsyncTasks.IsUserRegisterToRun;
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Run;
+import com.drukido.vrun.entities.User;
 import com.drukido.vrun.interfaces.OnAsyncTaskFinishedListener;
 import com.drukido.vrun.ui.WatchAttendingActivity;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.rey.material.widget.Button;
@@ -84,11 +87,19 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
         }
         holder.txtvDate.setText(DateHelper.getDateStringFromDate(holder.currRun.getRunTime()));
         holder.txtvTime.setText(DateHelper.getTimeStringFromDate(holder.currRun.getRunTime()));
-        String distance = String.valueOf((((double) holder.currRun.getTargetDistance()) / 1000)) + " KM";
+        String distance =
+                String.valueOf((((double) holder.currRun.getTargetDistance()) / 1000)) + " KM";
         holder.txtvDistance.setText(distance);
         Duration duration = Duration.fromString(holder.currRun.getTargetDuration());
         holder.txtvDuration.setText(duration.toPresentableString());
-        holder.txtvUserName.setText(holder.currRun.getCreator().getString("name"));
+        holder.currRun.getCreator().fetchIfNeededInBackground(new GetCallback<User>() {
+            @Override
+            public void done(User object, ParseException e) {
+                if (e == null) {
+                    holder.txtvUserName.setText(object.getName());
+                }
+            }
+        });
 
 //        if(holder.currRun.getIsMeasured()){
 //            String measuredDistance = String.valueOf((((double) holder.currRun.getDistance()) / 1000)) + " KM";
@@ -394,12 +405,6 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
             mainRelativeLayout = (RelativeLayout)
                     itemView.findViewById(R.id.run_list_item_relativeLayout_mainLayout);
             itemView.setOnClickListener(this);
-//            lnrLayoutMesuredDetails = (LinearLayout)
-//                    itemView.findViewById(R.id.run_list_item_layout_measured_details);
-//            txtvMeasuredDistance =
-//                    (TextView) itemView.findViewById(R.id.run_list_item_txtvMeasuredDistance);
-//            txtvMeasuredDuration =
-//                    (TextView) itemView.findViewById(R.id.run_list_item_txtvMeasuredDuration);
         }
 
         public void showAsAttending() {
