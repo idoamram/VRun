@@ -96,6 +96,8 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
     boolean isBestRunFetched;
     boolean isComingEventFetched;
 
+    Group mGroup;
+
     ImageChooserManager mImageChooserManager;
 
     public GroupFragment() {
@@ -255,8 +257,8 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
                                     .setText(runs.get(0).getRunTitle());
                         }
 
-                        ParseUser user = ParseUser.getCurrentUser();
-                        Group userGroup = (Group) user.getParseObject("group");
+                        User user = (User) ParseUser.getCurrentUser();
+                        Group userGroup = user.getGroup();
                         userGroup.fetchInBackground(new GetCallback<Group>() {
                             @Override
                             public void done(Group group, ParseException e) {
@@ -517,6 +519,20 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
 
                     mSwipeRefreshLayout.setRefreshing(true);
                     final Bitmap bitmap = BitmapFactory.decodeFile(image.getFilePathOriginal());
+
+                    PhotosManager.savePhotoInBackground(getActivity(), image.getFilePathOriginal(),
+                            PhotosManager.TYPE_GROUP_PHOTO, new OnAsyncTaskFinishedListener() {
+                                @Override
+                                public void onSuccess(Object result) {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                    mImgvGroupPhoto.setImageBitmap(bitmap);
+                                }
+
+                                @Override
+                                public void onError(String errorMessage) {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                }
+                            });
                     PhotosManager.saveCurrUserGroupPhoto(getActivity(),
                             image.getFilePathOriginal(),
                             new OnAsyncTaskFinishedListener() {

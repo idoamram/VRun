@@ -186,7 +186,7 @@ public class RunFragment extends Fragment {
         });
     }
 
-    private void getRunsList(String runType) {
+    private void getRunsList(final String runType) {
         switch (runType) {
             case COMING_RUNS:
                 Run.getAllComingRuns(Constants.VRUN_GROUP_OBJECT_ID, new FindCallback<Run>() {
@@ -197,11 +197,11 @@ public class RunFragment extends Fragment {
                                 mComingRunsList = runsListResult;
                                 fetchRunsDetails(COMING_RUNS);
                             } else {
-                                hideListProgressView();
+                                initializeRecycler(runType);
                             }
                         } else {
                             Log.d("run", "Error: " + e.getMessage());
-                            hideListProgressView();
+                            initializeRecycler(runType);
                         }
                     }
                 });
@@ -236,7 +236,7 @@ public class RunFragment extends Fragment {
                     case COMING_RUNS:
                         for (Run currRun:mComingRunsList) {
                             try {
-                                currRun.fetch();
+                                currRun = currRun.fetch();
                                 currRun.setCreator(currRun.getCreator().fetch());
                             } catch (ParseException e) {
                                 e.printStackTrace();
@@ -247,7 +247,7 @@ public class RunFragment extends Fragment {
                     case PAST_RUNS:
                         for (Run currRun:mPastRunsList) {
                             try {
-                                currRun.fetch();
+                                currRun = currRun.fetch();
                                 currRun.setCreator(currRun.getCreator().fetch());
                             } catch (ParseException e) {
                                 e.printStackTrace();
@@ -278,6 +278,10 @@ public class RunFragment extends Fragment {
 
         switch (runType) {
             case COMING_RUNS:
+                if(mComingRunsList == null) {
+                    mComingRunsList = new ArrayList<>();
+                }
+
                 mComingRunsRecyclerAdapter = new RunsRecyclerAdapter(mComingRunsList, mContext, true);
                 mRecyclerView.setAdapter(mComingRunsRecyclerAdapter);
                 break;

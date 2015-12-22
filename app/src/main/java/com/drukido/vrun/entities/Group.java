@@ -109,7 +109,7 @@ public class Group extends ParseObject {
                                     // Save photo Locally
                                     PhotosManager.savePhotoLocallyInBackground(context, data,
                                             fetchedGroup.getObjectId(),
-                                            PhotosManager.DIR_GROUPS_PHOTOS,
+                                            PhotosManager.TYPE_GROUP_PHOTO,
                                             new OnAsyncTaskFinishedListener() {
                                                 @Override
                                                 public void onSuccess(Object result) {
