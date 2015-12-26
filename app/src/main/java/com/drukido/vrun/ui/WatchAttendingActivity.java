@@ -16,13 +16,9 @@ import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Run;
 import com.drukido.vrun.entities.User;
-import com.drukido.vrun.utils.AttendingsRecyclerAdapter;
-import com.drukido.vrun.utils.DividerItemDecoration;
-import com.drukido.vrun.utils.RunsRecyclerAdapter;
+import com.drukido.vrun.utils.UsersListRecyclerAdapter;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
 import com.rey.material.widget.ProgressView;
 
 import java.util.List;
@@ -39,8 +35,8 @@ public class WatchAttendingActivity extends AppCompatActivity {
     private RecyclerView mNotAttendingRecyclerView;
     private LinearLayoutManager mLinearLayoutManagerAttending;
     private LinearLayoutManager mLinearLayoutManagerNotAttending;
-    private AttendingsRecyclerAdapter mAttendingAdapter;
-    private AttendingsRecyclerAdapter mNotAttendingAdapter;
+    private UsersListRecyclerAdapter mAttendingAdapter;
+    private UsersListRecyclerAdapter mNotAttendingAdapter;
     private Context mContext;
     private String mRunId;
 
@@ -172,7 +168,7 @@ public class WatchAttendingActivity extends AppCompatActivity {
             mLinearLayoutManagerAttending = new LinearLayoutManager(mContext);
             mAttendingRecyclerView.setLayoutManager(mLinearLayoutManagerAttending);
             mAttendingRecyclerView.setItemAnimator(new DefaultItemAnimator());
-            mAttendingAdapter = new AttendingsRecyclerAdapter(mAttendingList, mContext);
+            mAttendingAdapter = new UsersListRecyclerAdapter(mAttendingList, mContext);
             mAttendingRecyclerView.setAdapter(mAttendingAdapter);
         } else {
 //            mAttendingRecyclerView.setVisibility(View.INVISIBLE);
@@ -185,7 +181,7 @@ public class WatchAttendingActivity extends AppCompatActivity {
             mLinearLayoutManagerNotAttending = new LinearLayoutManager(mContext);
             mNotAttendingRecyclerView.setLayoutManager(mLinearLayoutManagerNotAttending);
             mNotAttendingRecyclerView.setItemAnimator(new DefaultItemAnimator());
-            mNotAttendingAdapter = new AttendingsRecyclerAdapter(mNotAttendingList, mContext);
+            mNotAttendingAdapter = new UsersListRecyclerAdapter(mNotAttendingList, mContext);
             mNotAttendingRecyclerView.setAdapter(mNotAttendingAdapter);
         } else {
 //            mNotAttendingRecyclerView.setVisibility(View.INVISIBLE);

@@ -39,4 +39,6 @@
     <string name="best_run">Best run :</string>
     <string name="last_run">Last run :</string>
     <string name="coming_event">Coming event :</string>
+    <string name="title_activity_group_members">GroupMembersActivity</string>
+    <string name="group_members">Group members</string>
 </resources>

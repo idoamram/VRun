@@ -45,6 +45,11 @@ public class MainActivity extends AppCompatActivity
         GeneralFragment.OnFragmentInteractionListener{
 
     private final int FRAGMENTS_COUNT = 3;
+    private int[] tabIcons = {
+            R.drawable.group_ios,
+            R.drawable.user_male_ios,
+            R.drawable.running_ios
+    };
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private TabLayout mTabLayout;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -94,8 +100,9 @@ public class MainActivity extends AppCompatActivity
         mViewPager.setOffscreenPageLimit(FRAGMENTS_COUNT);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        mTabLayout.setupWithViewPager(mViewPager);
+        setupTabIcons();
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +124,16 @@ public class MainActivity extends AppCompatActivity
 //        Intent i = new Intent(MainActivity.this, RunMeasureActivity.class);
 //        i.putExtra(Constants.EXTRA_RUN_ID, "QkTYcSTFi9");
 //        startActivity(i);
+    }
+
+    private void setupTabIcons() {
+        try {
+            mTabLayout.getTabAt(0).setIcon(tabIcons[0]);
+            mTabLayout.getTabAt(1).setIcon(tabIcons[1]);
+            mTabLayout.getTabAt(2).setIcon(tabIcons[2]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void subscribeGroupPushes() {
@@ -260,16 +277,18 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Group";
-                case 1:
-                    return "Runs";
-                case 2:
-                    return "Me";
-            }
+//            switch (position) {
+//                case 0:
+//                    return "Group";
+//                case 1:
+//                    return "Runs";
+//                case 2:
+//                    return "Me";
+//            }
             return null;
         }
+
+
     }
 
     /**

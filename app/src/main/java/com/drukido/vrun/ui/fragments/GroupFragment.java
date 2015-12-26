@@ -27,6 +27,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ import com.drukido.vrun.entities.Run;
 import com.drukido.vrun.entities.User;
 import com.drukido.vrun.interfaces.GetPhotoCallback;
 import com.drukido.vrun.interfaces.OnAsyncTaskFinishedListener;
+import com.drukido.vrun.ui.GroupMembersActivity;
 import com.drukido.vrun.ui.MainActivity;
 import com.drukido.vrun.ui.PhotoViewerActivity;
 import com.drukido.vrun.utils.DateHelper;
@@ -149,6 +151,14 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.group_swipeLayout);
         mImgvGroupPhoto = (ImageView) rootView.findViewById(R.id.group_imgvGroupPhoto);
 
+        Button groupMembersBtn = (Button) rootView.findViewById(R.id.group_membersButton);
+        groupMembersBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), GroupMembersActivity.class));
+            }
+        });
+
 //        initializeGroupPhoto();
 //        initializeSwipeLayout();
 //        initializeCards();
@@ -221,6 +231,7 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorGreenSuccess),
                 getResources().getColor(R.color.colorPrimary),
                 getResources().getColor(R.color.colorRedFailed));
+//        mSwipeRefreshLayout.setColorSchemeColors(Constants.getSwipeLayoutColors(getActivity()));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

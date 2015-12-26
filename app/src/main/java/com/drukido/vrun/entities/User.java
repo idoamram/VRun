@@ -5,17 +5,20 @@ import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
 import com.drukido.vrun.R;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.List;
 
 @ParseClassName("_User")
 public class User extends ParseUser{
@@ -86,12 +89,34 @@ public class User extends ParseUser{
 
     /********************* Methods *******************/
     public void getPicassoProfilePhoto(ImageView imageView, Context context) {
-        Picasso.with(context).load(getProfilePhoto().getUrl()).into(imageView);
+        if (getProfilePhoto() != null) {
+            Picasso.with(context).load(getProfilePhoto().getUrl())
+                    .error(R.drawable.account).into(imageView);
+        } else {
+            imageView.setPadding(10,10,10,10);
+        }
     }
 
     public void saveProfilePhoto(String photoFilePath, SaveCallback saveCallback) {
         setProfilePhoto(new ParseFile(new File(photoFilePath)));
         saveInBackground(saveCallback);
+    }
+
+    public void getAllUsers(boolean isOnlyIphone, FindCallback<User> callback) {
+        try {
+            ParseQuery<User> query = ParseQuery.getQuery(User.class);
+            query.whereEqualTo(KEY_GROUP, getGroup());
+
+            if(isOnlyIphone) {
+                query.whereEqualTo(KEY_IS_IPHONE_USER, true);
+            }
+
+            query.orderByAscending(KEY_NAME);
+            query.findInBackground(callback);
+        } catch (Exception e) {
+            e.printStackTrace();
+            callback.done(null, new ParseException(0,""));
+        }
     }
 
     public static void setUserProfilePhoto(final User user, final ImageView imageView) {
