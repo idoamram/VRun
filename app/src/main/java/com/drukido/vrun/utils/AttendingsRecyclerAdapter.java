@@ -33,11 +33,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AttendingsRecyclerAdapter extends
         RecyclerView.Adapter<AttendingsRecyclerAdapter.UserVH> {
 
-    List<ParseUser> mItemsList;
+    List<User> mItemsList;
     OnItemClickListener mItemClickListener;
     Context mContext;
 
-    public AttendingsRecyclerAdapter (List<ParseUser> usersList, Context context) {
+    public AttendingsRecyclerAdapter (List<User> usersList, Context context) {
         this.mItemsList = usersList;
         this.mContext = context;
     }
@@ -56,7 +56,8 @@ public class AttendingsRecyclerAdapter extends
 //        if(mItemsList.get(position).getBoolean(Constants.KEY_IS_IPHONE_USER)) {
 //            holder.imgvProfilePhoto.setImageResource(R.drawable.apple);
 //        }
-        User.setUserProfilePhoto((User)mItemsList.get(position), holder.imgvProfilePhoto);
+//        User.setUserProfilePhoto((User)mItemsList.get(position), holder.imgvProfilePhoto);
+        mItemsList.get(position).getPicassoProfilePhoto(holder.imgvProfilePhoto, mContext);
         holder.imgvProfilePhoto
                 .setBorderColor(mContext.getResources().getColor(R.color.colorAccent));
         holder.txtvUserName.setText(mItemsList.get(position).getString(Constants.KEY_NAME));

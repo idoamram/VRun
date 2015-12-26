@@ -1,5 +1,6 @@
 package com.drukido.vrun.entities;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
@@ -11,6 +12,10 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 @ParseClassName("_User")
 public class User extends ParseUser{
@@ -80,6 +85,15 @@ public class User extends ParseUser{
     }
 
     /********************* Methods *******************/
+    public void getPicassoProfilePhoto(ImageView imageView, Context context) {
+        Picasso.with(context).load(getProfilePhoto().getUrl()).into(imageView);
+    }
+
+    public void saveProfilePhoto(String photoFilePath, SaveCallback saveCallback) {
+        setProfilePhoto(new ParseFile(new File(photoFilePath)));
+        saveInBackground(saveCallback);
+    }
+
     public static void setUserProfilePhoto(final User user, final ImageView imageView) {
         user.fetchIfNeededInBackground(new GetCallback<User>() {
             @Override

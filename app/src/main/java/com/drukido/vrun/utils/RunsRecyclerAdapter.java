@@ -115,13 +115,13 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                 public void onClick(View view) {
 
                     if (!holder.isUserAttending) {
-                        ArrayList<ParseUser> notAttendingUsers = holder.currRun.getNotAttending();
-                        ArrayList<ParseUser> attendingUsers = holder.currRun.getAttending();
+                        ArrayList<User> notAttendingUsers = holder.currRun.getNotAttending();
+                        ArrayList<User> attendingUsers = holder.currRun.getAttending();
 
                         if(attendingUsers != null){
                             boolean isUserAttending = false;
 
-                            for(ParseUser currUser:attendingUsers) {
+                            for(User currUser:attendingUsers) {
                                 if(currUser.getObjectId()
                                         .equals(ParseUser.getCurrentUser().getObjectId())) {
                                     isUserAttending = true;
@@ -130,11 +130,11 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                             }
 
                             if (!isUserAttending) {
-                                attendingUsers.add(ParseUser.getCurrentUser());
+                                attendingUsers.add((User) ParseUser.getCurrentUser());
                             }
                         } else {
                             attendingUsers = new ArrayList<>();
-                            attendingUsers.add(ParseUser.getCurrentUser());
+                            attendingUsers.add((User) ParseUser.getCurrentUser());
                         }
 
                         if(notAttendingUsers == null){
@@ -173,10 +173,10 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                     }
                     // Already attending
                     else {
-                        ArrayList<ParseUser> attendingUsers = holder.currRun.getAttending();
+                        ArrayList<User> attendingUsers = holder.currRun.getAttending();
 
                         try {
-                            for(ParseUser currUser:attendingUsers) {
+                            for(User currUser:attendingUsers) {
                                 if(currUser.getObjectId()
                                         .equals(ParseUser.getCurrentUser().getObjectId())) {
                                     attendingUsers.remove(attendingUsers.indexOf(currUser));
@@ -208,13 +208,13 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                 public void onClick(View view) {
 
                     if (!holder.isUserNotAttending) {
-                        ArrayList<ParseUser> notAttendingUsers = holder.currRun.getNotAttending();
-                        ArrayList<ParseUser> attendingUsers = holder.currRun.getAttending();
+                        ArrayList<User> notAttendingUsers = holder.currRun.getNotAttending();
+                        ArrayList<User> attendingUsers = holder.currRun.getAttending();
 
                         if(notAttendingUsers != null){
                             boolean isUserNotAttending = false;
 
-                            for(ParseUser currUser:notAttendingUsers) {
+                            for(User currUser:notAttendingUsers) {
                                 if(currUser.getObjectId()
                                         .equals(ParseUser.getCurrentUser().getObjectId())) {
                                     isUserNotAttending = true;
@@ -223,11 +223,11 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                             }
 
                             if (!isUserNotAttending) {
-                                notAttendingUsers.add(ParseUser.getCurrentUser());
+                                notAttendingUsers.add((User) ParseUser.getCurrentUser());
                             }
                         } else {
                             notAttendingUsers = new ArrayList<>();
-                            notAttendingUsers.add(ParseUser.getCurrentUser());
+                            notAttendingUsers.add((User) ParseUser.getCurrentUser());
                         }
 
                         if(attendingUsers == null){
@@ -235,7 +235,7 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                         }
 
                         try {
-                            for(ParseUser currUser:attendingUsers) {
+                            for(User currUser:attendingUsers) {
                                 if(currUser.getObjectId()
                                         .equals(ParseUser.getCurrentUser().getObjectId())) {
                                     attendingUsers.remove(attendingUsers.indexOf(currUser));
@@ -264,10 +264,10 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                     }
                     // User already not attending
                     else {
-                        ArrayList<ParseUser> notAttendingUsers = holder.currRun.getNotAttending();
+                        ArrayList<User> notAttendingUsers = holder.currRun.getNotAttending();
 
                         try {
-                            for(ParseUser currUser:notAttendingUsers) {
+                            for(User currUser:notAttendingUsers) {
                                 if(currUser.getObjectId()
                                         .equals(ParseUser.getCurrentUser().getObjectId())) {
                                     notAttendingUsers.remove(notAttendingUsers.indexOf(currUser));

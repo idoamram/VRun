@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.CursorLoader;
@@ -31,12 +32,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.drukido.vrun.AsyncTasks.GetFetchedGroup;
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Group;
 import com.drukido.vrun.entities.GroupEvent;
 import com.drukido.vrun.entities.Run;
 import com.drukido.vrun.entities.User;
+import com.drukido.vrun.interfaces.GetPhotoCallback;
 import com.drukido.vrun.interfaces.OnAsyncTaskFinishedListener;
 import com.drukido.vrun.ui.MainActivity;
 import com.drukido.vrun.ui.PhotoViewerActivity;
@@ -54,6 +57,8 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+import com.squareup.picasso.Callback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -144,11 +149,33 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.group_swipeLayout);
         mImgvGroupPhoto = (ImageView) rootView.findViewById(R.id.group_imgvGroupPhoto);
 
-        initializeGroupPhoto();
+//        initializeGroupPhoto();
+//        initializeSwipeLayout();
+//        initializeCards();
         initializeSwipeLayout();
-        initializeCards();
+        fetchGroup();
 
         return rootView;
+    }
+
+    private void fetchGroup() {
+
+        isGroupFetched = false;
+
+        new GetFetchedGroup(new OnAsyncTaskFinishedListener() {
+            @Override
+            public void onSuccess(Object result) {
+                mGroup = (Group) result;
+                isGroupFetched = true;
+                initializeGroupPhoto();
+                initializeCards();
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }).execute();
     }
 
     private void initializeGroupPhoto() {
@@ -158,8 +185,36 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
                 grantDataWriting();
             }
         });
-        Group.setGroupPhotoToImageView(getActivity(),
-                ((User) ParseUser.getCurrentUser()).getGroup(), mImgvGroupPhoto);
+        mGroup.getPicassoGroupPhoto(mImgvGroupPhoto, getActivity(), new Callback() {
+            @Override
+            public void onSuccess() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onError() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+//        PhotosManager.getCurrUserOrGroupPhotoInBackground(getActivity(),
+//                PhotosManager.TYPE_GROUP_PHOTO, new GetPhotoCallback() {
+//                    @Override
+//                    public void onSuccess(Bitmap bitmap) {
+//                        mImgvGroupPhoto.setImageBitmap(bitmap);
+//                        mImgvGroupPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                    }
+//
+//                    @Override
+//                    public void onFetched(Bitmap bitmap) {
+//                        mImgvGroupPhoto.setImageBitmap(bitmap);
+//                        mImgvGroupPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                    }
+//
+//                    @Override
+//                    public void onError() {
+//
+//                    }
+//                });
     }
 
     private void initializeSwipeLayout() {
@@ -170,8 +225,7 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
             @Override
             public void onRefresh() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                initializeGroupPhoto();
-                initializeCards();
+                fetchGroup();
             }
         });
     }
@@ -180,17 +234,17 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
 
         mSwipeRefreshLayout.setRefreshing(true);
 
-        isGroupFetched = false;
         isLastRunFetched = false;
         isBestRunFetched = false;
         isComingEventFetched = false;
 
         // Get last run
-        Run.getLastRunInBackground(Constants.VRUN_GROUP_OBJECT_ID, new FindCallback<Run>() {
+        Run.getLastRunInBackground(mGroup.getObjectId(), new FindCallback<Run>() {
             @Override
             public void done(List<Run> runs, ParseException e) {
                 if (e == null) {
                     if (runs.size() > 0) {
+                        ((LinearLayout) mCardViewLastRun.getParent()).setVisibility(View.VISIBLE);
                         ((TextView) mCardViewLastRun.findViewById(R.id.card_group_lastRun_txtvDate))
                                 .setText(DateHelper.getDateStringFromDate(runs.get(0).getRunTime()));
                         ((TextView) mCardViewLastRun.findViewById(R.id.card_group_lastRun_txtvTime))
@@ -228,11 +282,12 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
         });
 
         // Get best run
-        Run.getBestRunInBackground(Constants.VRUN_GROUP_OBJECT_ID, new FindCallback<Run>() {
+        Run.getBestRunInBackground(mGroup.getObjectId(), new FindCallback<Run>() {
             @Override
             public void done(final List<Run> runs, ParseException e) {
                 if (e == null) {
                     if (runs.size() > 0) {
+                        ((LinearLayout) mCardViewBestRun.getParent()).setVisibility(View.VISIBLE);
                         ((TextView) mCardViewBestRun.findViewById(R.id.card_group_bestRun_txtvDate))
                                 .setText(DateHelper.getDateStringFromDate(runs.get(0).getRunTime()));
                         ((TextView) mCardViewBestRun.findViewById(R.id.card_group_bestRun_txtvTime))
@@ -257,48 +312,76 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
                                     .setText(runs.get(0).getRunTitle());
                         }
 
-                        User user = (User) ParseUser.getCurrentUser();
-                        Group userGroup = user.getGroup();
-                        userGroup.fetchInBackground(new GetCallback<Group>() {
-                            @Override
-                            public void done(Group group, ParseException e) {
-                                if (e == null) {
-                                    // Initialize Donut progress bar
-                                    double targetDistance = group.getTargetDistance();
-                                    double bestDistance = runs.get(0).getDistance();
-                                    double progress = (bestDistance % targetDistance) / 100;
-                                    if (progress > 100) {
-                                        progress = 100;
-                                    }
+                        // Initialize Donut progress bar
+                        double targetDistance = mGroup.getTargetDistance();
+                        double bestDistance = runs.get(0).getDistance();
+                        double progress = (bestDistance % targetDistance) / 100;
+                        if (progress > 100) {
+                            progress = 100;
+                        }
 
-                                    ((DonutProgress) mCardViewProgress
-                                            .findViewById(R.id.group_donutProgress))
-                                            .setProgress((int) progress);
-                                    ((DonutProgress) mCardViewProgress
-                                            .findViewById(R.id.group_donutProgress))
-                                            .setTextColor(getResources().getColor(R.color.colorGreenSuccess));
+                        mCardViewProgress.setVisibility(View.VISIBLE);
+                        ((DonutProgress) mCardViewProgress
+                                .findViewById(R.id.group_donutProgress))
+                                .setProgress((int) progress);
+                        ((DonutProgress) mCardViewProgress
+                                .findViewById(R.id.group_donutProgress))
+                                .setTextColor(getResources().getColor(R.color.colorGreenSuccess));
 
-                                    // Initialize group name
-                                    ((TextView) mCardViewProgress
-                                            .findViewById(R.id.group_txtvGroupName))
-                                            .setText(group.getName());
+                        // Initialize group name
+                        ((TextView) mCardViewProgress
+                                .findViewById(R.id.group_txtvGroupName))
+                                .setText(mGroup.getName());
 
-                                    // Initialize group progress
-                                    ((TextView) mCardViewProgress
-                                            .findViewById(R.id.group_txtvProgress))
-                                            .setText(String.valueOf("Progress: " +
-                                                    (bestDistance / 1000) + " / " +
-                                                    (targetDistance / 1000) + " KM"));
+                        // Initialize group progress
+                        ((TextView) mCardViewProgress
+                                .findViewById(R.id.group_txtvProgress))
+                                .setText(String.valueOf("Progress: " +
+                                        (bestDistance / 1000) + " / " +
+                                        (targetDistance / 1000) + " KM"));
 
-                                } else {
-                                    ((LinearLayout) mCardViewProgress.getParent())
-                                            .setVisibility(View.GONE);
-                                }
-
-                                isGroupFetched = true;
-                                checkIfAllFetched();
-                            }
-                        });
+//                        User user = (User) ParseUser.getCurrentUser();
+//                        Group userGroup = user.getGroup();
+//                        userGroup.fetchInBackground(new GetCallback<Group>() {
+//                            @Override
+//                            public void done(Group group, ParseException e) {
+//                                if (e == null) {
+//                                    // Initialize Donut progress bar
+//                                    double targetDistance = group.getTargetDistance();
+//                                    double bestDistance = runs.get(0).getDistance();
+//                                    double progress = (bestDistance % targetDistance) / 100;
+//                                    if (progress > 100) {
+//                                        progress = 100;
+//                                    }
+//
+//                                    ((DonutProgress) mCardViewProgress
+//                                            .findViewById(R.id.group_donutProgress))
+//                                            .setProgress((int) progress);
+//                                    ((DonutProgress) mCardViewProgress
+//                                            .findViewById(R.id.group_donutProgress))
+//                                            .setTextColor(getResources().getColor(R.color.colorGreenSuccess));
+//
+//                                    // Initialize group name
+//                                    ((TextView) mCardViewProgress
+//                                            .findViewById(R.id.group_txtvGroupName))
+//                                            .setText(group.getName());
+//
+//                                    // Initialize group progress
+//                                    ((TextView) mCardViewProgress
+//                                            .findViewById(R.id.group_txtvProgress))
+//                                            .setText(String.valueOf("Progress: " +
+//                                                    (bestDistance / 1000) + " / " +
+//                                                    (targetDistance / 1000) + " KM"));
+//
+//                                } else {
+//                                    ((LinearLayout) mCardViewProgress.getParent())
+//                                            .setVisibility(View.GONE);
+//                                }
+//
+//                                isGroupFetched = true;
+//                                checkIfAllFetched();
+//                            }
+//                        });
 
                     } else {
                         ((LinearLayout) mCardViewBestRun.getParent()).setVisibility(View.GONE);
@@ -318,6 +401,7 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
             public void done(List<GroupEvent> events, ParseException e) {
                 if (e == null) {
                     if (events.size() > 0) {
+                        ((LinearLayout) mCardViewComingEvent.getParent()).setVisibility(View.VISIBLE);
                         ((TextView) mCardViewComingEvent
                                 .findViewById(R.id.card_group_comingEvent_txtvDate))
                                 .setText(DateHelper.getDateStringFromDate(events
@@ -510,43 +594,50 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
             @Override
             public void run() {
                 if (image != null) {
-                    // Use the image
-                    // image.getFilePathOriginal();
-                    // image.getFileThumbnail();
-                    // image.getFileThumbnailSmall();
-                    Toast.makeText(getActivity(), image.getFileThumbnail(),
-                            Toast.LENGTH_LONG).show();
-
                     mSwipeRefreshLayout.setRefreshing(true);
-                    final Bitmap bitmap = BitmapFactory.decodeFile(image.getFilePathOriginal());
-
-                    PhotosManager.savePhotoInBackground(getActivity(), image.getFilePathOriginal(),
-                            PhotosManager.TYPE_GROUP_PHOTO, new OnAsyncTaskFinishedListener() {
-                                @Override
-                                public void onSuccess(Object result) {
-                                    mSwipeRefreshLayout.setRefreshing(false);
-                                    mImgvGroupPhoto.setImageBitmap(bitmap);
-                                }
-
-                                @Override
-                                public void onError(String errorMessage) {
-                                    mSwipeRefreshLayout.setRefreshing(false);
-                                }
-                            });
-                    PhotosManager.saveCurrUserGroupPhoto(getActivity(),
-                            image.getFilePathOriginal(),
-                            new OnAsyncTaskFinishedListener() {
-                                @Override
-                                public void onSuccess(Object result) {
-                                    mSwipeRefreshLayout.setRefreshing(false);
-                                    mImgvGroupPhoto.setImageBitmap(bitmap);
-                                }
-
-                                @Override
-                                public void onError(String errorMessage) {
-                                    mSwipeRefreshLayout.setRefreshing(false);
-                                }
-                            });
+                    mGroup.saveGroupPhoto(image.getFilePathOriginal(), new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Bitmap bitmap = BitmapFactory.decodeFile(image.getFilePathOriginal());
+                                mImgvGroupPhoto.setImageBitmap(bitmap);
+                            } else {
+                                Toast.makeText(getActivity(), "Failed to save your photo.\n" +
+                                        "Please try again.", Toast.LENGTH_LONG).show();
+                            }
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+//                    final Bitmap bitmap = BitmapFactory.decodeFile(image.getFilePathOriginal());
+//
+//                    PhotosManager.saveCurrUserOrGroupPhotoInBackground(getActivity(),
+//                            image.getFilePathOriginal(), PhotosManager.TYPE_GROUP_PHOTO,
+//                            new OnAsyncTaskFinishedListener() {
+//                                @Override
+//                                public void onSuccess(Object result) {
+//                                    mSwipeRefreshLayout.setRefreshing(false);
+//                                    mImgvGroupPhoto.setImageBitmap(bitmap);
+//                                }
+//
+//                                @Override
+//                                public void onError(String errorMessage) {
+//                                    mSwipeRefreshLayout.setRefreshing(false);
+//                                }
+//                            });
+//                    PhotosManager.saveCurrUserGroupPhoto(getActivity(),
+//                            image.getFilePathOriginal(),
+//                            new OnAsyncTaskFinishedListener() {
+//                                @Override
+//                                public void onSuccess(Object result) {
+//                                    mSwipeRefreshLayout.setRefreshing(false);
+//                                    mImgvGroupPhoto.setImageBitmap(bitmap);
+//                                }
+//
+//                                @Override
+//                                public void onError(String errorMessage) {
+//                                    mSwipeRefreshLayout.setRefreshing(false);
+//                                }
+//                            });
 //                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 //

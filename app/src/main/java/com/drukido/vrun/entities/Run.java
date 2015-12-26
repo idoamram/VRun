@@ -82,38 +82,38 @@ public class Run extends ParseObject {
         this.put(KEY_TARGET_DURATION, targetDuration);
     }
 
-    public ParseUser getCreator() {
-        return getParseUser(KEY_RUN_CREATOR);
+    public User getCreator() {
+        return (User)getParseUser(KEY_RUN_CREATOR);
     }
 
-    public void setCreator(ParseUser creator) {
+    public void setCreator(User creator) {
         this.put(KEY_RUN_CREATOR, creator);
     }
 
     @SuppressWarnings("unchecked")
-    public ArrayList<ParseUser> getAttending() {
-        return (ArrayList<ParseUser>) get(KEY_ATTENDING);
+    public ArrayList<User> getAttending() {
+        return (ArrayList<User>) get(KEY_ATTENDING);
     }
 
-    public void setAttending(ArrayList<ParseUser> attending) {
+    public void setAttending(ArrayList<User> attending) {
         this.put(KEY_ATTENDING, attending);
     }
 
     @SuppressWarnings("unchecked")
-    public ArrayList<ParseUser> getNotAttending() {
-        return (ArrayList<ParseUser>) get(KEY_NOT_ATTENDING);
+    public ArrayList<User> getNotAttending() {
+        return (ArrayList<User>) get(KEY_NOT_ATTENDING);
     }
 
-    public void setNotAttending(ArrayList<ParseUser> notAttending) {
+    public void setNotAttending(ArrayList<User> notAttending) {
         this.put(KEY_NOT_ATTENDING, notAttending);
     }
 
     @SuppressWarnings("unchecked")
-    public ArrayList<ParseUser> getNotRespond() {
-        return (ArrayList<ParseUser>) get(KEY_NOT_RESPOND);
+    public ArrayList<User> getNotRespond() {
+        return (ArrayList<User>) get(KEY_NOT_RESPOND);
     }
 
-    public void setNotRespond(ArrayList<ParseUser> notRespond) {
+    public void setNotRespond(ArrayList<User> notRespond) {
         this.put(KEY_NOT_RESPOND, notRespond);
     }
 

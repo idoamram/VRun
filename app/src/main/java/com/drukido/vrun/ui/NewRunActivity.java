@@ -24,6 +24,7 @@ import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Group;
 import com.drukido.vrun.entities.Run;
+import com.drukido.vrun.entities.User;
 import com.drukido.vrun.utils.DateHelper;
 import com.drukido.vrun.utils.Duration;
 import com.parse.GetCallback;
@@ -127,8 +128,8 @@ public class NewRunActivity extends AppCompatActivity
                 } else if (!mIsDistanceValid) {
                     Snackbar.make(mMainLayout, "Please type distance", Snackbar.LENGTH_LONG).show();
                 } else {
-                    ParseUser currUser = ParseUser.getCurrentUser();
-                    ArrayList<ParseUser> attendingUsers = new ArrayList<>();
+                    User currUser = (User) ParseUser.getCurrentUser();
+                    ArrayList<User> attendingUsers = new ArrayList<>();
                     attendingUsers.add(currUser);
 
                     Run newRun = new Run();

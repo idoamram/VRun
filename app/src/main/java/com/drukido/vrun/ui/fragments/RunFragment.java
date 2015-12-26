@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Run;
+import com.drukido.vrun.entities.User;
 import com.drukido.vrun.ui.MainActivity;
 import com.drukido.vrun.ui.NewRunActivity;
 import com.drukido.vrun.ui.RunMeasureActivity;
@@ -237,7 +238,7 @@ public class RunFragment extends Fragment {
                         for (Run currRun:mComingRunsList) {
                             try {
                                 currRun = currRun.fetch();
-                                currRun.setCreator(currRun.getCreator().fetch());
+                                currRun.setCreator((User) currRun.getCreator().fetch());
                             } catch (ParseException e) {
                                 e.printStackTrace();
                                 return false;
@@ -248,7 +249,7 @@ public class RunFragment extends Fragment {
                         for (Run currRun:mPastRunsList) {
                             try {
                                 currRun = currRun.fetch();
-                                currRun.setCreator(currRun.getCreator().fetch());
+                                currRun.setCreator((User) currRun.getCreator().fetch());
                             } catch (ParseException e) {
                                 e.printStackTrace();
                                 return false;

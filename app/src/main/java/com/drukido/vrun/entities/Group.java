@@ -17,7 +17,11 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.Date;
 
 @ParseClassName("Group")
@@ -92,6 +96,21 @@ public class Group extends ParseObject {
 
     /****************** Methods *********************/
 
+    public void getPicassoGroupPhoto(ImageView imageView, Context context, Callback callback) {
+        try {
+            Picasso.with(context).load(getGroupPhoto().getUrl())
+                    .resize(imageView.getWidth(), imageView.getHeight())
+                    .centerCrop().into(imageView, callback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveGroupPhoto(String photoFilePath, SaveCallback saveCallback) {
+        setGroupPhoto(new ParseFile(new File(photoFilePath)));
+        saveInBackground(saveCallback);
+    }
+
     public static void setGroupPhotoToImageView(final Context context, Group group, final ImageView imageView){
         group.fetchIfNeededInBackground(new GetCallback<Group>() {
             @Override
@@ -106,23 +125,23 @@ public class Group extends ParseObject {
                                             .decodeByteArray(data, 0, data.length));
                                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-                                    // Save photo Locally
-                                    PhotosManager.savePhotoLocallyInBackground(context, data,
-                                            fetchedGroup.getObjectId(),
-                                            PhotosManager.TYPE_GROUP_PHOTO,
-                                            new OnAsyncTaskFinishedListener() {
-                                                @Override
-                                                public void onSuccess(Object result) {
-
-                                                }
-
-                                                @Override
-                                                public void onError(String errorMessage) {
-                                                    Toast.makeText(context,
-                                                            "Failed to save group photo locally",
-                                                            Toast.LENGTH_LONG).show();
-                                                }
-                                            });
+//                                    // Save photo Locally
+//                                    PhotosManager.savePhotoLocallyInBackground(context, data,
+//                                            fetchedGroup.getObjectId(),
+//                                            PhotosManager.TYPE_GROUP_PHOTO,
+//                                            new OnAsyncTaskFinishedListener() {
+//                                                @Override
+//                                                public void onSuccess(Object result) {
+//
+//                                                }
+//
+//                                                @Override
+//                                                public void onError(String errorMessage) {
+//                                                    Toast.makeText(context,
+//                                                            "Failed to save group photo locally",
+//                                                            Toast.LENGTH_LONG).show();
+//                                                }
+//                                            });
                                 }
                             }
                         }

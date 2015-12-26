@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Run;
+import com.drukido.vrun.entities.User;
 import com.drukido.vrun.utils.AttendingsRecyclerAdapter;
 import com.drukido.vrun.utils.DividerItemDecoration;
 import com.drukido.vrun.utils.RunsRecyclerAdapter;
@@ -28,8 +29,8 @@ import java.util.List;
 
 public class WatchAttendingActivity extends AppCompatActivity {
 
-    private List<ParseUser> mAttendingList;
-    private List<ParseUser> mNotAttendingList;
+    private List<User> mAttendingList;
+    private List<User> mNotAttendingList;
 
     private ProgressView mProgressViewAttending;
     private ProgressView mProgressViewNotAttending;
@@ -115,7 +116,7 @@ public class WatchAttendingActivity extends AppCompatActivity {
 
             @Override
             protected Boolean doInBackground(Void... voids) {
-                for (ParseUser user:mAttendingList) {
+                for (User user:mAttendingList) {
                     try {
                         user.fetch();
                     } catch (ParseException e) {
@@ -143,7 +144,7 @@ public class WatchAttendingActivity extends AppCompatActivity {
 
             @Override
             protected Boolean doInBackground(Void... voids) {
-                for (ParseUser user:mNotAttendingList) {
+                for (User user:mNotAttendingList) {
                     try {
                         user.fetch();
                     } catch (ParseException e) {
