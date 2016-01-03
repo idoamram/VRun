@@ -137,7 +137,7 @@ public class NewRunActivity extends AppCompatActivity
                     newRun.setRunTime(DateHelper.stringToDate(mStrRunTime));
                     newRun.setTargetDuration(mDuration);
                     newRun.setCreator(currUser);
-                    newRun.setGroup((Group) currUser.getParseObject(Constants.KEY_GROUP));
+                    newRun.setGroup(currUser.getGroup());
                     newRun.setAttending(attendingUsers);
                     newRun.setIsMeasured(false);
 
@@ -151,7 +151,7 @@ public class NewRunActivity extends AppCompatActivity
         });
     }
 
-    private void saveNewRun(Run newRun, final ParseUser currUser) {
+    private void saveNewRun(Run newRun, final User currUser) {
         showProgressBar();
         newRun.saveInBackground(new SaveCallback() {
             @Override
@@ -172,10 +172,9 @@ public class NewRunActivity extends AppCompatActivity
         });
     }
 
-    private void sendPush(ParseUser currUser) {
-        Group userGroup = (Group) currUser.getParseObject(Constants.KEY_GROUP);
-        final String message = currUser.getString(Constants.KEY_FIRST_NAME) + " " +
-                currUser.getString(Constants.KEY_LAST_NAME) + " has convene a new run on " +
+    private void sendPush(User currUser) {
+        Group userGroup = currUser.getGroup();
+        final String message = currUser.getName() + " has convene a new run on " +
                 mStrDate + " at " + mStrTime + "." + " See you!";
         userGroup.fetchInBackground(new GetCallback<Group>() {
             @Override

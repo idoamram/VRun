@@ -13,13 +13,27 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.drukido.vrun.SignupActivity"
     android:orientation="vertical"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/colorPrimaryLight">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/signup_mainLayout">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/iphone_user"
+            android:id="@+id/signup_checkBox_iphoneUser"/>
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/group_name"
+            android:text="@string/group_vrun_name"
+            android:enabled="false"
+            android:id="@+id/signup_txtGroupName"/>
 
         <EditText
             android:id="@+id/signup_txtUsername"
@@ -78,7 +92,7 @@
             android:text="@string/sign_up"
             android:layout_marginTop="10dp"
             android:textColor="@android:color/white"
-            android:background="#F57C00"/>
+            android:background="@color/colorAccent"/>
 
     </LinearLayout>
 

@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 MainActivity.class));
                                     } else {
                                         Snackbar.make(_mainLayout, "Sorry, something went wrong...",
-                                                Snackbar.LENGTH_LONG);
+                                                Snackbar.LENGTH_LONG).show();
                                     }
                                 }
                             });

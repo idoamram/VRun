@@ -228,10 +228,10 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
     }
 
     private void initializeSwipeLayout() {
-        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorGreenSuccess),
-                getResources().getColor(R.color.colorPrimary),
-                getResources().getColor(R.color.colorRedFailed));
-//        mSwipeRefreshLayout.setColorSchemeColors(Constants.getSwipeLayoutColors(getActivity()));
+//        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorGreenSuccess),
+//                getResources().getColor(R.color.colorPrimary),
+//                getResources().getColor(R.color.colorRedFailed));
+        mSwipeRefreshLayout.setColorSchemeColors(Constants.getSwipeLayoutColors(getActivity()));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -612,6 +612,7 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
                             if (e == null) {
                                 Bitmap bitmap = BitmapFactory.decodeFile(image.getFilePathOriginal());
                                 mImgvGroupPhoto.setImageBitmap(bitmap);
+                                mImgvGroupPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             } else {
                                 Toast.makeText(getActivity(), "Failed to save your photo.\n" +
                                         "Please try again.", Toast.LENGTH_LONG).show();

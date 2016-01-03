@@ -98,7 +98,10 @@ public class Group extends ParseObject {
 
     public void getPicassoGroupPhoto(ImageView imageView, Context context, Callback callback) {
         try {
-            Picasso.with(context).load(getGroupPhoto().getUrl())
+            Picasso picasso = Picasso.with(context);
+            picasso.setIndicatorsEnabled(true);
+            picasso.setLoggingEnabled(true);
+            picasso.load(getGroupPhoto().getUrl())
                     .resize(imageView.getWidth(), imageView.getHeight())
                     .centerCrop().into(imageView, callback);
         } catch (Exception e) {

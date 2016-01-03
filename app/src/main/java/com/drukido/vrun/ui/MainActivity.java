@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity
     private final int FRAGMENTS_COUNT = 3;
     private int[] tabIcons = {
             R.drawable.group_ios,
-            R.drawable.user_male_ios,
-            R.drawable.running_ios
+            R.drawable.running_ios,
+            R.drawable.user_male_ios
     };
 
     /**
@@ -113,13 +113,13 @@ public class MainActivity extends AppCompatActivity
 //            }
 //        });
 
-        findViewById(R.id.mainActivity_btnNewRun).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, NewRunActivity.class);
-                startActivity(i);
-            }
-        });
+//        findViewById(R.id.mainActivity_btnNewRun).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(MainActivity.this, NewRunActivity.class);
+//                startActivity(i);
+//            }
+//        });
 
 //        Intent i = new Intent(MainActivity.this, RunMeasureActivity.class);
 //        i.putExtra(Constants.EXTRA_RUN_ID, "QkTYcSTFi9");
@@ -128,9 +128,9 @@ public class MainActivity extends AppCompatActivity
 
     private void setupTabIcons() {
         try {
-            mTabLayout.getTabAt(0).setIcon(tabIcons[0]);
-            mTabLayout.getTabAt(1).setIcon(tabIcons[1]);
-            mTabLayout.getTabAt(2).setIcon(tabIcons[2]);
+            for (int i = 0; i < mTabLayout.getTabCount(); i++) {
+                mTabLayout.getTabAt(i).setIcon(tabIcons[i]);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

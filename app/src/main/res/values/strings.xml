@@ -41,4 +41,10 @@
     <string name="coming_event">Coming event :</string>
     <string name="title_activity_group_members">GroupMembersActivity</string>
     <string name="group_members">Group members</string>
+    <string name="iphone_user">iPhone user</string>
+    <string name="group_vrun_name">VRun</string>
+    <string name="title_activity_attending">AttendingActivity</string>
+    <string name="members_attending_status">Members attending status</string>
+    <string name="remove_run">Remove run</string>
+    <string name="send_notification">Send notification</string>
 </resources>

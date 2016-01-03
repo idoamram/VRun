@@ -1,5 +1,6 @@
 package com.drukido.vrun.ui;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,6 +30,7 @@ public class GroupMembersActivity extends AppCompatActivity {
 
     SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
+    FloatingActionButton mFab;
 
     UsersListRecyclerAdapter mAdapter;
     LinearLayoutManager mLinearLayoutManager;
@@ -46,20 +48,22 @@ public class GroupMembersActivity extends AppCompatActivity {
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.groupMembers_swipeRefreshLayout);
         mRecyclerView = (RecyclerView) findViewById(R.id.groupMembers_recyclerView);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.groupMembers_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        mFab = (FloatingActionButton) findViewById(R.id.groupMembers_fab);
+//        mFab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(GroupMembersActivity.this, SignUpActivity.class);
+//                i.putExtra(SignUpActivity.EXTRA_IS_IPHONE_USER_SIGNUP, true);
+//                startActivityForResult(i, SignUpActivity.SIGNUP_REQUEST_CODE);
+//            }
+//        });
 
         initializeSwipeLayout();
         fetchCurrentUser();
     }
 
     private void initializeSwipeLayout() {
+        mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setColorSchemeColors(Constants.getSwipeLayoutColors(this));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -141,4 +145,14 @@ public class GroupMembersActivity extends AppCompatActivity {
 
         mSwipeRefreshLayout.setRefreshing(false);
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(requestCode == SignUpActivity.SIGNUP_REQUEST_CODE) {
+//            if (resultCode == RESULT_OK) {
+//                Snackbar.make(mFab, "Welcome!" +
+//                        "\n" + "Sign up finished successfully!", Snackbar.LENGTH_LONG).show();
+//            }
+//        }
+//    }
 }

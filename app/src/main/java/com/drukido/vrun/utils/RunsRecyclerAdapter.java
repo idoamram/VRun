@@ -1,35 +1,36 @@
 package com.drukido.vrun.utils;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.daimajia.swipe.SwipeLayout;
 import com.drukido.vrun.AsyncTasks.IsUserRegisterToRun;
+import com.drukido.vrun.AsyncTasks.SendPush;
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Run;
 import com.drukido.vrun.entities.User;
 import com.drukido.vrun.interfaces.OnAsyncTaskFinishedListener;
-import com.drukido.vrun.ui.WatchAttendingActivity;
+import com.drukido.vrun.ui.AttendingActivity;
+import com.parse.DeleteCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.rey.material.widget.Button;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -294,7 +295,7 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
             holder.btnWatchAttending.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(mContext, WatchAttendingActivity.class);
+                    Intent i = new Intent(mContext, AttendingActivity.class);
                     i.putExtra(Constants.EXTRA_RUN_ID, mItemsList.get(position).getObjectId());
                     mContext.startActivity(i);
                 }
@@ -404,7 +405,108 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
             swipeLayout = (SwipeLayout)itemView.findViewById(R.id.run_list_item_swipeLayout);
             mainRelativeLayout = (RelativeLayout)
                     itemView.findViewById(R.id.run_list_item_relativeLayout_mainLayout);
+            mainRelativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (currRun != null) {
+                        if (currRun.getCreator() != null &&
+                                ParseUser.getCurrentUser().getObjectId() != null) {
+                            if (currRun.getCreator().getObjectId()
+                                    .equals(ParseUser.getCurrentUser().getObjectId())) {
+                                Snackbar.make(mainRelativeLayout, "Hello Admin!",
+                                        Snackbar.LENGTH_SHORT).show();
+                                showRunOptionsDialog();
+                            } else {
+                                Snackbar.make(mainRelativeLayout, "Only the creator can modify " +
+                                        "the run", Snackbar.LENGTH_SHORT).show();
+                            }
+
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+            });
             itemView.setOnClickListener(this);
+        }
+
+        private void showRunOptionsDialog() {
+            final Dialog dialog = new Dialog(mContext);
+            dialog.setContentView(R.layout.dialog_run_options);
+            dialog.setTitle("Run creator options");
+
+            // set the custom dialog components - text, image and button
+            final EditText editTextMessage =
+                    (EditText) dialog.findViewById(R.id.dialog_runOptions_etxtPushMessage);
+
+            ImageButton btnSendPush = (ImageButton) dialog.findViewById(R.id.dialog_runOptions_btnSendPush);
+            btnSendPush.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ((editTextMessage.getText() != null) &&
+                            (!editTextMessage.getText().toString().equals(""))) {
+                        dialog.dismiss();
+                        sendPush(editTextMessage.getText().toString());
+                    } else {
+                        Snackbar.make(swipeLayout, "Please type your message",
+                                Snackbar.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+            Button btnRemoveRun = (Button) dialog.findViewById(R.id.dialog_runOptions_btnRemoveRun);
+            btnRemoveRun.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+
+                    final ProgressDialog progressDialog = new ProgressDialog(mContext);
+                    progressDialog.setMessage("Removing...");
+                    progressDialog.show();
+
+                    currRun.deleteInBackground(new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            progressDialog.dismiss();
+                            if (e == null) {
+                                mItemsList.remove(getAdapterPosition());
+                                notifyItemRemoved(getAdapterPosition());
+                                Snackbar.make(swipeLayout, "Run removed successfully!",
+                                        Snackbar.LENGTH_LONG).show();
+                            } else {
+                                Snackbar.make(swipeLayout, "Run removing failed...",
+                                        Snackbar.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            });
+
+            dialog.show();
+        }
+
+        private void sendPush(String message) {
+
+            final ProgressDialog progressDialog = new ProgressDialog(mContext);
+            progressDialog.setMessage("Sending...");
+            progressDialog.show();
+
+            new SendPush(message, new OnAsyncTaskFinishedListener() {
+                @Override
+                public void onSuccess(Object result) {
+                    progressDialog.dismiss();
+                    Snackbar.make(mainRelativeLayout, "Push sent successfully!",
+                            Snackbar.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onError(String errorMessage) {
+                    progressDialog.dismiss();
+                    Snackbar.make(mainRelativeLayout, "Push sending failed...",
+                            Snackbar.LENGTH_LONG).show();
+                }
+            }).execute();
         }
 
         public void showAsAttending() {

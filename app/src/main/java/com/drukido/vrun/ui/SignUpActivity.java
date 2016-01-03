@@ -1,24 +1,38 @@
 package com.drukido.vrun.ui;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
+import com.drukido.vrun.entities.Group;
+import com.drukido.vrun.entities.User;
+import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    public static final String EXTRA_IS_IPHONE_USER_SIGNUP = "isIPhoneUserSignUp";
+    public static final int SIGNUP_REQUEST_CODE = 11;
+
+    CheckBox _checkBoxiPhoneUser;
+    AutoCompleteTextView _autoTxtGroupName;
     EditText _etxtUserName;
     EditText _etxtFirstName;
     EditText _etxtLastName;
@@ -28,6 +42,8 @@ public class SignUpActivity extends AppCompatActivity {
     EditText _etxtPhoneNumber;
     Button btnSignUp;
 
+    ProgressDialog mProgressDialog;
+
     LinearLayout _mainLayout;
 
     @Override
@@ -36,6 +52,8 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         _mainLayout = (LinearLayout) findViewById(R.id.signup_mainLayout);
+        _checkBoxiPhoneUser = (CheckBox) findViewById(R.id.signup_checkBox_iphoneUser);
+        _autoTxtGroupName = (AutoCompleteTextView) findViewById(R.id.signup_txtGroupName);
         _etxtUserName = (EditText) findViewById(R.id.signup_txtUsername);
         _etxtFirstName = (EditText) findViewById(R.id.signup_txtFirstname);
         _etxtLastName = (EditText) findViewById(R.id.signup_txtLastname);
@@ -46,47 +64,60 @@ public class SignUpActivity extends AppCompatActivity {
 
         btnSignUp = (Button) findViewById(R.id.signup_btnSignup);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
 
                 if(validateFields()) {
-                    final ParseUser newUser = new ParseUser();
+
+                    mProgressDialog = new ProgressDialog(SignUpActivity.this);
+                    mProgressDialog.setTitle("Signing up...");
+                    mProgressDialog.setMessage("Please wait");
+                    mProgressDialog.show();
+
+                    final User newUser = new User();
                     newUser.setUsername(_etxtUserName.getText().toString());
                     newUser.setEmail(_etxtEmail.getText().toString());
                     newUser.setPassword(_etxtPassword.getText().toString());
-                    newUser.put("firstName", _etxtFirstName.getText().toString());
-                    newUser.put("lastName", _etxtLastName.getText().toString());
-                    newUser.put("name", _etxtFirstName.getText().toString() + " " +
-                    _etxtLastName.getText().toString());
-                    newUser.put("phoneNumber", _etxtPhoneNumber.getText().toString());
-                    newUser.put("group",
-                            ParseObject.createWithoutData("Group", Constants.VRUN_GROUP_OBJECT_ID));
+                    newUser.setFirstName(_etxtFirstName.getText().toString());
+                    newUser.setLastName(_etxtLastName.getText().toString());
+                    newUser.setName(_etxtFirstName.getText().toString() + " " +
+                            _etxtLastName.getText().toString());
+                    newUser.setPhoneNumber(_etxtPhoneNumber.getText().toString());
+                    newUser.setGroup(Group.createWithoutData(Group.class,
+                            Constants.VRUN_GROUP_OBJECT_ID));
+                    newUser.setIsIphoneUser(_checkBoxiPhoneUser.isChecked());
 
-                    newUser.signUpInBackground(new SignUpCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                Toast.makeText(SignUpActivity.this, "Welcome " +
-                                newUser.get("firstName") + " " + newUser.get("lastName") + "!",
-                                        Toast.LENGTH_LONG).show();
-                                btnSignUp.setText(getString(R.string.welcome));
-                                btnSignUp.setBackgroundColor(Color.parseColor("#8BC34A"));
-                                finish();
-                            } else {
-                                Snackbar.make(_mainLayout, "Sorry, something went wrong...",
-                                        Snackbar.LENGTH_LONG).show();
-                                btnSignUp.setText(getString(R.string.failed));
-                                btnSignUp.setBackgroundColor(Color.parseColor("#F44336"));
-                            }
-                        }
-                    });
+                    signUp(newUser);
                 }
             }
-
-
         });
     }
 
+    private void signUp(final User newUser) {
+        newUser.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                mProgressDialog.dismiss();
+
+                if (e == null) {
+                    Toast.makeText(SignUpActivity.this, "Welcome " +
+                                    newUser.getName() + "!",
+                            Toast.LENGTH_LONG).show();
+                    btnSignUp.setText(getString(R.string.welcome));
+                    btnSignUp.setBackgroundColor(getResources()
+                            .getColor(R.color.colorGreenSuccess));
+                    finish();
+                } else {
+                    Snackbar.make(_mainLayout, "Sorry, something went wrong...",
+                            Snackbar.LENGTH_LONG).show();
+                    btnSignUp.setText(getString(R.string.failed));
+                    btnSignUp.setBackgroundColor(getResources()
+                            .getColor(R.color.colorRedFailed));
+                }
+            }
+        });
+    }
     private boolean validateFields() {
         if(_etxtUserName.getText().toString().equals(Constants.EMPTY_STRING)) {
             Snackbar.make(_mainLayout, "Please type a User name", Snackbar.LENGTH_LONG).show();

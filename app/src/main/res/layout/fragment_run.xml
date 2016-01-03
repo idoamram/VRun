@@ -42,7 +42,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/new_run_icon"
+        android:src="@drawable/plus_white"
         android:id="@+id/run_fragment_fltBtnNewRun" />
 
 </RelativeLayout>

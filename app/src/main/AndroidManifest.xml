@@ -48,6 +48,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MainActivity"
+            android:label="VRun. You&apos;ll never run alone."
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -90,6 +91,11 @@
         <activity
             android:name=".ui.GroupMembersActivity"
             android:label="@string/group_members"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.AttendingActivity"
+            android:label="@string/members_attending_status"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
