@@ -15,6 +15,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -92,6 +93,16 @@ public class User extends ParseUser{
         if (getProfilePhoto() != null) {
             Picasso.with(context).load(getProfilePhoto().getUrl())
                     .error(R.drawable.account).into(imageView);
+        } else {
+            imageView.setPadding(10,10,10,10);
+        }
+    }
+
+    public void getPicassoProfilePhotoWithCallBack(ImageView imageView, Context context,
+                                                   Callback callback) {
+        if (getProfilePhoto() != null) {
+            Picasso.with(context).load(getProfilePhoto().getUrl())
+                    .error(R.drawable.account).into(imageView, callback);
         } else {
             imageView.setPadding(10,10,10,10);
         }

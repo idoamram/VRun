@@ -47,4 +47,5 @@
     <string name="members_attending_status">Members attending status</string>
     <string name="remove_run">Remove run</string>
     <string name="send_notification">Send notification</string>
+    <string name="who_is_attending">Who\'s coming ?</string>
 </resources>

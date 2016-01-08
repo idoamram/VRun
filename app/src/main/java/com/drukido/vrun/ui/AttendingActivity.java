@@ -55,6 +55,8 @@ public class AttendingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attending);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.attendings_toolbar);
+        setSupportActionBar(toolbar);
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
