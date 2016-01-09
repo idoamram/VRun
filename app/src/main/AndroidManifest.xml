@@ -26,10 +26,9 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
-    <!--<meta-data-->
-        <!--android:name="com.parse.push.notification_icon"-->
-        <!--android:resource="@drawable/push_icon"/>-->
-
+    <!-- <meta-data -->
+    <!-- android:name="com.parse.push.notification_icon" -->
+    <!-- android:resource="@drawable/push_icon"/> -->
     <application
         android:name=".VRunApplication"
         android:allowBackup="true"
@@ -49,11 +48,11 @@
         </activity>
         <activity
             android:name=".ui.SignUpActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/sign_up"/>
+            android:label="@string/sign_up"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MainActivity"
-            android:label="VRun. You&apos;ll never run alone."
+            android:icon="@drawable/push_icon"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -83,7 +82,7 @@
             </intent-filter>
         </receiver>
         <!-- /Added for Parse push notifications -->
-        
+
         <activity
             android:name=".ui.RunMeasureActivity"
             android:screenOrientation="portrait"
@@ -96,8 +95,7 @@
             android:name=".ui.WatchAttendingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleDialog" />
-        <activity
-            android:name=".ui.PhotoViewerActivity" />
+        <activity android:name=".ui.PhotoViewerActivity" />
         <activity
             android:name=".ui.GroupMembersActivity"
             android:label="@string/group_members"
@@ -107,7 +105,11 @@
             android:name=".ui.AttendingActivity"
             android:label="@string/who_is_attending"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.SendFeedbackActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleDialog"/>
     </application>
 
 </manifest>

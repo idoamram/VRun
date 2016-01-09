@@ -48,4 +48,9 @@
     <string name="remove_run">Remove run</string>
     <string name="send_notification">Send notification</string>
     <string name="who_is_attending">Who\'s coming ?</string>
+    <string name="feedback">Feedback</string>
+    <string name="subject">Subject</string>
+    <string name="message">Message</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="send_feedback_via_gmail">Send feedback via GMail</string>
 </resources>

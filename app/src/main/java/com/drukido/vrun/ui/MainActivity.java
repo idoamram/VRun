@@ -113,13 +113,13 @@ public class MainActivity extends AppCompatActivity
 //            }
 //        });
 
-//        findViewById(R.id.mainActivity_btnNewRun).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this, NewRunActivity.class);
-//                startActivity(i);
-//            }
-//        });
+        findViewById(R.id.mainActivity_btnSendFeedback).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, SendFeedbackActivity.class);
+                startActivity(i);
+            }
+        });
 
 //        Intent i = new Intent(MainActivity.this, RunMeasureActivity.class);
 //        i.putExtra(Constants.EXTRA_RUN_ID, "QkTYcSTFi9");
