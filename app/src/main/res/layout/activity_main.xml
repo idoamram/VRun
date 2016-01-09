@@ -14,12 +14,13 @@
 
         <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
             android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay">
+            android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title=" ">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="end"
+                android:layout_gravity="start"
                 android:orientation="vertical"
                 android:padding="5dp">
 
@@ -30,7 +31,8 @@
                     android:layout_height="0dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/feedback"
-                    android:scaleType="centerInside"/>
+                    android:scaleType="centerInside"
+                    android:padding="2dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
