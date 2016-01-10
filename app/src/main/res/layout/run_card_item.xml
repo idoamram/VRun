@@ -22,7 +22,7 @@
         <ImageView
             android:layout_width="0dp"
             android:layout_height="25dp"
-            android:src="@drawable/calendar"
+            android:src="@drawable/calendar_blue"
             android:id="@+id/run_card_item_iconRunDate"
             android:layout_weight="1"/>
 
@@ -36,7 +36,7 @@
         <ImageView
             android:layout_width="0dp"
             android:layout_height="25dp"
-            android:src="@drawable/clock"
+            android:src="@drawable/clock_blue"
             android:id="@+id/run_card_item_iconRunTime"
             android:layout_weight="1"/>
 
@@ -50,6 +50,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/run_card_item_linearLayout_targets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -66,20 +67,20 @@
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
-            android:id="@+id/run_card_item_txtvDuration"/>
+            android:id="@+id/run_card_item_txtvTargetDuration"/>
 
         <ImageView
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="1"
-            android:src="@drawable/ployline_orange"/>
+            android:src="@drawable/polyline_orange"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
-            android:id="@+id/run_card_item_txtvDistance"/>
+            android:id="@+id/run_card_item_txtvTargetDistance"/>
 
     </LinearLayout>
 

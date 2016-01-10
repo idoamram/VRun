@@ -3,40 +3,26 @@ package com.drukido.vrun.ui;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
-import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment;
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Group;
 import com.drukido.vrun.entities.Run;
-import com.drukido.vrun.ui.views.MyTimePickerDialog;
-import com.drukido.vrun.ui.views.TimePicker;
-import com.drukido.vrun.utils.DateHelper;
 import com.drukido.vrun.utils.Duration;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.rey.material.widget.ProgressView;
-
-import org.joda.time.DateTime;
-
-import java.util.ArrayList;
-import java.util.Calendar;
 
 public class RunMeasureActivity extends AppCompatActivity
         implements NumberPickerDialogFragment.NumberPickerDialogHandler,
@@ -49,7 +35,7 @@ public class RunMeasureActivity extends AppCompatActivity
     Button btnDistance;
     Button btnDuration;
     Button btnFinish;
-    ProgressView mProgressView;
+    ProgressBar mProgressView;
     LinearLayout mMainLayout;
 
     long mDistance;
@@ -67,7 +53,7 @@ public class RunMeasureActivity extends AppCompatActivity
         Intent intent = getIntent();
         mRunId = intent.getStringExtra(Constants.EXTRA_RUN_ID);
 
-        mProgressView = (ProgressView) findViewById(R.id.runMeasure_progressView);
+        mProgressView = (ProgressBar) findViewById(R.id.runMeasure_progressView);
         mMainLayout = (LinearLayout) findViewById(R.id.runMeasure_mainLinearLayout);
         btnDistance = (Button) findViewById(R.id.runMeasure_btnDistance);
         btnDuration = (Button) findViewById(R.id.runMeasure_btnDuration);

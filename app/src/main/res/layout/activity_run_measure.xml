@@ -3,18 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.drukido.vrun.ui.RunMeasureActivity"
-    android:background="@color/colorPrimaryDark">
+    android:background="@android:color/white">
 
-    <com.rey.material.widget.ProgressView
+    <ProgressBar
         android:id="@+id/runMeasure_progressView"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        app:pv_autostart="true"
-        app:pv_circular="true"
-        app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
-        app:pv_progressMode="indeterminate"
         android:layout_centerInParent="true"
         android:visibility="gone"/>
 
@@ -38,7 +33,7 @@
             android:text="@string/how_much_in_meters"
             android:layout_marginTop="10dp"
             android:textColor="@android:color/white"
-            android:background="@color/colorRedFailed"/>
+            android:background="@color/colorPrimary"/>
 
         <Button
             android:id="@+id/runMeasure_btnDuration"
@@ -48,7 +43,7 @@
             android:text="@string/for_how_long"
             android:layout_marginTop="10dp"
             android:textColor="@android:color/white"
-            android:background="@color/colorRedFailed"/>
+            android:background="@color/colorPrimary"/>
 
         <Button
             android:id="@+id/runMeasure_btnFinish"
@@ -58,7 +53,7 @@
             android:text="@string/finish"
             android:layout_marginTop="10dp"
             android:textColor="@android:color/white"
-            android:background="@color/colorOrangeRegular"/>
+            android:background="@color/colorAccent"/>
     </LinearLayout>
 
 </RelativeLayout>

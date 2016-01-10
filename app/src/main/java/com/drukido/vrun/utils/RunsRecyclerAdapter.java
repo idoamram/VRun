@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.drukido.vrun.entities.Run;
 import com.drukido.vrun.entities.User;
 import com.drukido.vrun.interfaces.OnAsyncTaskFinishedListener;
 import com.drukido.vrun.ui.AttendingActivity;
+import com.drukido.vrun.ui.RunMeasureActivity;
 import com.parse.DeleteCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -40,11 +42,13 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
     OnItemClickListener mItemClickListener;
     Context mContext;
     Boolean isSwipable;
+    Boolean mIsPastRuns;
 
-    public RunsRecyclerAdapter (List<Run> runsList, Context context, Boolean isSwipable) {
+    public RunsRecyclerAdapter (List<Run> runsList, Context context, Boolean isSwipable, Boolean isPastRuns) {
         this.mItemsList = runsList;
         this.mContext = context;
         this.isSwipable = isSwipable;
+        this.mIsPastRuns = isPastRuns;
     }
 
     @Override
@@ -90,9 +94,9 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
         holder.txtvTime.setText(DateHelper.getTimeStringFromDate(holder.currRun.getRunTime()));
         String distance =
                 String.valueOf((((double) holder.currRun.getTargetDistance()) / 1000)) + " KM";
-        holder.txtvDistance.setText(distance);
+        holder.txtvTargetDistance.setText(distance);
         Duration duration = Duration.fromString(holder.currRun.getTargetDuration());
-        holder.txtvDuration.setText(duration.toPresentableString());
+        holder.txtvTargetDuration.setText(duration.toPresentableString());
         holder.currRun.getCreator().fetchIfNeededInBackground(new GetCallback<User>() {
             @Override
             public void done(User object, ParseException e) {
@@ -102,6 +106,7 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
             }
         });
 
+        holder.showMeasuredDetailsIfNeed();
 //        if(holder.currRun.getIsMeasured()){
 //            String measuredDistance = String.valueOf((((double) holder.currRun.getDistance()) / 1000)) + " KM";
 //            holder.txtvMeasuredDistance.setText(measuredDistance);
@@ -377,14 +382,16 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
         TextView txtvTitle;
         TextView txtvDate;
         TextView txtvTime;
-        TextView txtvDuration;
-        TextView txtvDistance;
+        TextView txtvTargetDuration;
+        TextView txtvTargetDistance;
         TextView txtvUserName;
         SwipeLayout swipeLayout;
         RelativeLayout mainRelativeLayout;
         LinearLayout lnrLayoutMesuredDetails;
         TextView txtvMeasuredDuration;
         TextView txtvMeasuredDistance;
+        ImageView imgvMeasuredDistance;
+        ImageView imgvMeasuredDuration;
 
         public RunVH(View itemView) {
             super(itemView);
@@ -399,8 +406,13 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
             txtvTitle = (TextView)itemView.findViewById(R.id.run_list_item_txtvTitle);
             txtvDate = (TextView)itemView.findViewById(R.id.run_list_item_txtvDate);
             txtvTime = (TextView)itemView.findViewById(R.id.run_list_item_txtvTime);
-            txtvDuration = (TextView)itemView.findViewById(R.id.run_list_item_txtvDuration);
-            txtvDistance = (TextView)itemView.findViewById(R.id.run_list_item_txtvDistance);
+            txtvTargetDuration = (TextView)itemView.findViewById(R.id.run_list_item_txtvTargetDuration);
+            txtvTargetDistance = (TextView)itemView.findViewById(R.id.run_list_item_txtvTargetDistance);
+            lnrLayoutMesuredDetails = (LinearLayout)itemView.findViewById(R.id.run_list_item_layout_measured_details);
+            txtvMeasuredDuration = (TextView)itemView.findViewById(R.id.run_list_item_txtvMeasuredDuration);
+            txtvMeasuredDistance = (TextView)itemView.findViewById(R.id.run_list_item_txtvMeasuredDistance);
+            imgvMeasuredDistance = (ImageView)itemView.findViewById(R.id.run_list_item_imgv_measuredDistance);
+            imgvMeasuredDuration = (ImageView)itemView.findViewById(R.id.run_list_item_imgv_measuredDuration);
             txtvUserName = (TextView)itemView.findViewById(R.id.run_list_item_txtvUserName);
             swipeLayout = (SwipeLayout)itemView.findViewById(R.id.run_list_item_swipeLayout);
             mainRelativeLayout = (RelativeLayout)
@@ -428,7 +440,57 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                 }
 
             });
+
+            if(mIsPastRuns) {
+                mainRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(mContext, RunMeasureActivity.class);
+                        i.putExtra(Constants.EXTRA_RUN_ID,
+                                mItemsList.get(getAdapterPosition()).getObjectId());
+                        mContext.startActivity(i);
+                    }
+                });
+            }
+
             itemView.setOnClickListener(this);
+        }
+
+        private void showMeasuredDetailsIfNeed() {
+            try {
+                if (currRun.getIsMeasured()) {
+                    lnrLayoutMesuredDetails.setVisibility(View.VISIBLE);
+                    String distance =
+                            String.valueOf((((double) currRun.getDistance()) / 1000)) + " KM";
+                    txtvMeasuredDistance.setText(distance);
+                    Duration duration = Duration.fromString(currRun.getDuration());
+                    txtvMeasuredDuration.setText(duration.toPresentableString());
+                    Duration targetDuration = Duration.fromString(currRun.getTargetDuration());
+
+                    if (currRun.getDistance() >= currRun.getTargetDistance()) {
+                        imgvMeasuredDistance.setImageResource(R.drawable.polyline_green);
+                    } else {
+                        imgvMeasuredDistance.setImageResource(R.drawable.polyline_red);
+                    }
+
+                    if (targetDuration.getHours() >= duration.getHours()) {
+                        if (targetDuration.getMinutes() >= duration.getMinutes()) {
+                            if (targetDuration.getSeconds() >= duration.getSeconds()) {
+                                imgvMeasuredDuration.setImageResource(R.drawable.stopwatch_green);
+                            } else {
+                                imgvMeasuredDuration.setImageResource(R.drawable.stopwatch_red);
+                            }
+                        } else {
+                            imgvMeasuredDuration.setImageResource(R.drawable.stopwatch_red);
+                        }
+                    } else {
+                        imgvMeasuredDuration.setImageResource(R.drawable.stopwatch_red);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(Constants.LOG_TAG,"error in showMeasuredDetailsIfNeed", e);
+            }
         }
 
         private void showRunOptionsDialog() {

@@ -283,11 +283,11 @@ public class RunFragment extends Fragment {
                     mComingRunsList = new ArrayList<>();
                 }
 
-                mComingRunsRecyclerAdapter = new RunsRecyclerAdapter(mComingRunsList, mContext, true);
+                mComingRunsRecyclerAdapter = new RunsRecyclerAdapter(mComingRunsList, mContext, true, false);
                 mRecyclerView.setAdapter(mComingRunsRecyclerAdapter);
                 break;
             case PAST_RUNS:
-                mPastRunsRecyclerAdapter = new RunsRecyclerAdapter(mPastRunsList, mContext, false);
+                mPastRunsRecyclerAdapter = new RunsRecyclerAdapter(mPastRunsList, mContext, false, true);
                 mPastRunsRecyclerAdapter.setOnItemClickListener(new RunsRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {

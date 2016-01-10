@@ -41,7 +41,7 @@
             android:layout_margin="10dp"
             android:layout_gravity="center"
             android:id="@+id/run_list_item_btnWatchAttending"
-            android:src="@drawable/group"
+            android:src="@drawable/who_is_coming"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"/>
 
@@ -74,7 +74,7 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/calendar"
+                android:src="@drawable/calendar_blue"
                 android:id="@+id/run_list_item_icon_runDate"
                 android:layout_weight="0.7"/>
 
@@ -88,7 +88,7 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/clock"
+                android:src="@drawable/clock_blue"
                 android:id="@+id/run_list_item_icon_runTime"
                 android:layout_weight="0.7"/>
 
@@ -114,31 +114,32 @@
             android:layout_marginTop="5dp"
             android:id="@+id/run_list_item_layout_targets">
 
+
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@drawable/stopwatch_orange"/>
+                android:src="@drawable/stopwatch_blue"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
-                android:id="@+id/run_list_item_txtvDuration"/>
+                android:id="@+id/run_list_item_txtvTargetDuration"/>
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@drawable/ployline_orange"/>
+                android:src="@drawable/polyline_blue"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:layout_marginLeft="@dimen/runs_list_item_fields_margin"
-                android:id="@+id/run_list_item_txtvDistance"/>
+                android:id="@+id/run_list_item_txtvTargetDistance"/>
 
             <ImageView
                 android:layout_width="0dp"
@@ -156,17 +157,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_below="@+id/run_list_item_layout_targets"
             android:layout_marginTop="5dp"
             android:visibility="gone"
             android:id="@+id/run_list_item_layout_measured_details">
 
             <ImageView
+                android:id="@+id/run_list_item_imgv_measuredDuration"
                 android:layout_width="0dp"
-                android:layout_height="25dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@drawable/stopwatch_orange"/>
+                android:src="@drawable/stopwatch_gray"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -176,10 +178,11 @@
                 android:id="@+id/run_list_item_txtvMeasuredDuration"/>
 
             <ImageView
+                android:id="@+id/run_list_item_imgv_measuredDistance"
                 android:layout_width="0dp"
                 android:layout_height="25dp"
                 android:layout_weight="1"
-                android:src="@drawable/ployline_orange"/>
+                android:src="@drawable/polyline_gray"/>
 
             <TextView
                 android:layout_width="0dp"

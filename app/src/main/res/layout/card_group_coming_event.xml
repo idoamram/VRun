@@ -102,7 +102,7 @@
                         android:layout_width="0dp"
                         android:layout_height="25dp"
                         android:layout_weight="1"
-                        android:src="@drawable/ployline_orange"/>
+                        android:src="@drawable/polyline_orange"/>
 
                     <TextView
                         android:layout_width="0dp"

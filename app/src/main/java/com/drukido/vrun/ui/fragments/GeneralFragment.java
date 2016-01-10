@@ -286,7 +286,7 @@ public class GeneralFragment extends Fragment {
         mLinearLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRunsRecyclerAdapter = new RunsRecyclerAdapter(mRunsList, mContext, true);
+        mRunsRecyclerAdapter = new RunsRecyclerAdapter(mRunsList, mContext, true, false);
         mRecyclerView.setAdapter(mRunsRecyclerAdapter);
         RecyclerView.ItemDecoration itemDecoration =
                 new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL);
