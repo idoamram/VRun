@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/apple_user_item_imgvProfilePhoto"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:scaleType="centerInside"
+        android:src="@drawable/steve_jobs"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:padding="5dp"
+        android:gravity="left|center"
+        android:id="@+id/apple_user_item_txtvUserName"
+        android:hint="@string/user_name"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textColor="@android:color/black"/>
+
+    <ImageButton
+        android:id="@+id/apple_user_item_btnAttending"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/head_attending_gray"
+        android:scaleType="centerInside"
+        android:background="@android:color/transparent"
+        android:padding="5dp"
+        android:layout_weight="1"/>
+
+    <ImageButton
+        android:id="@+id/apple_user_item_btnNotAttending"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/head_not_attending_gray"
+        android:scaleType="centerInside"
+        android:background="@android:color/transparent"
+        android:padding="5dp"
+        android:layout_weight="1"/>
+
+    <ProgressBar
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        style="?android:attr/progressBarStyle"
+        android:indeterminate="true"
+        android:visibility="visible"
+        android:id="@+id/apple_user_item_progressBar"
+        android:padding="5dp"/>
+
+</LinearLayout>

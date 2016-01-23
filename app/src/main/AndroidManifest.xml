@@ -104,10 +104,16 @@
             android:label="@string/who_is_attending"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.SendFeedbackActivity"
+        <activity
+            android:name=".ui.SendFeedbackActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleDialog"/>
+            android:theme="@style/NoTitleDialog" />
+        <activity
+            android:name=".ui.AppleUserAttendingActivity"
+            android:screenOrientation="portrait"
+            android:label="iPhone users"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

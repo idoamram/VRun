@@ -200,7 +200,7 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                                     holder.imageViewStatus
                                             .setImageResource(R.drawable.head_dont_know);
                                     holder.btnAttending
-                                            .setImageResource(R.drawable.head_attenting_gray);
+                                            .setImageResource(R.drawable.head_attending_gray);
                                     Toast.makeText(mContext, "You've cancel your attending",
                                             Toast.LENGTH_LONG).show();
                                 }
@@ -289,7 +289,7 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
                                 holder.isUserNotAttending = false;
                                 holder.imageViewStatus.setImageResource(R.drawable.head_dont_know);
                                 holder.btnNotAttending.
-                                        setImageResource(R.drawable.head_not_attenting_gray);
+                                        setImageResource(R.drawable.head_not_attending_gray);
                                 Toast.makeText(mContext, "You've cancel your not attending respond",
                                         Toast.LENGTH_LONG).show();
                             }
@@ -577,9 +577,9 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
 
 //            mainRelativeLayout
 //                    .setBackgroundResource(R.drawable.run_item_border_attending);
-            imageViewStatus.setImageResource(R.drawable.head_attenting);
-            btnAttending.setImageResource(R.drawable.head_attenting);
-            btnNotAttending.setImageResource(R.drawable.head_not_attenting_gray);
+            imageViewStatus.setImageResource(R.drawable.head_attending);
+            btnAttending.setImageResource(R.drawable.head_attending);
+            btnNotAttending.setImageResource(R.drawable.head_not_attending_gray);
         }
 
         public void showAsNotAttending() {
@@ -588,10 +588,11 @@ public class RunsRecyclerAdapter extends RecyclerView.Adapter<RunsRecyclerAdapte
 
 //            mainRelativeLayout
 //                    .setBackgroundResource(R.drawable.run_item_border_not_attending);
-            imageViewStatus.setImageResource(R.drawable.head_not_attenting);
-            btnNotAttending.setImageResource(R.drawable.head_not_attenting);
-            btnAttending.setImageResource(R.drawable.head_attenting_gray);
+            imageViewStatus.setImageResource(R.drawable.head_not_attending);
+            btnNotAttending.setImageResource(R.drawable.head_not_attending);
+            btnAttending.setImageResource(R.drawable.head_attending_gray);
         }
+
         @Override
         public void onClick(View view) {
             if (mItemClickListener != null) {

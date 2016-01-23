@@ -92,7 +92,8 @@ public class User extends ParseUser{
     public void getPicassoProfilePhoto(ImageView imageView, Context context) {
         if (getProfilePhoto() != null) {
             Picasso.with(context).load(getProfilePhoto().getUrl())
-                    .error(R.drawable.account).into(imageView);
+                    .placeholder(R.drawable.user_temp)
+                    .error(R.drawable.user_temp).into(imageView);
         } else {
             imageView.setPadding(10,10,10,10);
         }
@@ -102,7 +103,8 @@ public class User extends ParseUser{
                                                    Callback callback) {
         if (getProfilePhoto() != null) {
             Picasso.with(context).load(getProfilePhoto().getUrl())
-                    .error(R.drawable.account).into(imageView, callback);
+                    .placeholder(R.drawable.user_temp)
+                    .error(R.drawable.user_temp).into(imageView, callback);
         } else {
             imageView.setPadding(10,10,10,10);
         }

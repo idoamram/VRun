@@ -33,6 +33,9 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class NotAttendingFragment extends Fragment {
+
+    public static final String TAG = "not_attending_fragment";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
@@ -93,6 +96,11 @@ public class NotAttendingFragment extends Fragment {
         initializeData();
 
         return rootView;
+    }
+
+    public void refreshData() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        initializeData();
     }
 
     private void initializeSwipeRefreshLayout() {

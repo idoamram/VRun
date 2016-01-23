@@ -30,17 +30,9 @@
                     android:layout_weight="2"
                     android:layout_height="0dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/feedback"
+                    android:src="@drawable/selector_feedback_icon"
                     android:scaleType="centerInside"
                     android:padding="2dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_height="0dp"
-                    android:text="@string/feedback"
-                    android:gravity="center"
-                    android:layout_gravity="center"/>
 
             </LinearLayout>
 

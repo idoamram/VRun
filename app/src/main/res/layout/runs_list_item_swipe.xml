@@ -19,7 +19,7 @@
             android:layout_margin="10dp"
             android:layout_gravity="center"
             android:id="@+id/run_list_item_btnAttending"
-            android:src="@drawable/head_attenting_gray"
+            android:src="@drawable/head_attending_gray"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"/>
 
@@ -30,7 +30,7 @@
             android:layout_margin="10dp"
             android:layout_gravity="center"
             android:id="@+id/run_list_item_btnNotAttending"
-            android:src="@drawable/head_not_attenting_gray"
+            android:src="@drawable/head_not_attending_gray"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"/>
 
@@ -156,7 +156,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_below="@+id/run_list_item_layout_targets"
             android:layout_marginTop="5dp"

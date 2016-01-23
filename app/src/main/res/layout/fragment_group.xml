@@ -20,7 +20,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="170dp"
+                    android:layout_height="220dp"
                     android:background="@drawable/run_item_border"
                     android:id="@+id/group_photoLayout"
                     android:paddingBottom="2dp">
@@ -48,7 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/group_members"
-                    android:background="@color/colorAccent"
+                    android:background="@color/colorPrimary"
                     android:layout_marginBottom="10dp"
                     android:textColor="@android:color/white"
                     android:id="@+id/group_membersButton"/>

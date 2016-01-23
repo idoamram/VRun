@@ -1,5 +1,6 @@
 package com.drukido.vrun.ui;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,13 +22,14 @@ import android.widget.TextView;
 
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
-import com.drukido.vrun.entities.Run;
 import com.drukido.vrun.ui.fragments.AttendingFragment;
 import com.drukido.vrun.ui.fragments.NotAttendingFragment;
 
 public class AttendingActivity extends AppCompatActivity {
 
     private static final int TABS_COUNT = 2;
+
+    public static final int REQUEST_APPLE_USER_ATTENDING = 11;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -41,15 +43,34 @@ public class AttendingActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private String mRunId;
 
+    private AttendingFragment mAttendingFragment = null;
+    private NotAttendingFragment mNotAttendingFragment = null;
+
     private int[] tabIcons = {
-            R.drawable.head_attenting_gray,
-            R.drawable.head_not_attenting_gray
+            R.drawable.head_attending_gray,
+            R.drawable.head_not_attending_gray
     };
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_APPLE_USER_ATTENDING) {
+                if (mAttendingFragment != null) {
+                    mAttendingFragment.refreshData();
+                }
+                if (mNotAttendingFragment != null) {
+                    mNotAttendingFragment.refreshData();
+                }
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +99,14 @@ public class AttendingActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (mRunId == null) {
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    Intent i = new Intent(AttendingActivity.this, AppleUserAttendingActivity.class);
+                    i.putExtra(Constants.EXTRA_RUN_ID, mRunId);
+                    startActivityForResult(i, REQUEST_APPLE_USER_ATTENDING);
+                }
             }
         });
 
@@ -170,9 +197,15 @@ public class AttendingActivity extends AppCompatActivity {
             if (mRunId != null) {
                 switch (position) {
                     case 0:
-                        return AttendingFragment.newInstance(mRunId);
+                        if (mAttendingFragment == null) {
+                            mAttendingFragment = AttendingFragment.newInstance(mRunId);
+                        }
+                        return mAttendingFragment;
                     case 1:
-                        return NotAttendingFragment.newInstance(mRunId);
+                        if (mNotAttendingFragment == null) {
+                            mNotAttendingFragment = NotAttendingFragment.newInstance(mRunId);
+                        }
+                        return mNotAttendingFragment;
                 }
             }
             return PlaceholderFragment.newInstance(position + 1);

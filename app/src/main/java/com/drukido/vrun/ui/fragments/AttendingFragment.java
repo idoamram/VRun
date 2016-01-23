@@ -2,10 +2,12 @@ package com.drukido.vrun.ui.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +36,9 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class AttendingFragment extends Fragment {
+
+    public static final String TAG = "attending_fragment";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
@@ -71,6 +76,7 @@ public class AttendingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mRunId = getArguments().getString(Constants.EXTRA_RUN_ID);
         }
@@ -94,6 +100,11 @@ public class AttendingFragment extends Fragment {
         initializeData();
 
         return rootView;
+    }
+
+    public void refreshData() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        initializeData();
     }
 
     private void initializeSwipeRefreshLayout() {

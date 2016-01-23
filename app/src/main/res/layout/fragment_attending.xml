@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/frg_attending_swipeRefreshLayout"
-    tools:context="com.drukido.vrun.ui.AttendingActivity$PlaceholderFragment">
+    tools:context="com.drukido.vrun.ui.AttendingActivity$PlaceholderFragment"
+    android:tag="attending_fragment_tag">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/frg_attending_recyclerView"

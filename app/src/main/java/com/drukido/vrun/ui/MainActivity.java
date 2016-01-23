@@ -29,13 +29,16 @@ import com.drukido.vrun.AsyncTasks.SubscribeGroupPushes;
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Group;
+import com.drukido.vrun.entities.User;
 import com.drukido.vrun.interfaces.OnAsyncTaskFinishedListener;
 import com.drukido.vrun.ui.fragments.GeneralFragment;
 import com.drukido.vrun.ui.fragments.GroupFragment;
+import com.drukido.vrun.ui.fragments.ProfileFragment;
 import com.drukido.vrun.ui.fragments.RunFragment;
 import com.parse.GetCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -46,9 +49,9 @@ public class MainActivity extends AppCompatActivity
 
     private final int FRAGMENTS_COUNT = 3;
     private int[] tabIcons = {
-            R.drawable.group_ios,
-            R.drawable.running_ios,
-            R.drawable.user_male_ios
+            R.drawable.selector_tab_icon_group,
+            R.drawable.selector_tab_icon_run,
+            R.drawable.selector_tab_icon_user
     };
 
     /**
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private TabLayout mTabLayout;
+    private Toolbar mToolbar;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -89,8 +93,8 @@ public class MainActivity extends AppCompatActivity
         }
 
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainActivity_coordinateLayout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -100,9 +104,105 @@ public class MainActivity extends AppCompatActivity
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setOffscreenPageLimit(FRAGMENTS_COUNT);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                User currUser = ((User) User.getCurrentUser());
+
+                switch (position) {
+                    case 0:
+                        Group group = currUser.getGroup();
+                        if (group != null) {
+                            if (group.getName() != null) {
+                                mToolbar.setTitle(group.getName());
+                            } else {
+                                mToolbar.setTitle("My group");
+                                group.fetchInBackground(new GetCallback<Group>() {
+                                    @Override
+                                    public void done(Group fetchedGroup, ParseException e) {
+                                        if (e == null) {
+                                            mToolbar.setTitle(fetchedGroup.getName());
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            mToolbar.setTitle("My group");
+                            currUser.fetchInBackground(new GetCallback<User>() {
+                                @Override
+                                public void done(User user, ParseException e) {
+                                    if (e == null) {
+                                        Group group = user.getGroup();
+                                        if (group.getName() != null) {
+                                            mToolbar.setTitle(group.getName());
+                                        } else {
+                                            mToolbar.setTitle("My group");
+                                            group.fetchInBackground(new GetCallback<Group>() {
+                                                @Override
+                                                public void done(Group fetchedGroup, ParseException e) {
+                                                    if (e == null) {
+                                                        mToolbar.setTitle(fetchedGroup.getName());
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        break;
+                    case 1:
+                        mToolbar.setTitle("Runs");
+                        break;
+                    case 2:
+                        String userName = currUser.getName();
+                        if (userName != null) {
+                            mToolbar.setTitle(userName);
+                        } else {
+                            mToolbar.setTitle("Me");
+                            User.getCurrentUser().fetchInBackground(new GetCallback<User>() {
+                                @Override
+                                public void done(User user, ParseException e) {
+                                    if (e == null) {
+                                        mToolbar.setTitle(user.getName());
+                                    }
+                                }
+                            });
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         setupTabIcons();
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -121,10 +221,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i);
             }
         });
-
-//        Intent i = new Intent(MainActivity.this, RunMeasureActivity.class);
-//        i.putExtra(Constants.EXTRA_RUN_ID, "QkTYcSTFi9");
-//        startActivity(i);
     }
 
     private void setupTabIcons() {
@@ -135,35 +231,6 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void subscribeGroupPushes() {
-        final Group userGroup =
-                (Group) ParseUser.getCurrentUser().getParseObject(Constants.KEY_GROUP);
-        userGroup.fetchInBackground(new GetCallback<Group>() {
-            @Override
-            public void done(final Group group, ParseException e) {
-                if (e == null) {
-                    ParsePush.subscribeInBackground(group.getName(), new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                mIsSubscribed = true;
-                                Toast.makeText(MainActivity.this, "You are now subscribe to " +
-                                        group.getName(), Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(MainActivity.this, "Failed to subscribe..." +
-                                        group.getName(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                } else {
-                    Toast.makeText(MainActivity.this, "Failed to subscribe..."
-                            , Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
     }
 
     private void logout(){
@@ -214,33 +281,33 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Logout");
-        builder.setMessage("Are you sure ?");
-        builder.setCancelable(true);
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // if this button is clicked, close
-                // current activity
-                logout();
-            }
-        })
-                .setNegativeButton("No",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        // if this button is clicked, just close
-                        // the dialog box and do nothing
-                        dialog.cancel();
-                    }
-                });
-
-        // create alert dialog
-        AlertDialog alertDialog = builder.create();
-
-        // show it
-        alertDialog.show();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Logout");
+//        builder.setMessage("Are you sure ?");
+//        builder.setCancelable(true);
+//        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int id) {
+//                // if this button is clicked, close
+//                // current activity
+//                logout();
+//            }
+//        })
+//                .setNegativeButton("No",new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog,int id) {
+//                        // if this button is clicked, just close
+//                        // the dialog box and do nothing
+//                        dialog.cancel();
+//                    }
+//                });
+//
+//        // create alert dialog
+//        AlertDialog alertDialog = builder.create();
+//
+//        // show it
+//        alertDialog.show();
+//    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -266,6 +333,8 @@ public class MainActivity extends AppCompatActivity
                     return new GroupFragment();
                 case 1:
                     return new RunFragment();
+                case 2:
+                    return new ProfileFragment();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

@@ -10,12 +10,14 @@ import com.drukido.vrun.R;
 import com.drukido.vrun.interfaces.OnAsyncTaskFinishedListener;
 import com.drukido.vrun.ui.fragments.GroupFragment;
 import com.drukido.vrun.utils.PhotosManager;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.squareup.picasso.Callback;
@@ -23,6 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 @ParseClassName("Group")
 public class Group extends ParseObject {
@@ -95,6 +98,13 @@ public class Group extends ParseObject {
     }
 
     /****************** Methods *********************/
+
+    public List<User> getAllAppleUsers() throws ParseException {
+        ParseQuery<User> query = ParseQuery.getQuery(User.class);
+        query.whereEqualTo(User.KEY_GROUP, Group.this);
+        query.whereEqualTo(User.KEY_IS_IPHONE_USER, true);
+        return query.find();
+    }
 
     public void getPicassoGroupPhoto(ImageView imageView, Context context, Callback callback) {
         try {

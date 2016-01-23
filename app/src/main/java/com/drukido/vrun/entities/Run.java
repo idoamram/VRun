@@ -1,8 +1,11 @@
 package com.drukido.vrun.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.drukido.vrun.Constants;
+import com.drukido.vrun.utils.DateHelper;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseClassName;
@@ -16,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @ParseClassName("Run")
-public class Run extends ParseObject {
+public class Run extends ParseObject{
 
     public static final String KEY_DISTANCE = "distance";
     public static final String KEY_DURATION = "duration";
@@ -176,4 +179,44 @@ public class Run extends ParseObject {
         query.findInBackground(findCallback);
     }
 
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeLong(getDistance());
+//        dest.writeString(getDuration());
+//        dest.writeString(DateHelper.dateToString(getRunTime()));
+//        dest.writeString(getTargetDuration());
+//        dest.writeLong(getTargetDistance());
+//        dest.writeByte((byte) (getIsMeasured() ? 1 : 0));
+//        dest.writeString(getRunTitle());
+//    }
+//
+//    // Creator
+//    public static final Parcelable.Creator<Run>
+//            CREATOR
+//            = new Parcelable.Creator<Run>
+//            () {
+//        public Run createFromParcel(Parcel in) {
+//            return new Run(in);
+//        }
+//
+//        public Run[] newArray(int size) {
+//            return new Run[size];
+//        }
+//    };
+//
+//    // "De-parcel object
+//    private Run(Parcel in) {
+//        setDistance(in.readLong());
+//        setDuration(in.readString());
+//        setRunTime(DateHelper.stringToDate(in.readString()));
+//        setTargetDuration(in.readString());
+//        setTargetDistance(in.readLong());
+//        setIsMeasured(in.readByte() != 0);
+//        setRunTitle(in.readString());
+//    }
 }
