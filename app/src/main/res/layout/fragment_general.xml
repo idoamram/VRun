@@ -10,8 +10,7 @@
     <RelativeLayout android:layout_width="match_parent"
         android:layout_height="0dp"
         android:padding="20dp"
-        android:layout_weight="1"
-        android:background="@drawable/group_details_background">
+        android:layout_weight="1">
 
         <com.rey.material.widget.ProgressView
             android:id="@+id/general_groupDetails_progressView"

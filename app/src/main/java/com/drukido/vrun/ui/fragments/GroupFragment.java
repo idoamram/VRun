@@ -232,6 +232,7 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
 //                getResources().getColor(R.color.colorPrimary),
 //                getResources().getColor(R.color.colorRedFailed));
         mSwipeRefreshLayout.setColorSchemeColors(Constants.getSwipeLayoutColors(getActivity()));
+        mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -271,7 +272,8 @@ public class GroupFragment extends Fragment implements ImageChooserListener{
                                 .findViewById(R.id.card_group_lastRun_txtvDuration))
                                 .setText(duration.toPresentableString());
 
-                        if (!runs.get(0).getRunTitle().equals("")) {
+                        if (runs.get(0).getRunTitle() != null &&
+                                !runs.get(0).getRunTitle().equals("")) {
                             (mCardViewLastRun
                                     .findViewById(R.id.card_group_lastRun_txtvTitle))
                                     .setVisibility(View.VISIBLE);

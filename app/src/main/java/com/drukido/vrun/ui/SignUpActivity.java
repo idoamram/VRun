@@ -2,6 +2,7 @@ package com.drukido.vrun.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Group;
 import com.drukido.vrun.entities.User;
+import com.parse.LogInCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -107,7 +109,8 @@ public class SignUpActivity extends AppCompatActivity {
                     btnSignUp.setText(getString(R.string.welcome));
                     btnSignUp.setBackgroundColor(getResources()
                             .getColor(R.color.colorGreenSuccess));
-                    finish();
+                    
+                    login();
                 } else {
                     Snackbar.make(_mainLayout, "Sorry, something went wrong...",
                             Snackbar.LENGTH_LONG).show();
@@ -118,6 +121,35 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void login() {
+        ParseUser.logInInBackground(_etxtUserName.getText().toString(),
+                _etxtPassword.getText().toString(), new LogInCallback() {
+                    @Override
+                    public void done(ParseUser user, ParseException e) {
+                        if (e == null) {
+                            Toast.makeText(SignUpActivity.this,
+                                    "Hello " + user.getString("firstName") + " " +
+                                            user.getString("lastName") + "!", Toast.LENGTH_LONG).show();
+
+                            SharedPreferences prefs =
+                                    getSharedPreferences(Constants.VRUN_PREFS_NAME, MODE_PRIVATE);
+                            SharedPreferences.Editor prefsEditor = prefs.edit();
+                            prefsEditor.putBoolean(Constants.PREF_IS_USER_LOGGED_IN,
+                                    true);
+                            prefsEditor.apply();
+
+                            startActivity(new Intent(SignUpActivity.this,
+                                    MainActivity.class));
+                            finish();
+                        } else {
+                            Snackbar.make(_mainLayout, "Sorry, something went wrong...",
+                                    Snackbar.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
     private boolean validateFields() {
         if(_etxtUserName.getText().toString().equals(Constants.EMPTY_STRING)) {
             Snackbar.make(_mainLayout, "Please type a User name", Snackbar.LENGTH_LONG).show();

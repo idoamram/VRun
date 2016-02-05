@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                         startActivity(new Intent(LoginActivity.this,
                                                 MainActivity.class));
+                                        finish();
                                     } else {
                                         Snackbar.make(_mainLayout, "Sorry, something went wrong...",
                                                 Snackbar.LENGTH_LONG).show();
@@ -84,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                 getSharedPreferences(Constants.VRUN_PREFS_NAME, MODE_PRIVATE);
         if (prefs.getBoolean(Constants.PREF_IS_USER_LOGGED_IN, false)) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
         }
     }
 

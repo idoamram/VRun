@@ -46,7 +46,7 @@ public class Duration {
         }
 
         if (hours == 0) {
-            return strMinutes + ":" + strSeconds;
+            return "00:" + strMinutes + ":" + strSeconds;
         } else {
             return strHours + ":" + strMinutes + ":" + strSeconds;
         }

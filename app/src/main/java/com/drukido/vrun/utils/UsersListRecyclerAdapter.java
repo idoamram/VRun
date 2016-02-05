@@ -42,7 +42,7 @@ public class UsersListRecyclerAdapter extends
     public void onBindViewHolder(final UserVH holder, int position) {
 
         if(mItemsList.get(position).getBoolean(User.KEY_IS_IPHONE_USER)) {
-            holder.imgvProfilePhoto.setImageResource(R.drawable.apple);
+            holder.imgvProfilePhoto.setImageResource(R.drawable.steve_jobs);
         } else {
             mItemsList.get(position).getPicassoProfilePhoto(holder.imgvProfilePhoto, mContext);
         }

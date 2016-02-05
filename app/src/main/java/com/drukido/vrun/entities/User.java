@@ -19,6 +19,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ParseClassName("_User")
@@ -146,7 +148,7 @@ public class User extends ParseUser{
                             }
                             else {
                                 if (fetchedUser.getIsIphoneUser()) {
-                                    imageView.setImageResource(R.drawable.apple);
+                                    imageView.setImageResource(R.drawable.steve_jobs);
                                 }
                             }
                         }
@@ -154,7 +156,7 @@ public class User extends ParseUser{
                 } else {
                     try {
                         if (user.getIsIphoneUser()) {
-                            imageView.setImageResource(R.drawable.apple);
+                            imageView.setImageResource(R.drawable.steve_jobs);
                         }
                     } catch (Exception exception) {
                         exception.printStackTrace();
@@ -162,5 +164,16 @@ public class User extends ParseUser{
                 }
             }
         });
+    }
+
+    public void getPastAttendingRuns(FindCallback<Run> callBack) {
+        ArrayList<User> userCollection = new ArrayList<>();
+        userCollection.add(this);
+        ParseQuery<Run> query = Run.getQuery();
+        query.whereEqualTo(Run.KEY_GROUP, this.getGroup());
+        query.whereLessThanOrEqualTo(Run.KEY_RUN_TIME, new Date());
+        query.whereContainsAll(Run.KEY_ATTENDING, userCollection);
+        query.orderByAscending(Run.KEY_RUN_TIME);
+        query.findInBackground(callBack);
     }
 }

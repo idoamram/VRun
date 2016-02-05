@@ -19,24 +19,45 @@
                 android:orientation="vertical"
                 android:id="@+id/profile_linearLayout_userDetails">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:id="@+id/profile_circularImageView_profilePicture"
-                    android:src="@drawable/user_temp"
-                    app:civ_border_width="3dp"
-                    app:civ_border_color="#546E7A"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    android:layout_gravity="center"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
 
-                <include layout="@layout/card_group_progress" />
+                    <android.support.design.widget.FloatingActionButton
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="30dp"
+                        android:src="@drawable/edit_photo"
+                        app:backgroundTint="@color/colorPrimaryDark"/>
 
-                <include layout="@layout/card_group_coming_event" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:id="@+id/profile_circularImageView_profilePicture"
+                        android:src="@drawable/user_temp"
+                        app:civ_border_width="3dp"
+                        app:civ_border_color="@color/colorPrimary"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:layout_gravity="center"/>
 
-                <include layout="@layout/card_group_best_run" />
+                    <android.support.design.widget.FloatingActionButton
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="30dp"
+                        android:src="@drawable/edit_user"/>
+                </LinearLayout>
 
-                <include layout="@layout/card_group_last_run" />
+
+                <include layout="@layout/card_profile_user_details" />
+
+                <include layout="@layout/card_profile_progress" />
+
+                <include layout="@layout/card_profile_overall" />
             </LinearLayout>
         </ScrollView>
 
