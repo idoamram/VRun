@@ -103,13 +103,13 @@ public class Group extends ParseObject {
         ParseQuery<User> query = ParseQuery.getQuery(User.class);
         query.whereEqualTo(User.KEY_GROUP, Group.this);
         query.whereEqualTo(User.KEY_IS_IPHONE_USER, true);
+        query.orderByAscending(User.KEY_NAME);
         return query.find();
     }
 
     public void getPicassoGroupPhoto(ImageView imageView, Context context, Callback callback) {
         try {
             Picasso picasso = Picasso.with(context);
-            picasso.setIndicatorsEnabled(true);
             picasso.setLoggingEnabled(true);
             picasso.load(getGroupPhoto().getUrl())
                     .resize(imageView.getWidth(), imageView.getHeight())

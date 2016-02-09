@@ -59,4 +59,7 @@
     <string name="overall_title">Overall:</string>
     <string name="average">Average</string>
     <string name="progress_title">Progress:</string>
+    <string name="coming">Coming</string>
+    <string name="past">Past</string>
+    <string name="apple_users_status">Apple users status</string>
 </resources>

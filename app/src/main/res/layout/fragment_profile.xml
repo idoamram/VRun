@@ -26,12 +26,14 @@
                     android:layout_gravity="center">
 
                     <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/profile_fab_editProfilePhoto"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_gravity="center"
                         android:layout_margin="30dp"
                         android:src="@drawable/edit_photo"
-                        app:backgroundTint="@color/colorPrimaryDark"/>
+                        app:backgroundTint="@color/colorPrimaryDark"
+                        android:background="?android:attr/selectableItemBackground"/>
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="120dp"

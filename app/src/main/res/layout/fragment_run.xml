@@ -5,16 +5,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.drukido.vrun.ui.fragments.RunFragment">
 
-    <Spinner
+    <!--<Spinner-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/run_fragment_spinnerRunType"-->
+        <!--android:padding="15dp"-->
+        <!--android:background="@color/colorAccent"/>-->
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/run_fragment_spinnerRunType"
-        android:padding="15dp"/>
+        android:orientation="horizontal"
+        android:id="@+id/run_fragment_buttonsLayout">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/coming"
+            android:background="@color/colorAccent"
+            android:textColor="@android:color/white"
+            android:id="@+id/run_fragment_btnComing"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/past"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
+            android:id="@+id/run_fragment_btnPast"/>
+    </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/run_fragment_spinnerRunType"
+        android:layout_below="@+id/run_fragment_buttonsLayout"
         android:id="@+id/run_fragment_swipeLayout">
 
         <android.support.v7.widget.RecyclerView
@@ -43,6 +69,6 @@
         android:layout_margin="16dp"
         android:scaleType="centerCrop"
         android:src="@drawable/plus_white"
-        android:id="@+id/run_fragment_fltBtnNewRun" />
+        android:id="@+id/run_fragment_fabBtnNewRun" />
 
 </RelativeLayout>

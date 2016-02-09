@@ -20,7 +20,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="220dp"
+                    android:layout_height="240dp"
                     android:background="@drawable/run_item_border"
                     android:id="@+id/group_photoLayout"
                     android:paddingBottom="2dp">
@@ -33,9 +33,9 @@
                         android:id="@+id/group_imgvGroupPhoto"/>
 
                     <ImageButton
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/camera_enhance"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:src="@drawable/edit_photo"
                         android:background="#66212121"
                         android:scaleType="centerInside"
                         android:padding="5dp"

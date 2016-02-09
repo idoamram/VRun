@@ -8,6 +8,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
@@ -28,6 +29,7 @@ public class AppleUserAttendingActivity extends AppCompatActivity {
     SwipeRefreshLayout mSwipeRefreshLayout;
     AppleUsersRecyclerAdapter mAdapter;
     LinearLayoutManager mLinearLayoutManager;
+    ProgressBar mProgressBar;
 
     List<User> mAppleUsersList = null;
     List<User> mRunAttendingUsers = null;
@@ -51,6 +53,9 @@ public class AppleUserAttendingActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.appleUserAttending_recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setVisibility(View.INVISIBLE);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.appleUserAttending_progressBar);
 
         mSwipeRefreshLayout =
                 (SwipeRefreshLayout) findViewById(R.id.appleUserAttending_swipeRefreshLayout);
@@ -70,7 +75,6 @@ public class AppleUserAttendingActivity extends AppCompatActivity {
 
     private void initializeSwipeLayout() {
         mSwipeRefreshLayout.setColorSchemeColors(Constants.getSwipeLayoutColors(this));
-        mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -81,6 +85,7 @@ public class AppleUserAttendingActivity extends AppCompatActivity {
                 }
             }
         });
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     private void getData() {
@@ -132,6 +137,7 @@ public class AppleUserAttendingActivity extends AppCompatActivity {
                     initializeRecycler();
                 } else {
                     mSwipeRefreshLayout.setRefreshing(false);
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
         }.execute();
@@ -148,6 +154,7 @@ public class AppleUserAttendingActivity extends AppCompatActivity {
             mRunNotAttendingUsers = new ArrayList<>();
         }
 
+        mRecyclerView.setVisibility(View.VISIBLE);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new AppleUsersRecyclerAdapter(AppleUserAttendingActivity.this,
                 mCurrRun, mAppleUsersList, mRunAttendingUsers, mRunNotAttendingUsers);
@@ -157,5 +164,6 @@ public class AppleUserAttendingActivity extends AppCompatActivity {
         mRecyclerView.addItemDecoration(itemDecoration);
 
         mSwipeRefreshLayout.setRefreshing(false);
+        mProgressBar.setVisibility(View.GONE);
     }
 }

@@ -134,6 +134,7 @@ public class User extends ParseUser{
         }
     }
 
+
     public static void setUserProfilePhoto(final User user, final ImageView imageView) {
         user.fetchIfNeededInBackground(new GetCallback<User>() {
             @Override

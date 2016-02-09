@@ -1,10 +1,7 @@
 package com.drukido.vrun.ui;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
@@ -23,14 +21,13 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-
 import java.util.List;
 
 public class GroupMembersActivity extends AppCompatActivity {
 
     SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
-    FloatingActionButton mFab;
+    ProgressBar mProgressBar;
 
     UsersListRecyclerAdapter mAdapter;
     LinearLayoutManager mLinearLayoutManager;
@@ -46,17 +43,12 @@ public class GroupMembersActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.groupMembers_swipeRefreshLayout);
-        mRecyclerView = (RecyclerView) findViewById(R.id.groupMembers_recyclerView);
+        mProgressBar = (ProgressBar) findViewById(R.id.groupMembers_progressBar);
 
-//        mFab = (FloatingActionButton) findViewById(R.id.groupMembers_fab);
-//        mFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(GroupMembersActivity.this, SignUpActivity.class);
-//                i.putExtra(SignUpActivity.EXTRA_IS_IPHONE_USER_SIGNUP, true);
-//                startActivityForResult(i, SignUpActivity.SIGNUP_REQUEST_CODE);
-//            }
-//        });
+        mRecyclerView = (RecyclerView) findViewById(R.id.groupMembers_recyclerView);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setVisibility(View.INVISIBLE);
 
         initializeSwipeLayout();
         fetchCurrentUser();
@@ -69,6 +61,7 @@ public class GroupMembersActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 mSwipeRefreshLayout.setRefreshing(true);
+                mRecyclerView.setVisibility(View.INVISIBLE);
                 fetchCurrentUser();
             }
         });
@@ -84,6 +77,7 @@ public class GroupMembersActivity extends AppCompatActivity {
                     initializeUsersList();
                 } else {
                     mSwipeRefreshLayout.setRefreshing(false);
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
         });
@@ -98,6 +92,7 @@ public class GroupMembersActivity extends AppCompatActivity {
                     fetchUsersList();
                 } else {
                     mSwipeRefreshLayout.setRefreshing(false);
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
         });
@@ -126,6 +121,7 @@ public class GroupMembersActivity extends AppCompatActivity {
                     initializeRecycler();
                 } else {
                     mSwipeRefreshLayout.setRefreshing(false);
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
         }.execute();
@@ -133,8 +129,7 @@ public class GroupMembersActivity extends AppCompatActivity {
 
     private void initializeRecycler() {
         if (mUsersList.size() > 0) {
-            mLinearLayoutManager = new LinearLayoutManager(this);
-            mRecyclerView.setLayoutManager(mLinearLayoutManager);
+            mRecyclerView.setVisibility(View.VISIBLE);
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
             mAdapter = new UsersListRecyclerAdapter(mUsersList, this);
             mRecyclerView.setAdapter(mAdapter);
@@ -143,6 +138,7 @@ public class GroupMembersActivity extends AppCompatActivity {
             mRecyclerView.addItemDecoration(itemDecoration);
         }
 
+        mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class AttendingFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private UsersListRecyclerAdapter mAdapter;
+    private ProgressBar mProgressBar;
 
     private Context mContext;
     private List<User> mAttendingList;
@@ -95,8 +97,12 @@ public class AttendingFragment extends Fragment {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.frg_attending_recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setVisibility(View.INVISIBLE);
+
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.frg_attending_progressBar);
 
         initializeSwipeRefreshLayout();
+        mProgressBar.setVisibility(View.VISIBLE);
         initializeData();
 
         return rootView;
@@ -131,11 +137,13 @@ public class AttendingFragment extends Fragment {
                         Snackbar.make(mSwipeRefreshLayout, "No one is attending",
                                 Snackbar.LENGTH_INDEFINITE).show();
                         mSwipeRefreshLayout.setRefreshing(false);
+                        mProgressBar.setVisibility(View.GONE);
                     }
                 } else {
                     Snackbar.make(mSwipeRefreshLayout, "There was an error",
                             Snackbar.LENGTH_LONG).show();
                     mSwipeRefreshLayout.setRefreshing(false);
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
         });
@@ -166,6 +174,7 @@ public class AttendingFragment extends Fragment {
                     Snackbar.make(mSwipeRefreshLayout, "There was an error",
                             Snackbar.LENGTH_LONG).show();
                     mSwipeRefreshLayout.setRefreshing(false);
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
         }.execute();
@@ -176,10 +185,12 @@ public class AttendingFragment extends Fragment {
             mAttendingList = new ArrayList<>();
         }
 
+        mRecyclerView.setVisibility(View.VISIBLE);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new UsersListRecyclerAdapter(mAttendingList, mContext);
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.setRefreshing(false);
+        mProgressBar.setVisibility(View.GONE);
     }
 }

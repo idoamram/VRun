@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -58,8 +59,11 @@ public class RunFragment extends Fragment {
     private RunsRecyclerAdapter mComingRunsRecyclerAdapter;
     private Context mContext;
     private ProgressView mProgressView;
-    private Spinner mSpinner;
+//    private Spinner mSpinner;
     private SwipeRefreshLayout mSwipeLayout;
+    private Button mBtnComing;
+    private Button mBtnPast;
+    private boolean mIsComingSelected = true;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -110,12 +114,16 @@ public class RunFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_run, container, false);
 
         mContext = getActivity();
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.run_fragment_recyclerView);
         mProgressView = (ProgressView) rootView.findViewById(R.id.run_fragment_progressView);
-        mSpinner = (Spinner) rootView.findViewById(R.id.run_fragment_spinnerRunType);
+//        mSpinner = (Spinner) rootView.findViewById(R.id.run_fragment_spinnerRunType);
         mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.run_fragment_swipeLayout);
+        mBtnComing = (Button) rootView.findViewById(R.id.run_fragment_btnComing);
+        mBtnPast = (Button) rootView.findViewById(R.id.run_fragment_btnPast);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.run_fragment_recyclerView);
+        mLinearLayoutManager = new LinearLayoutManager(mContext);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        rootView.findViewById(R.id.run_fragment_fltBtnNewRun).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.run_fragment_fabBtnNewRun).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(), NewRunActivity.class);
@@ -123,12 +131,53 @@ public class RunFragment extends Fragment {
             }
         });
 
-        initializeSpinner();
+        initializeTabButtons();
+//        initializeSpinner();
         initializeSwipeRefreshLayout();
         showListProgressView();
         getRunsList(COMING_RUNS);
 
         return rootView;
+    }
+
+    private void initializeTabButtons() {
+        mBtnComing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mIsComingSelected) {
+                    mBtnComing.setBackgroundResource(R.color.colorAccent);
+                    mBtnPast.setBackgroundResource(R.color.colorPrimaryDark);
+                    mIsComingSelected = true;
+                    mSwipeLayout.setRefreshing(true);
+                    if (mComingRunsList == null) {
+                        getRunsList(COMING_RUNS);
+                    }
+                    else {
+                        mSwipeLayout.setRefreshing(true);
+                        initializeRecycler(COMING_RUNS);
+                    }
+                }
+            }
+        });
+
+        mBtnPast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mIsComingSelected) {
+                    mBtnPast.setBackgroundResource(R.color.colorAccent);
+                    mBtnComing.setBackgroundResource(R.color.colorPrimaryDark);
+                    mIsComingSelected = false;
+                    mSwipeLayout.setRefreshing(true);
+                    if (mPastRunsList == null) {
+                        getRunsList(PAST_RUNS);
+                    }
+                    else {
+                        mSwipeLayout.setRefreshing(true);
+                        initializeRecycler(PAST_RUNS);
+                    }
+                }
+            }
+        });
     }
 
     private void initializeSwipeRefreshLayout() {
@@ -139,53 +188,61 @@ public class RunFragment extends Fragment {
             @Override
             public void onRefresh() {
                 mSwipeLayout.setRefreshing(true);
-                getRunsList((String) mSpinner.getSelectedItem());
+                getRunsList(getSelectedTab());
             }
         });
     }
 
-    private void initializeSpinner() {
-        List<String> list = new ArrayList<>();
-        list.add(COMING_RUNS);
-        list.add(PAST_RUNS);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(mContext,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(dataAdapter);
-        mSpinner.setSelection(0);
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                switch ((String) mSpinner.getSelectedItem()) {
-                    case COMING_RUNS:
-                        mSwipeLayout.setRefreshing(true);
-                        if (mComingRunsList == null) {
-                            getRunsList(COMING_RUNS);
-                        }
-                        else {
-                            mSwipeLayout.setRefreshing(true);
-                            initializeRecycler(COMING_RUNS);
-                        }
-                        break;
-                    case PAST_RUNS:
-                        mSwipeLayout.setRefreshing(true);
-                        if (mPastRunsList == null) {
-                            getRunsList(PAST_RUNS);
-                        }
-                        else {
-                            mSwipeLayout.setRefreshing(true);
-                            initializeRecycler(PAST_RUNS);
-                        }
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+    private String getSelectedTab() {
+        if(mIsComingSelected) {
+            return COMING_RUNS;
+        } else {
+            return PAST_RUNS;
+        }
     }
+
+//    private void initializeSpinner() {
+//        List<String> list = new ArrayList<>();
+//        list.add(COMING_RUNS);
+//        list.add(PAST_RUNS);
+//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(mContext,
+//                android.R.layout.simple_spinner_item, list);
+//        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        mSpinner.setAdapter(dataAdapter);
+//        mSpinner.setSelection(0);
+//        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                switch ((String) mSpinner.getSelectedItem()) {
+//                    case COMING_RUNS:
+//                        mSwipeLayout.setRefreshing(true);
+//                        if (mComingRunsList == null) {
+//                            getRunsList(COMING_RUNS);
+//                        }
+//                        else {
+//                            mSwipeLayout.setRefreshing(true);
+//                            initializeRecycler(COMING_RUNS);
+//                        }
+//                        break;
+//                    case PAST_RUNS:
+//                        mSwipeLayout.setRefreshing(true);
+//                        if (mPastRunsList == null) {
+//                            getRunsList(PAST_RUNS);
+//                        }
+//                        else {
+//                            mSwipeLayout.setRefreshing(true);
+//                            initializeRecycler(PAST_RUNS);
+//                        }
+//                        break;
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+//    }
 
     private void getRunsList(final String runType) {
         switch (runType) {
@@ -273,8 +330,6 @@ public class RunFragment extends Fragment {
     }
 
     private void initializeRecycler(String runType) {
-        mLinearLayoutManager = new LinearLayoutManager(mContext);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         switch (runType) {
