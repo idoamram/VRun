@@ -26,10 +26,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/best_run"
+                android:textColor="@color/colorAccent"
                 android:layout_margin="5dp"
-                android:textColor="@color/secondary_text"
                 android:gravity="left"
-                android:textAppearance="@android:style/TextAppearance.Medium" />
+                android:textAppearance="@android:style/TextAppearance.Medium"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"

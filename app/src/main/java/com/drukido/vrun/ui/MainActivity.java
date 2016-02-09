@@ -1,5 +1,6 @@
 package com.drukido.vrun.ui;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,21 +32,16 @@ import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Group;
 import com.drukido.vrun.entities.User;
 import com.drukido.vrun.interfaces.OnAsyncTaskFinishedListener;
-import com.drukido.vrun.ui.fragments.GeneralFragment;
 import com.drukido.vrun.ui.fragments.GroupFragment;
 import com.drukido.vrun.ui.fragments.ProfileFragment;
 import com.drukido.vrun.ui.fragments.RunFragment;
 import com.parse.GetCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 public class MainActivity extends AppCompatActivity
-        implements RunFragment.OnFragmentInteractionListener,
-        GeneralFragment.OnFragmentInteractionListener{
+        implements RunFragment.OnFragmentInteractionListener {
 
     private final int FRAGMENTS_COUNT = 3;
     private int[] tabIcons = {
@@ -234,11 +230,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void logout(){
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setTitle(getResources().getString(R.string.logout));
+        progressDialog.show();
+
         final ParseUser user = ParseUser.getCurrentUser();
         ParseUser.logOutInBackground(new LogOutCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
+                    progressDialog.dismiss();
                     Toast.makeText(MainActivity.this,
                             "Bye Bye " + user.getString("firstName") + " " +
                                     user.getString("lastName") + "!", Toast.LENGTH_LONG).show();

@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:hint="(Past attending runs count)"
                 android:layout_margin="3dp"
-                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:textAppearance="@android:style/TextAppearance.Small"
                 android:textColor="@android:color/white"/>
 
             <TextView
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:hint="(Measured runs count)"
                 android:layout_margin="3dp"
-                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:textAppearance="@android:style/TextAppearance.Small"
                 android:textColor="@android:color/white"/>
 
         </LinearLayout>

@@ -89,10 +89,6 @@
             android:name=".ui.NewRunActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleDialog" />
-        <activity
-            android:name=".ui.WatchAttendingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleDialog" />
         <activity android:name=".ui.PhotoViewerActivity" />
         <activity
             android:name=".ui.GroupMembersActivity"

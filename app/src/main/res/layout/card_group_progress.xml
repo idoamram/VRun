@@ -36,6 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:textColor="@color/colorAccent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:id="@+id/group_txtvGroupName"
                     android:gravity="left|center_vertical"/>

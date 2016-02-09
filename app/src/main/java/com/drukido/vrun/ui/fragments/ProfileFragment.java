@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -24,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,6 +93,7 @@ public class ProfileFragment extends Fragment implements ImageChooserListener {
     SwipeRefreshLayout mSwipeLayout;
     ElasticDownloadView mElasticDownloadView;
     FloatingActionButton mFabEditProfilePicture;
+    FloatingActionButton mFabEditUserDetails;
 
     ImageChooserManager mImageChooserManager;
 
@@ -143,6 +146,16 @@ public class ProfileFragment extends Fragment implements ImageChooserListener {
         mElasticDownloadView = (ElasticDownloadView) rootView.findViewById(R.id.card_profile_progress_elastic_progress_view);
 
         mFabEditProfilePicture = (FloatingActionButton) rootView.findViewById(R.id.profile_fab_editProfilePhoto);
+        mFabEditUserDetails = (FloatingActionButton) rootView.findViewById(R.id.profile_fab_editUserDetails);
+
+        final RelativeLayout mainLayout = (RelativeLayout) rootView.findViewById(R.id.profile_mainLayout_relativeLayout);
+        mFabEditUserDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(mainLayout, "Soon: Edit your personal details", Snackbar.LENGTH_LONG).show();
+            }
+        });
+
         mFabEditProfilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -276,17 +289,21 @@ public class ProfileFragment extends Fragment implements ImageChooserListener {
         ((TextView)(mCardProgress.findViewById(R.id.card_profile_progress_textView_measuredRunsCount)))
                 .setText(mRunsAnalyzer.getMeasuredRunsCount() + " Measured");
 
-        if (mRunsAnalyzer.getBestRun().getDistance() < mGroup.getTargetDistance()) {
-            float progress = (float)((((double)(mRunsAnalyzer.getBestRun().getDistance())) /
-                    ((double)mGroup.getTargetDistance())) * 100);
-            mElasticDownloadView.setProgress(progress);
+        if (mRunsAnalyzer.isMeasuredRunsAvailable()) {
+            if (mRunsAnalyzer.getBestRun().getDistance() < mGroup.getTargetDistance()) {
+                float progress = (float)((((double)(mRunsAnalyzer.getBestRun().getDistance())) /
+                        ((double)mGroup.getTargetDistance())) * 100);
+                mElasticDownloadView.setProgress(progress);
 
-            ((TextView)(mCardProgress.findViewById(R.id.card_profile_progress_textView_bestDistance)))
-                    .setText(String.valueOf(((double)mRunsAnalyzer.getBestRun().getDistance()) / 1000) + "\nkm");
-            ((TextView)(mCardProgress.findViewById(R.id.card_profile_progress_textView_groupTarget)))
-                    .setText(String.valueOf(((double) mGroup.getTargetDistance()) / 1000) + "\nkm");
+                ((TextView)(mCardProgress.findViewById(R.id.card_profile_progress_textView_bestDistance)))
+                        .setText(String.valueOf(((double)mRunsAnalyzer.getBestRun().getDistance()) / 1000) + "\nkm");
+                ((TextView)(mCardProgress.findViewById(R.id.card_profile_progress_textView_groupTarget)))
+                        .setText(String.valueOf(((double) mGroup.getTargetDistance()) / 1000) + "\nkm");
+            } else {
+                mElasticDownloadView.success();
+            }
         } else {
-            mElasticDownloadView.success();
+            mElasticDownloadView.setVisibility(View.GONE);
         }
 
         mSwipeLayout.setRefreshing(false);
