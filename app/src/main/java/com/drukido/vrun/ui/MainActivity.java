@@ -277,6 +277,10 @@ public class MainActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.action_logout) {
             logout();
+        } else if (id == R.id.action_map) {
+            startActivity(new Intent(MainActivity.this, MapActivity.class));
+        } else if (id == R.id.trainingView) {
+            startActivity(new Intent(MainActivity.this, TrainingViewActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

@@ -7,4 +7,7 @@
     <dimen name="signup_fields_margin_top">6dp</dimen>
     <dimen name="fragment_general_details_padding">20dp</dimen>
     <dimen name="runs_list_item_fields_margin">2dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="map_bar_height">400dp</dimen>
 </resources>
