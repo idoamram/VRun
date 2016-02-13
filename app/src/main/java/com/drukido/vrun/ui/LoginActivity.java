@@ -1,11 +1,13 @@
 package com.drukido.vrun.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -14,7 +16,6 @@ import com.drukido.vrun.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.rey.material.widget.Button;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -48,11 +49,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(validateFields()) {
+                    final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+                    progressDialog.setMessage("Please wait...");
+                    progressDialog.setTitle("Login");
+                    progressDialog.show();
                     ParseUser.logInInBackground(_etxtUserName.getText().toString(),
                             _etxtPassword.getText().toString(), new LogInCallback() {
                                 @Override
                                 public void done(ParseUser user, ParseException e) {
                                     if (e == null) {
+                                        progressDialog.dismiss();
                                         Toast.makeText(LoginActivity.this,
                                                 "Hello " + user.getString("firstName") + " " +
                                         user.getString("lastName") + "!", Toast.LENGTH_LONG).show();
@@ -68,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 MainActivity.class));
                                         finish();
                                     } else {
+                                        progressDialog.dismiss();
                                         Snackbar.make(_mainLayout, "Sorry, something went wrong...",
                                                 Snackbar.LENGTH_LONG).show();
                                     }

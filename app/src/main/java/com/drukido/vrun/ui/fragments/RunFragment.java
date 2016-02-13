@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,9 +18,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.drukido.vrun.Constants;
 import com.drukido.vrun.R;
 import com.drukido.vrun.entities.Run;
@@ -33,8 +32,6 @@ import com.drukido.vrun.utils.DividerItemDecoration;
 import com.drukido.vrun.utils.RunsRecyclerAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.rey.material.widget.ProgressView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +55,7 @@ public class RunFragment extends Fragment {
     private RunsRecyclerAdapter mPastRunsRecyclerAdapter;
     private RunsRecyclerAdapter mComingRunsRecyclerAdapter;
     private Context mContext;
-    private ProgressView mProgressView;
+    private ProgressBar mProgressBar;
 //    private Spinner mSpinner;
     private SwipeRefreshLayout mSwipeLayout;
     private Button mBtnComing;
@@ -114,7 +111,7 @@ public class RunFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_run, container, false);
 
         mContext = getActivity();
-        mProgressView = (ProgressView) rootView.findViewById(R.id.run_fragment_progressView);
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.run_fragment_progressBar);
 //        mSpinner = (Spinner) rootView.findViewById(R.id.run_fragment_spinnerRunType);
         mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.run_fragment_swipeLayout);
         mBtnComing = (Button) rootView.findViewById(R.id.run_fragment_btnComing);
@@ -342,6 +339,10 @@ public class RunFragment extends Fragment {
                 mRecyclerView.setAdapter(mComingRunsRecyclerAdapter);
                 break;
             case PAST_RUNS:
+                if(mPastRunsList == null) {
+                    mPastRunsList = new ArrayList<>();
+                }
+
                 mPastRunsRecyclerAdapter = new RunsRecyclerAdapter(mPastRunsList, mContext, false, true);
                 mPastRunsRecyclerAdapter.setOnItemClickListener(new RunsRecyclerAdapter.OnItemClickListener() {
                     @Override
@@ -374,13 +375,13 @@ public class RunFragment extends Fragment {
 
     private void showListProgressView() {
         mRecyclerView.setVisibility(View.INVISIBLE);
-        mProgressView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
         mSwipeLayout.setRefreshing(true);
     }
 
     private void hideListProgressView() {
         mRecyclerView.setVisibility(View.VISIBLE);
-        mProgressView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
         mSwipeLayout.setRefreshing(false);
     }
 

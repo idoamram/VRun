@@ -61,7 +61,7 @@
         android:layout_below="@+id/login_linearLayout_txtFields"
         android:gravity="center">
 
-        <com.rey.material.widget.Button
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/login"
@@ -70,7 +70,7 @@
             android:layout_marginBottom="20dp"
             android:id="@+id/login_btnLogin"/>
 
-        <com.rey.material.widget.Button
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/sign_up"

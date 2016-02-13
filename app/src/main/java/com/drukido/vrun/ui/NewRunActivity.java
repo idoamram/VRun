@@ -12,8 +12,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
@@ -35,10 +35,7 @@ import com.parse.ParsePush;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SendCallback;
-import com.rey.material.widget.ProgressView;
-
 import org.joda.time.DateTime;
-
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -56,7 +53,7 @@ public class NewRunActivity extends AppCompatActivity
     Button btnDistance;
     Button btnDuration;
     Button btnFinish;
-    ProgressView mProgressView;
+    ProgressBar mProgressBar;
     LinearLayout mMainLayout;
     EditText mEditTextTitle;
 
@@ -77,7 +74,7 @@ public class NewRunActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_run);
 
-        mProgressView = (ProgressView) findViewById(R.id.newRun_progressView);
+        mProgressBar = (ProgressBar) findViewById(R.id.newRun_progressBar);
         mMainLayout = (LinearLayout) findViewById(R.id.newRun_mainLinearLayout);
         btnWhen = (Button) findViewById(R.id.newRun_btnWhen);
         btnDistance = (Button) findViewById(R.id.newRun_btnDistance);
@@ -210,12 +207,12 @@ public class NewRunActivity extends AppCompatActivity
 
     private void showProgressBar() {
         mMainLayout.setVisibility(View.INVISIBLE);
-        mProgressView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     private void hideProgressBar() {
         mMainLayout.setVisibility(View.VISIBLE);
-        mProgressView.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override

@@ -100,8 +100,8 @@ public class AttendingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (mRunId == null) {
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    Snackbar.make(view, "Can't show apple users right now...\n" +
+                            "Please try again later", Snackbar.LENGTH_LONG).show();
                 } else {
                     Intent i = new Intent(AttendingActivity.this, AppleUserAttendingActivity.class);
                     i.putExtra(Constants.EXTRA_RUN_ID, mRunId);

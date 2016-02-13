@@ -112,14 +112,20 @@ public class AppleUserAttendingActivity extends AppCompatActivity {
                     mRunNotAttendingUsers = mCurrRun.getNotAttending();
 
                     // Fetch all users
-                    for (User user : mAppleUsersList) {
-                        user.fetchIfNeeded();
+                    if (mAppleUsersList != null) {
+                        for (User user : mAppleUsersList) {
+                            user.fetchIfNeeded();
+                        }
                     }
-                    for (User user : mRunAttendingUsers) {
-                        user.fetchIfNeeded();
+                    if (mRunAttendingUsers != null) {
+                        for (User user : mRunAttendingUsers) {
+                            user.fetchIfNeeded();
+                        }
                     }
-                    for (User user : mRunNotAttendingUsers) {
-                        user.fetchIfNeeded();
+                    if (mRunNotAttendingUsers != null) {
+                        for (User user : mRunNotAttendingUsers) {
+                            user.fetchIfNeeded();
+                        }
                     }
 
                     return true;

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <!--What you want to show-->
-        <com.rey.material.widget.ImageButton
+        <ImageButton
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
@@ -23,7 +23,7 @@
             android:background="@android:color/transparent"
             android:scaleType="centerInside"/>
 
-        <com.rey.material.widget.ImageButton
+        <ImageButton
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
@@ -34,7 +34,7 @@
             android:background="@android:color/transparent"
             android:scaleType="centerInside"/>
 
-        <com.rey.material.widget.ImageButton
+        <ImageButton
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"

@@ -51,14 +51,10 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
 
-    <com.rey.material.widget.ProgressView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:pv_autostart="true"
-        app:pv_circular="true"
-        app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
-        app:pv_progressMode="indeterminate"
-        android:id="@+id/run_fragment_progressView"
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/run_fragment_progressBar"
         android:layout_centerInParent="true"/>
 
     <android.support.design.widget.FloatingActionButton
