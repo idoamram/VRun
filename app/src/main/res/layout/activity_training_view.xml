@@ -9,7 +9,7 @@
     app:statusBarBackground="@android:color/transparent">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
+        android:id="@+id/trainingView_appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/map_bar_height"
         android:fitsSystemWindows="true"
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.AppBarOverlay" />
 
             <fragment
                 android:id="@+id/trainingView_map"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/running_ios_filled"
-        app:layout_anchor="@id/app_bar"
+        app:layout_anchor="@id/trainingView_appBarLayout"
         app:layout_anchorGravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>
